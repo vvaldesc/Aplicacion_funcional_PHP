@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
--->
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -11,10 +7,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edi
     </head>
     <body>
         
-        <!<!-- container -->
+        <!-- container -->
         <div style="width: 1000px; margin: auto">
         
-        <?php //comprobar credenciales y si no, error ?>
+        <?php //comprobar credenciales y token y si no, error
+        //el formulario te llevaría a homepage
+        if (isset($_POST)) {
+            //
+        }
+        
+        
+        
+        ?>
 
         <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
 
