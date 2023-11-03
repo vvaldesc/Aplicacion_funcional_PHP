@@ -13,7 +13,11 @@
         <?php //comprobar credenciales y token y si no, error
         //el formulario te llevaría a homepage
         if (isset($_POST)) {
-            //
+            if($_POST["pass"]=="admin"){
+                //
+            }else{
+                header('Location:');
+            }
         }
         
         
@@ -23,12 +27,12 @@
         <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
 
             <div class="form-group">
-                <label for="nombre">Usuario</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre">
+                <label for="usr">Usuario</label>
+                <input type="text" class="form-control" id="usr" name="usr" placeholder="Usuario">
             </div>
             <div class="form-group">
-                <label for="ape">Contraseña</label>
-                <input type="text" class="form-control" id="ape" name="apellidos" placeholder="Apellidos">
+                <label for="pass">Contraseña</label>
+                <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
             </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
