@@ -10,7 +10,9 @@
         <!-- container -->
         <div style="width: 1000px; margin: auto">
         
-        <?php //comprobar credenciales y token y si no, error
+        <?php
+        include './pages/conexionPDO.php';
+        //comprobar credenciales y token y si no, error
         //el formulario te llevaría a homepage
         
         if ($_SERVER["REQUEST_METHOD"]=="POST") {
@@ -26,6 +28,8 @@
                 header('Location:');
             }
         }
+        
+        conexionPDO();
         
         
         
