@@ -6,9 +6,8 @@
         <title></title>
     </head>
     <body>
-        
+        <div class="container mt-4">
         <!-- container -->
-        <div style="width: 1000px; margin: auto">
         
         <?php
         include './pages/conexionPDO.php';
@@ -34,14 +33,16 @@
         
         
         ?>
+        
+        <h1 class="text-center">Inicio de sesión</h1>
 
-        <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
-
-            <div class="form-group">
+        <form method="POST" class="text-center mt-4 p-4 border d-flex align-items-center flex-column" style="width: 400px; margin: auto" action=<?php $_SERVER["PHP_SELF"] ?>>
+            
+            <div class="form-group m-2" style="width: 300px">
                 <label for="usr">Usuario</label>
                 <input type="text" class="form-control" id="usr" name="usr" placeholder="Usuario">
             </div>
-            <div class="form-group">
+            <div class="form-group m-2" style="width: 300px">
                 <label for="pass">Contraseña</label>
                 <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
             </div>
