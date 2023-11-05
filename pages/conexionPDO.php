@@ -12,23 +12,24 @@ $password = 'pbazEMdm)vf/d43_';
 try {
     $BD=new PDO($cadena_conexion, $username, $password);
     $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    //Consulta para ver el numero de tablas en concesionario a modo de prueba
-    //$BD->closeCursor();
     
-    crearTabla($BD);
+    crearTabla($BD,"coches");
     
-    $sql="SHOW TABLES";
-    $tablas = $BD->query($sql);
-    $instancias = $tablas->fetchAll(PDO::FETCH_COLUMN);
+    insertar($BD, "coches", array("columna1" => "ford"));
+    
+    
+    
+    $sql="SELECT * FROM COCHES";
+    $cursor = $BD->query($sql);
+    $instancias = $cursor->fetchAll(PDO::FETCH_ASSOC);
     
     foreach ($instancias as $fila){
-        echo "Tabla ".$fila;
+        echo "Marca: " . $fila['columna1'] . "<br>";
     }
         
     echo "Conexion correcta";
     
-    eliminarTabla($BD);
+    eliminarTabla($BD,"coches");
     
     $BD = null;
 } catch (Exception $exc) {
@@ -37,13 +38,43 @@ try {
 }
 
 
-function crearTabla($BD) {
-    $sql = "CREATE TABLE PRUEBA (columna1 varchar(20));";
+function crearTabla($BD,$tabla) {
+    $sql = "CREATE TABLE ".$tabla." (columna1 varchar(20));";
     $stmt = $BD->exec($sql);
 }
 
-function eliminarTabla($BD) {
-    $sql = "DROP TABLE PRUEBA;";
+function eliminarTabla($BD,$tabla) {
+    $sql = "DROP TABLE ".$tabla.";";
     $stmt = $BD->exec($sql);
 }
+
+//valores es un array asociativo columna => valor
+function insertar($BD,$tabla,$valores) {
+    
+$columasSql = "";
+$valoresSql = "";
+    
+    foreach ($valores as $clave => $valor){
+        $columasSql.=$clave.", ";
+        $valoresSql.=":".$clave.", ";
+    }
+    
+$columasSql = substr($columasSql, 0, -2);
+$valoresSql = substr($valoresSql, 0, -2);
+
+    
+    
+    $sql = "INSERT INTO ".$tabla." (".$columasSql.") VALUES (".$valoresSql.");";
+    $stmt = $BD->prepare($sql);
+    
+    
+    foreach ($valores as $clave => $valor) {
+        $stmt->bindParam(":" . $clave, $valor, PDO::PARAM_STR);
+    }
+
+    if ($stmt->execute()) {
+        echo "Registro insertado con éxito.";
+    } else {
+        echo "Error al insertar el registro: " . $stmt->errorInfo()[2];
+    }}
 
