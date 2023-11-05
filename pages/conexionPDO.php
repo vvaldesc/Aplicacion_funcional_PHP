@@ -16,22 +16,34 @@ try {
     //Consulta para ver el numero de tablas en concesionario a modo de prueba
     //$BD->closeCursor();
     
+    crearTabla($BD);
+    
     $sql="SHOW TABLES";
     $tablas = $BD->query($sql);
     $instancias = $tablas->fetchAll(PDO::FETCH_COLUMN);
     
     foreach ($instancias as $fila){
-        echo "tabla";
+        echo "Tabla ".$fila;
     }
+        
+    echo "Conexion correcta";
     
-    //echo count($tablas);
-    
-    echo "Conexion";
-    
+    eliminarTabla($BD);
     
     $BD = null;
 } catch (Exception $exc) {
     echo $exc->getMessage();
 }
+}
+
+
+function crearTabla($BD) {
+    $sql = "CREATE TABLE PRUEBA (columna1 varchar(20));";
+    $stmt = $BD->exec($sql);
+}
+
+function eliminarTabla($BD) {
+    $sql = "DROP TABLE PRUEBA;";
+    $stmt = $BD->exec($sql);
 }
 
