@@ -12,9 +12,16 @@
         
         <?php //comprobar credenciales y token y si no, error
         //el formulario te llevaría a homepage
-        if (isset($_POST)) {
-            if($_POST["pass"]=="admin"){
-                //
+        
+        if ($_SERVER["REQUEST_METHOD"]=="POST") {
+            if(isset($_POST["pass"])){
+                
+                //si usr y pass son correctos...
+                session_start();
+                $_SESSION["usuario"] = $_POST["usr"];
+                header('Location:pages/homepage.php');
+            
+                
             }else{
                 header('Location:');
             }
