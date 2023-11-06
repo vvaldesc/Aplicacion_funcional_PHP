@@ -37,9 +37,8 @@ function crearBD() {
     $password = 'pbazEMdm)vf/d43_';
     $BD = new PDO($cadena_conexion, $username, $password);
 
-    crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Año" => "varchar(20)", "Precio" => "integer"), $BD);
-
-    insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Año" => "2007", "Precio" => "2500"), $BD);
+    crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), $BD);
+    insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => "2007", "Precio" => "2500"), $BD);
 }
 
 //LES PUEDES PASAR LOS PARÁMETROS O NO HACERLO, ES PREFERIBLE PASARLO
@@ -51,8 +50,10 @@ function crearTabla($tabla, $columnas, $BD = null) {
 
         $sentencia = "SELECT * FROM COCHES";
         $instancias = conexionPDO($sentencia); //aqui debo comprobar si existe la tabla a crear
-        if ($instancias) {
+        
+        if (count($instancias)==0) {
             echo "existe";
+            
         } else {
 
             $columasSql = "";
