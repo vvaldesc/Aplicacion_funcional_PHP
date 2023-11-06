@@ -2,11 +2,7 @@
 
 function conexionPDO($sql, $BD = null) {
 
-
-
     try {
-
-
         if ($BD == null) {
             $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
             //public PDO::__construct("driver","usr","pass","array_opcional");
@@ -41,40 +37,46 @@ function crearBD() {
     $password = 'pbazEMdm)vf/d43_';
     $BD = new PDO($cadena_conexion, $username, $password);
 
-    crearTabla("coches", array("Marca" => "varchar(20)","Modelo" => "varchar(20)","Año" => "varchar(20)","Precio" => "integer") ,$BD);
-    
-    //insertar("coches",array() ,$BD);
+    crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Año" => "varchar(20)", "Precio" => "integer"), $BD);
 
+    insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Año" => "2007", "Precio" => "2500"), $BD);
 }
 
 //LES PUEDES PASAR LOS PARÁMETROS O NO HACERLO, ES PREFERIBLE PASARLO
 //ESTAS FUNCIONES SIEMPRE VAN A TRBAJAR CON EL USUARIO usrConcesionario
-function crearTabla($tabla, $columnas ,$BD = null) {
+function crearTabla($tabla, $columnas, $BD = null) {
 
     try {
-        
-        $columasSql = "";
-        $tiposSql = "";
 
-        
-        foreach ($columnas as $columna => $tipo) {
-            $columasSql .= $columna ." ".$tipo.",";
+
+        $sentencia = "SELECT * FROM COCHES";
+        $instancias = conexionPDO($sentencia); //aqui debo comprobar si existe la tabla a crear
+        if ($instancias) {
+            echo "existe";
+        } else {
+
+            $columasSql = "";
+            $tiposSql = "";
+
+            foreach ($columnas as $columna => $tipo) {
+                $columasSql .= $columna . " " . $tipo . ",";
+            }
+
+            $columasSql = substr($columasSql, 0, -1);
+            //$tiposSql = substr($tiposSql, 0, -2);
+
+            if ($BD == null) {
+                $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
+                //public PDO::__construct("driver","usr","pass","array_opcional");
+                $username = 'usrConcesionario';
+                $password = 'pbazEMdm)vf/d43_';
+                $BD = new PDO($cadena_conexion, $username, $password);
+            }
+
+
+            $sql = "CREATE TABLE " . $tabla . " (" . $columasSql . ");";
+            $stmt = $BD->exec($sql);
         }
-
-        $columasSql = substr($columasSql, 0, -1);
-        //$tiposSql = substr($tiposSql, 0, -2);
-
-        if ($BD == null) {
-            $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-            //public PDO::__construct("driver","usr","pass","array_opcional");
-            $username = 'usrConcesionario';
-            $password = 'pbazEMdm)vf/d43_';
-            $BD = new PDO($cadena_conexion, $username, $password);
-        }
-        
-        
-        $sql = "CREATE TABLE " . $tabla . " (".$columnas.");";
-        $stmt = $BD->exec($sql);
     } catch (Exception $exc) {
         echo $exc->getTraceAsString();
     }
