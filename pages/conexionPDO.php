@@ -1,14 +1,20 @@
 <?php
 
-function conexionPDO($sql) {
+function conexionPDO($sql, $BD = null) {
 
-    $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-    //public PDO::__construct("driver","usr","pass","array_opcional");
-    $username = 'usrConcesionario';
-    $password = 'pbazEMdm)vf/d43_';
+
 
     try {
-        $BD = new PDO($cadena_conexion, $username, $password);
+
+
+        if ($BD == null) {
+            $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
+            //public PDO::__construct("driver","usr","pass","array_opcional");
+            $username = 'usrConcesionario';
+            $password = 'pbazEMdm)vf/d43_';
+            $BD = new PDO($cadena_conexion, $username, $password);
+        }
+
 
         $tablas = $BD->query($sql);
         if ($tablas) {
@@ -17,8 +23,6 @@ function conexionPDO($sql) {
                 $instancias[] = $row;
             }
             return $instancias;
-
-            
         } else {
             echo "Error en la consulta: " . $conn->error;
         }
@@ -27,37 +31,66 @@ function conexionPDO($sql) {
     } catch (Exception $exc) {
         echo $exc->getMessage();
     }
-    
 }
 
-
-
-//ESTAS FUNCIONES SIEMPRE VAN A TRBAJAR CON EL USUARIO usrConcesionario
-function crearTabla($tabla) {
+function crearBD() {
 
     $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
     //public PDO::__construct("driver","usr","pass","array_opcional");
     $username = 'usrConcesionario';
     $password = 'pbazEMdm)vf/d43_';
+    $BD = new PDO($cadena_conexion, $username, $password);
+
+    crearTabla("coches", array("Marca" => "varchar(20)","Modelo" => "varchar(20)","Año" => "varchar(20)","Precio" => "integer") ,$BD);
+    
+    //insertar("coches",array() ,$BD);
+
+}
+
+//LES PUEDES PASAR LOS PARÁMETROS O NO HACERLO, ES PREFERIBLE PASARLO
+//ESTAS FUNCIONES SIEMPRE VAN A TRBAJAR CON EL USUARIO usrConcesionario
+function crearTabla($tabla, $columnas ,$BD = null) {
 
     try {
-        $BD = new PDO($cadena_conexion, $username, $password);
-        $sql = "CREATE TABLE " . $tabla . " (columna1 varchar(20));";
+        
+        $columasSql = "";
+        $tiposSql = "";
+
+        
+        foreach ($columnas as $columna => $tipo) {
+            $columasSql .= $columna ." ".$tipo.",";
+        }
+
+        $columasSql = substr($columasSql, 0, -1);
+        //$tiposSql = substr($tiposSql, 0, -2);
+
+        if ($BD == null) {
+            $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
+            //public PDO::__construct("driver","usr","pass","array_opcional");
+            $username = 'usrConcesionario';
+            $password = 'pbazEMdm)vf/d43_';
+            $BD = new PDO($cadena_conexion, $username, $password);
+        }
+        
+        
+        $sql = "CREATE TABLE " . $tabla . " (".$columnas.");";
         $stmt = $BD->exec($sql);
     } catch (Exception $exc) {
         echo $exc->getTraceAsString();
     }
 }
 
-function eliminarTabla($tabla) {
+function eliminarTabla($tabla, $BD = null) {
 
-    $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-    //public PDO::__construct("driver","usr","pass","array_opcional");
-    $username = 'usrConcesionario';
-    $password = 'pbazEMdm)vf/d43_';
 
     try {
-        $BD = new PDO($cadena_conexion, $username, $password);
+        if ($BD == null) {
+            $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
+            //public PDO::__construct("driver","usr","pass","array_opcional");
+            $username = 'usrConcesionario';
+            $password = 'pbazEMdm)vf/d43_';
+            $BD = new PDO($cadena_conexion, $username, $password);
+        }
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     } catch (Exception $exc) {
@@ -68,15 +101,19 @@ function eliminarTabla($tabla) {
 //valores es un array asociativo columna => valor
 
 
-function insertar($tabla, $valores) {
+function insertar($tabla, $valores, $BD = null) {
 
 
-    $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-    //public PDO::__construct("driver","usr","pass","array_opcional");
-    $username = 'usrConcesionario';
-    $password = 'pbazEMdm)vf/d43_';
 
     try {
+
+        if ($BD == null) {
+            $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
+            //public PDO::__construct("driver","usr","pass","array_opcional");
+            $username = 'usrConcesionario';
+            $password = 'pbazEMdm)vf/d43_';
+            $BD = new PDO($cadena_conexion, $username, $password);
+        }
 
         $columasSql = "";
         $valoresSql = "";
@@ -101,7 +138,6 @@ function insertar($tabla, $valores) {
         } else {
             echo "Error al insertar el registro: " . $stmt->errorInfo()[2];
         }
-        
     } catch (Exception $exc) {
         echo $exc->getTraceAsString();
     }
