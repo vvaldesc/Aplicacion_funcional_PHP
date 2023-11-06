@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Coches - Concesionario</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <?php
+        include('./conexionPDO.php');
+    ?>
 </head>
 <body>
     <div class="container mt-4">
@@ -21,13 +25,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <?php
+                    $sentencia='SELECT * FROM coches';
+                    $row=conexionPDO($sentencia);
+                    for($i=0;$i< count($row);$i++){
+                        echo '<tr>
+                                 <td>'.$row[$i][1].'</td>
+                                 <td>'.$row[$i][2].'</td>
+                                 <td>'.$row[$i][3].'</td>
+                                 <td>'.$row[$i][4].'</td>
+                                 <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
+                             </tr>';
+                    }
+                
+                ?>
+                
             </tbody>
         </table>
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar Coche</button>
