@@ -47,14 +47,15 @@ function crearTabla($tabla, $columnas, $BD = null) {
 
     try {
 
-
-        $sentencia = "SELECT * FROM COCHES";
+        //Compruebo si existe la tabla, esto no funciona bien
+        
+        /*$sentencia = "SELECT * FROM COCHES";
         $instancias = conexionPDO($sentencia); //aqui debo comprobar si existe la tabla a crear
         
         if (count($instancias)==0) {
-            echo "existe";
+            echo "existe";*/
             
-        } else {
+        //} else {
 
             $columasSql = "";
             $tiposSql = "";
@@ -77,7 +78,7 @@ function crearTabla($tabla, $columnas, $BD = null) {
 
             $sql = "CREATE TABLE " . $tabla . " (" . $columasSql . ");";
             $stmt = $BD->exec($sql);
-        }
+        //}
     } catch (Exception $exc) {
         echo $exc->getTraceAsString();
     }
@@ -117,6 +118,9 @@ function insertar($tabla, $valores, $BD = null) {
             $password = 'pbazEMdm)vf/d43_';
             $BD = new PDO($cadena_conexion, $username, $password);
         }
+        
+        //para mostrar errores
+        $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $columasSql = "";
         $valoresSql = "";
