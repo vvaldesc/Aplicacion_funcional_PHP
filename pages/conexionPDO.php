@@ -1,32 +1,28 @@
 <?php
 
-function conexionPDO($sql, $BD = null) {
+function conexionPDO($sql) {
 
     try {
-        if ($BD == null) {
             $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
             //public PDO::__construct("driver","usr","pass","array_opcional");
             $username = 'usrConcesionario';
             $password = 'pbazEMdm)vf/d43_';
             $BD = new PDO($cadena_conexion, $username, $password);
-        }
-
-
-        $tablas = $BD->query($sql);
-        if ($tablas) {
-            $instancias = Array();
-            foreach ($tablas as $row) {
-                $instancias[] = $row;
+            $tablas = $BD->query($sql);
+            if ($tablas) {
+                $instancias = Array();
+                foreach ($tablas as $row) {
+                    $instancias[] = $row;
+                }
+                return $instancias;
+            } else {
+                echo "Error en la consulta: " . $conn->error;
             }
-            return $instancias;
-        } else {
-            echo "Error en la consulta: " . $conn->error;
+    
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
         }
-
         $BD = null;
-    } catch (Exception $exc) {
-        echo $exc->getMessage();
-    }
 }
 
 function crearBD() {
@@ -36,50 +32,29 @@ function crearBD() {
     $username = 'usrConcesionario';
     $password = 'pbazEMdm)vf/d43_';
     $BD = new PDO($cadena_conexion, $username, $password);
-
-    crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), $BD);
-    insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500), $BD);
+    $coches='coches_afdfsdff';
+    $tablas = $BD->query('SHOW TABLES');
+    crearTabla($coches, array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), $BD);
+    insertar($coches, array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500), $BD); 
+    
 }
-
-//LES PUEDES PASAR LOS PARÁMETROS BD O NO HACERLO, ES PREFERIBLE PASARLO
-function crearTabla($tabla, $columnas, $BD = null) {
-
+function crearTabla($tabla, $columnas, $BD) {
     try {
-
-        //Compruebo si existe la tabla, esto no funciona bien
-        
-        /*$sentencia = "SELECT * FROM COCHES";
-        $instancias = conexionPDO($sentencia); //aqui debo comprobar si existe la tabla a crear
-        
-        if (count($instancias)==0) {
-            echo "existe";*/
-            
-        //} else {
-
-            $columasSql = "";
-            $tiposSql = "";
-
-            foreach ($columnas as $columna => $tipo) {
-                $columasSql .= $columna . " " . $tipo . ",";
+        $result = $BD->query("SHOW TABLES LIKE '$tabla'");
+        if ($result->rowCount() == 0) {
+            $columnasSql = "";
+            foreach ($columnas as $column => $tipo) {
+                $columnasSql .= "".$column." ".$tipo.", ";
             }
-
-            $columasSql = substr($columasSql, 0, -1);
-            //$tiposSql = substr($tiposSql, 0, -2);
-
-            if ($BD == null) {
-                $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-                //public PDO::__construct("driver","usr","pass","array_opcional");
-                $username = 'usrConcesionario';
-                $password = 'pbazEMdm)vf/d43_';
-                $BD = new PDO($cadena_conexion, $username, $password);
-            }
-
-
-            $sql = "CREATE TABLE " . $tabla . " (" . $columasSql . ");";
-            $stmt = $BD->exec($sql);
-        //}
+            //Esta función elimina la ultima coma
+            $columnasSql= rtrim($columnasSql, ', ');
+            $sql = "CREATE TABLE $tabla ($columnasSql)";
+            $BD->exec($sql);
+        } else {
+            echo "La tabla $tabla ya existe, no es necesario crearla.";
+        }
     } catch (Exception $exc) {
-        echo $exc->getTraceAsString();
+        echo $exc->getMessage();
     }
 }
 
@@ -96,6 +71,7 @@ function eliminarTabla($tabla, $BD = null) {
         }
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
+        $BD = null;
     } catch (Exception $exc) {
         echo $exc->getTraceAsString();
     }
@@ -138,7 +114,7 @@ function insertar($tabla, $valores, $BD = null) {
         $valoresSql = ":" . implode(", :", array_keys($valores));
 
         
-        $sql = "INSERT INTO " . $tabla . " (" . $columasSql . ") VALUES (" . $valoresSql . ");";
+        $sql = "INSERT INTO " . $tabla . " (" . $columnasSql. ") VALUES (" . $valoresSql . ");";
         
         //stmt se convierte en un array
         $stmt = $BD->prepare($sql);
