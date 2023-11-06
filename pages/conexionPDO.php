@@ -3,29 +3,25 @@
 function conexionPDO($sql) {
 
     $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-//public PDO::__construct("driver","usr","pass","array_opcional");
+    //public PDO::__construct("driver","usr","pass","array_opcional");
     $username = 'usrConcesionario';
     $password = 'pbazEMdm)vf/d43_';
 
     try {
         $BD = new PDO($cadena_conexion, $username, $password);
 
-        //Consulta para ver el numero de tablas en concesionario a modo de prueba
-        //$BD->closeCursor();
-
-
-
-
         $tablas = $BD->query($sql);
         if ($tablas) {
-            $coches = Array();
+            $instancias = Array();
             foreach ($tablas as $row) {
-                $coches[] = $row;
+                $instancias[] = $row;
             }
+            return $instancias;
+
+            
         } else {
             echo "Error en la consulta: " . $conn->error;
         }
-        return $coches;
 
         $BD = null;
     } catch (Exception $exc) {
