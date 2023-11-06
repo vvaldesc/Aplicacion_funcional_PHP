@@ -106,10 +106,9 @@ function eliminarTabla($tabla, $BD = null) {
 
 function insertar($tabla, $valores, $BD = null) {
 
-
-
     try {
 
+        //Parámetros en caso de que no haya
         if ($BD == null) {
             $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
             //public PDO::__construct("driver","usr","pass","array_opcional");
@@ -121,22 +120,32 @@ function insertar($tabla, $valores, $BD = null) {
         //para mostrar errores
         $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $columasSql = "";
-        $valoresSql = "";
+        //dos futuras cadenas que contendran la parte de columnas y de valores con la sintaxis sql
+        //$columasSql = "";
+        //$valoresSql = "";
 
-        foreach ($valores as $clave => $valor) {
+        /*foreach ($valores as $clave => $valor) {
             $columasSql .= $clave . ", ";
             $valoresSql .= ":" . $clave . ", ";
-        }
+        }*/
 
-        $columasSql = substr($columasSql, 0, -2);
-        $valoresSql = substr($valoresSql, 0, -2);
+        //Quito el " ," del final
+        //$columasSql = substr($columasSql, 0, -2);
+        //$valoresSql = substr($valoresSql, 0, -2);
+        
+        //RESULTA QUE IMPLODE HACE LO QUE ME HE TIRADO DOS HORAS HACIENDO
+        $columnasSql = implode(", ", array_keys($valores));
+        $valoresSql = ":" . implode(", :", array_keys($valores));
 
+        
         $sql = "INSERT INTO " . $tabla . " (" . $columasSql . ") VALUES (" . $valoresSql . ");";
+        
+        //stmt se convierte en un array
         $stmt = $BD->prepare($sql);
 
+        
         foreach ($valores as $clave => $valor) {
-            // Use the correct named placeholders
+            // Esto sustituye las claves por sus respectivas columnas
             $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
         }
 
