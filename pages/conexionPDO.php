@@ -38,11 +38,10 @@ function crearBD() {
     $BD = new PDO($cadena_conexion, $username, $password);
 
     crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), $BD);
-    insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => "2007", "Precio" => "2500"), $BD);
+    insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500), $BD);
 }
 
-//LES PUEDES PASAR LOS PARÁMETROS O NO HACERLO, ES PREFERIBLE PASARLO
-//ESTAS FUNCIONES SIEMPRE VAN A TRBAJAR CON EL USUARIO usrConcesionario
+//LES PUEDES PASAR LOS PARÁMETROS BD O NO HACERLO, ES PREFERIBLE PASARLO
 function crearTabla($tabla, $columnas, $BD = null) {
 
     try {
@@ -137,7 +136,8 @@ function insertar($tabla, $valores, $BD = null) {
         $stmt = $BD->prepare($sql);
 
         foreach ($valores as $clave => $valor) {
-            $stmt->bindParam(":" . $clave, $valor, PDO::PARAM_STR);
+            // Use the correct named placeholders
+            $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
         }
 
         if ($stmt->execute()) {
