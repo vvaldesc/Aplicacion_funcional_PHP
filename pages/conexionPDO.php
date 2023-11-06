@@ -1,6 +1,6 @@
 <?php
 
-function conexionPDO(){
+function conexionPDO($sql){
 
 $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
 //public PDO::__construct("driver","usr","pass","array_opcional");
@@ -8,34 +8,30 @@ $username = 'usrConcesionario';
 $password = 'pbazEMdm)vf/d43_';
 
 
-
 try {
     $BD=new PDO($cadena_conexion, $username, $password);
-    $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    //Consulta para ver el numero de tablas en concesionario a modo de prueba
+    //$BD->closeCursor();
     
-    crearTabla($BD,"coches");
-    
-    insertar($BD, "coches", array("columna1" => "ford"));
-    
-    
-    
-    $sql="SELECT * FROM COCHES";
-    $cursor = $BD->query($sql);
-    $instancias = $cursor->fetchAll(PDO::FETCH_ASSOC);
-    
-    foreach ($instancias as $fila){
-        echo "Marca: " . $fila['columna1'] . "<br>";
+    $tablas = $BD->query($sql);
+    if ($tablas) {
+        $coches = Array();
+        foreach ($tablas as $row) {
+            $coches[]=$row;
+        }
+    } else {
+        echo "Error en la consulta: " . $conn->error;
     }
-        
-    echo "Conexion correcta";
+    return $coches;
     
-    eliminarTabla($BD,"coches");
     
     $BD = null;
 } catch (Exception $exc) {
     echo $exc->getMessage();
 }
 }
+
 
 
 function crearTabla($BD,$tabla) {
@@ -49,6 +45,8 @@ function eliminarTabla($BD,$tabla) {
 }
 
 //valores es un array asociativo columna => valor
+
+
 function insertar($BD,$tabla,$valores) {
     
 $columasSql = "";
