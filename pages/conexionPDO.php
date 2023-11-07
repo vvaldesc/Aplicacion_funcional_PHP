@@ -35,9 +35,6 @@ function extraerTablas($sql) {
 }
 
 function crearBD() {
-    try {
-        //$BD= conexionPDO();
-
         try {
             eliminarTabla("coches");
             crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"));
@@ -45,9 +42,6 @@ function crearBD() {
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }
-    } catch (Exception $exc) {
-        echo $exc->getMessage();
-    }
 }
 
 function crearTabla($tabla, $columnas) {
