@@ -1,6 +1,6 @@
 <?php
 
-include 'funciones.php';
+include '../libraries/funciones.php';
 
 //Creo variable global con los parámetros necesarios para la conexión PDO
 //accedo a la misma mediante $GLOBAL[]
@@ -36,6 +36,12 @@ function extraerTablas($sql) {
 
 //Creación de tablas inciciales
 function crearBD() {
+    
+        //FALTA AÑADIR ALGUNOS PREPARES, CREO QUE SOLO HAY UNO
+        //NO ESTARÍA MAL HACER UNA FUNCION DE ACTUALIZAR COLUMNAS DE UN REGISTRO (USAR EXTRAERTABLAS() DENTRO DE ESTA FUNCIÓN SERÍA LO SUYO)
+        //Y SUS RESPECTIVAS EXCEPCIONES
+    
+    
         try {
             eliminarTabla("coches");
             crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"));
@@ -63,6 +69,7 @@ function crearTabla($tabla, $columnas) {
         foreach ($columnas as $column => $tipo) {
             $columnasSql .= "" . $column . " " . $tipo . ", ";
         }
+        
         //Esta función elimina la ultima coma
         $columnasSql = rtrim($columnasSql, ', ');
         $sql = "CREATE TABLE " . $tabla . " (".$columnasSql.")";
