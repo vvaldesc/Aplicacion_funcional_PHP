@@ -15,12 +15,25 @@
             //el formulario te llevaría a homepage
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if (isset($_POST["pass"])) {
+                
+                
+                if (isset($_POST["pass"]) && isset($_POST["usr"])) {
 
-                    //si usr y pass son correctos...
-                    session_start();
-                    $_SESSION["usuario"] = $_POST["usr"];
-                    header('Location:pages/homepage.php');
+                    $BD= conexionPDO();
+                    $sql="SELECT CONTRASENA FROM USUARIOS WHERE USUARIO IS ".$_POST['usr'];
+                    $cursorSql = $BD->query($sql);
+                        
+                    // ESTO NO LO HE COMPROBADO TODAVÍA
+                    if ($cursorSql->rowCount() == 1 && $cursorSql[0]==$_POST['pass']) {
+                        
+                        //si usr y pass son correctos...
+                        session_start();
+                        $_SESSION["usuario"] = $_POST["usr"];
+                        header('Location:pages/homepage.php');                        
+                        
+                    }
+                    
+
                 } else {
                     header('Location:');
                 }
