@@ -27,13 +27,14 @@
             <tbody>
                 <?php
                     $sentencia='SELECT * FROM coches';
-                    $row=conexionPDO($sentencia);
+                    $tabla=extraerTablas($sentencia);
                     for($i=0;$i< count($row);$i++){
+                        //No lo he comprobado
                         echo '<tr>
-                                 <td>'.$row[$i][1].'</td>
-                                 <td>'.$row[$i][2].'</td>
-                                 <td>'.$row[$i][3].'</td>
-                                 <td>'.$row[$i][4].'</td>
+                                 <td>'.$tabla[0][1].'</td>
+                                 <td>'.$tabla[0][1].'</td>
+                                 <td>'.$tabla[0][2].'</td>
+                                 <td>'.$tabla[0][3].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                              </tr>';
                     }
