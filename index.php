@@ -11,6 +11,7 @@
 
             <?php
             include './pages/conexionPDO.php';
+            include './pages/funciones.php';
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage
 
@@ -22,7 +23,7 @@
                     $BD= conexionPDO();
                     $sql="SELECT CONTRASENA FROM USUARIOS WHERE USUARIO IS ".$_POST['usr'];
                     $cursorSql = $BD->query($sql);
-                        
+                    // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
                     // ESTO NO LO HE COMPROBADO TODAVÍA
                     if ($cursorSql->rowCount() == 1 && $cursorSql[0]==$_POST['pass']) {
                         
@@ -31,10 +32,12 @@
                         $_SESSION["usuario"] = $_POST["usr"];
                         header('Location:pages/homepage.php');                        
                         
+                    } else {
+                        mensajeError("La contraseña o el usuario no es correcto");
                     }
-                    
 
                 } else {
+                    mensajeError("Formulario no rellenado");
                     header('Location:');
                 }
             }
