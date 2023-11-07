@@ -1,5 +1,9 @@
 <?php
 
+//Creo variable global con los parámetros necesarios para la conexión PDO
+//accedo a la misma mediante $GLOBAL[]
+$BD = conexionPDO();
+
 function conexionPDO(){
     $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
     //public PDO::__construct("driver","usr","pass","array_opcional");
@@ -11,13 +15,14 @@ function conexionPDO(){
 function extraerTablas($sql) {
     try {
         $BD= conexionPDO();
-        $tablas = $BD->query($sql);
-        if ($tablas) {
-            $instancias = Array();
-            foreach ($tablas as $row) {
-                $instancias[] = $row;
+        $cursorSql = $BD->query($sql);
+        if ($cursorSql) {
+            $tabla = Array();
+            foreach ($cursorSql as $row) {
+                $tabla[] = $row; //podría ser un array_push?
             }
             return $instancias;
+        //esto podría ser una excepción
         } else {
             echo "Error en la consulta: " . $BD->error;
         }
@@ -27,12 +32,13 @@ function extraerTablas($sql) {
 }
 function crearBD()  {
     try{
-        $BD= conexionPDO();
+        //$BD= conexionPDO();
+        $BD=$GLOBALS['BD'];
         $coches='coches';
         $tablas = $BD->query("SHOW TABLES LIKE '$coches'");
         if ($tablas->rowCount() == 0) {
-                crearTabla($coches, array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), $BD);
-                insertar($coches, array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500), $BD);
+                crearTabla($coches, array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"));
+                insertar($coches, array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
         } else {
             echo "La tabla $coches ya existe, no es necesario crearla.";
         }
@@ -43,7 +49,8 @@ function crearBD()  {
 }
 function crearTabla($tabla, $columnas) {
     try {
-        $BD= conexionPDO();
+        //$BD= conexionPDO();
+        $BD=$GLOBALS['BD'];
         $result = $BD->query("SHOW TABLES LIKE '$tabla'");
         if ($result->rowCount() == 0) {
             $columnasSql = "";
@@ -66,7 +73,8 @@ function eliminarTabla($tabla) {
 
 
     try {
-        $BD= conexionPDO();
+        //$BD= conexionPDO();
+        $BD=$GLOBALS['BD'];
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     } catch (Exception $exc) {
@@ -81,7 +89,8 @@ function insertar($tabla, $valores) {
 
     try {
         //Parámetros en caso de que no haya
-        $BD= conexionPDO();
+        //$BD= conexionPDO();
+        $BD=$GLOBALS['BD'];
         //para mostrar errores
         $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
