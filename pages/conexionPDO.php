@@ -38,9 +38,6 @@ function crearBD() {
     try {
         //$BD= conexionPDO();
 
-
-
-
         try {
             eliminarTabla("coches");
             crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"));
@@ -88,8 +85,6 @@ function eliminarTabla($tabla) {
 }
 
 //valores es un array asociativo columna => valor
-
-
 function insertar($tabla, $valores) {
 
     $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
