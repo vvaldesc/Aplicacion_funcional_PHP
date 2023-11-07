@@ -34,11 +34,18 @@ function extraerTablas($sql) {
     }
 }
 
+//Creación de tablas inciciales
 function crearBD() {
         try {
             eliminarTabla("coches");
             crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"));
             insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
+            
+            //En insertar la letra ñ da error (puede ser la función bindValues)
+            crearTabla("usuarios", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"));
+            insertar("usuarios", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
+            insertar("usuarios", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
+            
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }
@@ -62,7 +69,7 @@ function crearTabla($tabla, $columnas) {
         $BD->exec($sql);
     } else {
         echo "La tabla $tabla ya existe, no es necesario crearla.";
-        throw new Exception(mensajeError("(crearTabla): Todos los parámetros tienen que ser numéricos"));
+        //throw new Exception(mensajeError("(crearTabla): Todos los parámetros tienen que ser numéricos"));
     }
 }
 
