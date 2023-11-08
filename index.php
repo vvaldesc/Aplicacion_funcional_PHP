@@ -22,9 +22,13 @@
                 
                 if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
                     if($_POST["pass"]!='' && $_POST["usr"]!=''){
+                        
                         $BD= conexionPDO();
+                        
                         $sql="SELECT CONTRASENA FROM USUARIOS WHERE USUARIO IS ".$_POST['usr'];
+                        
                         $cursorSql = $BD->query($sql);
+                        
                         // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
                         // ESTO NO LO HE COMPROBADO TODAVÍA
                         if ($cursorSql->rowCount() == 1 && $cursorSql[0]==$_POST['pass']) {
