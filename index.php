@@ -10,8 +10,10 @@
             <!-- container -->
 
             <?php
-            include './pages/conexionPDO.php';
+            
+            include './libraries/conexionPDO.php';
             include './libraries/funciones.php';
+
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage
 

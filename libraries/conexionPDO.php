@@ -1,6 +1,6 @@
 <?php
 
-include '../libraries/funciones.php';
+include './funciones.php';
 
 //Creo variable global con los parámetros necesarios para la conexión PDO
 //accedo a la misma mediante $GLOBAL[]
@@ -44,11 +44,12 @@ function crearBD() {
     
         try {
             eliminarTabla("coches");
-            crearTabla("coches", array("Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"));
-            insertar("coches", array("Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
+            crearTabla("coches", array("VIN" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), array("VIN"));
+            insertar("coches", array("VIN" => "23456GFDB", "Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
             
             //En insertar la letra ñ da error (puede ser la función bindValues)
-            crearTabla("usuarios", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"));
+            eliminarTabla("usuarios");
+            crearTabla("usuarios", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
             insertar("usuarios", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
             insertar("usuarios", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
             
@@ -57,7 +58,8 @@ function crearBD() {
         }
 }
 
-function crearTabla($tabla, $columnas) {
+//javi no me borres esto
+function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
 
     //$BD= conexionPDO();
@@ -67,6 +69,18 @@ function crearTabla($tabla, $columnas) {
     if (count($result)==0) {
         $columnasSql = "";
         foreach ($columnas as $column => $tipo) {
+            if (!empty($primaryKeys)) {
+                $enc=false;     $i=0;
+                while (!$enc && $i<count($primaryKeys)) {
+                    if ($primaryKeys[$i]==$column) {
+                        $tipo.=" PRIMARY KEY";
+                        unset($primaryKeys[$i]);
+                        $primaryKeys= array_values($primaryKeys);
+                    }
+
+                }
+                $i++;
+            }
             $columnasSql .= "" . $column . " " . $tipo . ", ";
         }
         
