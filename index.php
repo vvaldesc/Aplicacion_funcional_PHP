@@ -11,8 +11,8 @@
 
             <?php
             
-            include $_SERVER['DOCUMENT_ROOT'].'\Aplicacion_funcional_PHP\libraries\conexionPDO.php';
-            include $_SERVER['DOCUMENT_ROOT'].'\Aplicacion_funcional_PHP\libraries\funciones.php';
+            include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+            include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
 
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage

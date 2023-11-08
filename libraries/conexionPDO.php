@@ -1,7 +1,6 @@
 <?php
-echo $_SERVER["DOCUMENT_ROOT"];
-include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP\libraries\conexion.php";
-include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP\libraries\funciones.php";
+include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/conexion.php";
+include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones.php";
 
 
 
@@ -46,11 +45,11 @@ function crearBD() {
             crearTabla("usuarios", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
             insertar("usuarios", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
             insertar("usuarios", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
-            
-            eliminarTabla("usuarios");
-            crearTabla("vendedodres", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
-            insertar("vendedodres", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
-            insertar("vendedodres", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
+           
+            eliminarTabla("vendedores");
+            crearTabla("vendedores", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
+            insertar("vendedores", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
+            insertar("vendedores", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "jefe"));            
             
         } catch (Exception $exc) {
             echo $exc->getMessage();
