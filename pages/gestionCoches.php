@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-        include('../libraries/conexionPDO.php');
+        include '../libraries/conexionPDO.php';
+        include '../libraries/conexion.php';
     ?>
 </head>
 <body>
@@ -36,7 +37,7 @@
                                  <td>'.$tabla[0][2].'</td>
                                  <td>'.$tabla[0][3].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
-                             </tr>';
+                            </tr>';
                     }
                 
                 ?>

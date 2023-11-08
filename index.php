@@ -11,8 +11,9 @@
 
             <?php
             
-            include './libraries/conexionPDO.php';
-            include './libraries/funciones.php';
+            //include $_SERVER["DOCUMENT_ROOT"];
+            include $_SERVER["DOCUMENT_ROOT"]."/Ejercicios_UT5_2_Concesionario_Victor_Valdes_Cobos_Javier_Diaz_Molina\libraries\conexionPDO.php";
+            include $_SERVER["DOCUMENT_ROOT"]."/Ejercicios_UT5_2_Concesionario_Victor_Valdes_Cobos_Javier_Diaz_Molina\libraries\funciones.php";
 
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage
@@ -35,11 +36,11 @@
                         header('Location:pages/homepage.php');                        
                         
                     } else {
-                        mensajeError("La contraseña o el usuario no es correcto");
+                        echo mensajeError("La contraseña o el usuario no es correcto");
                     }
 
                 } else {
-                    mensajeError("Formulario no rellenado");
+                    echo mensajeError("Formulario no rellenado");
                     header('Location:');
                 }
             }

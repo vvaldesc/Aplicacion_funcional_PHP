@@ -1,23 +1,17 @@
 <?php
+echo $_SERVER["DOCUMENT_ROOT"];
+include $_SERVER["DOCUMENT_ROOT"]."/Ejercicios_UT5_2_Concesionario_Victor_Valdes_Cobos_Javier_Diaz_Molina\libraries\conexion.php";
+include $_SERVER["DOCUMENT_ROOT"]."/Ejercicios_UT5_2_Concesionario_Victor_Valdes_Cobos_Javier_Diaz_Molina\libraries\funciones.php";
 
-include './funciones.php';
+
 
 //Creo variable global con los parámetros necesarios para la conexión PDO
-//accedo a la misma mediante $GLOBAL[]
-$BD = conexionPDO();
+//$BD = conexionPDO();
 
-function conexionPDO() {
-    $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-    //public PDO::__construct("driver","usr","pass","array_opcional");
-    $username = 'usrConcesionario';
-    $password = 'pbazEMdm)vf/d43_';
-    $BD = new PDO($cadena_conexion, $username, $password);
-    return $BD;
-}
 
 function extraerTablas($sql) {
     try {
-        $BD = $GLOBALS['BD'];
+        $BD = conexionPDO();
         $cursorSql = $BD->query($sql);
         if ($cursorSql) {
             $tabla = Array();
@@ -53,6 +47,11 @@ function crearBD() {
             insertar("usuarios", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
             insertar("usuarios", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
             
+            eliminarTabla("usuarios");
+            crearTabla("vendedodres", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
+            insertar("vendedodres", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
+            insertar("vendedodres", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
+            
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }
@@ -63,7 +62,7 @@ function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
 
     //$BD= conexionPDO();
-    $BD = $GLOBALS['BD'];
+    $BD = conexionPDO();
 
     $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
     if (count($result)==0) {
@@ -96,11 +95,11 @@ function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
 function eliminarTabla($tabla) {
 
-    $BD = $GLOBALS['BD'];
+    $BD = conexionPDO();
     $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
     if (count($result) == 1) {
         //$BD= conexionPDO();
-        $BD = $GLOBALS['BD'];
+        //$BD = conexionPDO();
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     }
@@ -115,7 +114,7 @@ function insertar($tabla, $valores) {
 
         //Parámetros en caso de que no haya
         //$BD= conexionPDO();
-        $BD = $GLOBALS['BD'];
+        $BD = conexionPDO();
 
         //para mostrar errores
         $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
