@@ -1,7 +1,7 @@
 <?php
 echo $_SERVER["DOCUMENT_ROOT"];
-include $_SERVER["DOCUMENT_ROOT"]."/Ejercicios_UT5_2_Concesionario_Victor_Valdes_Cobos_Javier_Diaz_Molina\libraries\conexion.php";
-include $_SERVER["DOCUMENT_ROOT"]."/Ejercicios_UT5_2_Concesionario_Victor_Valdes_Cobos_Javier_Diaz_Molina\libraries\funciones.php";
+include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP\libraries\conexion.php";
+include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP\libraries\funciones.php";
 
 
 
