@@ -34,7 +34,7 @@
                     //si la sesion corresponde a un cliente, este puede ver sus propios coches, y eliminaría el apartado de propietario
                     //de cada coche, ya que todos van a ser su coche
                     
-                    //$sentencia = 'SELECT * FROM COCHES WHERE DNI IN (SELECT DNI FROM coches)'
+                    //$sentencia = 'SELECT * FROM COCHES WHERE DNI IS (SELECT DNI FROM USUARIOS WHERE USUARIO IS (USUARIO DE LA SESION))'
                     
                     
                     $tabla=extraerTablas($sentencia);
