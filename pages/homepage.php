@@ -32,6 +32,8 @@
                                 <i class="fa-solid fa-car mx-2"></i>Gestión de Coches
                             </a>
                         </li>
+                        
+                        <-<!-- No debería ser visible para clientes a partir de aquí -->
                         <li class="nav-item m-1">
                             <a class="nav-link" href="#">
                                 <i class="fa-solid fa-children mx-2"></i>Gestion de Clientes

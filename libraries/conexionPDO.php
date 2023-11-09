@@ -36,9 +36,11 @@ function crearBD() {
     
     
         try {
+            
+            //COCHE DEBERÍA TENER COMO PROPIEDAD DNI (DNI DEL TOMADOR DEL SEGURO)
             eliminarTabla("coches");
-            crearTabla("coches", array("VIN" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), array("VIN"));
-            insertar("coches", array("VIN" => "23456GFDB", "Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
+            crearTabla("coches", array("VIN" => "varchar(20)", "DNI" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), array("VIN"));
+            insertar("coches", array("VIN" => "23456GFDB", "DNI" => "45137187D","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
             
             //En insertar la letra ñ da error (puede ser la función bindValues)
             eliminarTabla("usuarios");
