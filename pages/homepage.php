@@ -23,27 +23,38 @@
                             </a>
                         </li>
                         <li class="nav-item m-1">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="./gestionVentas.php">
                                 <i class="fa-solid fa-shop mx-2"></i>Gestión de Ventas
                             </a>
                         </li>
                         <li class="nav-item m-1">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="./gestionCoches.php.php">
                                 <i class="fa-solid fa-car mx-2"></i>Gestión de Coches
                             </a>
                         </li>
                         
-                        <-<!-- No debería ser visible para clientes a partir de aquí -->
+                        <!-- No debería ser visible para clientes a partir de aquí -->
+                        <?php
+                        
+                        $BD = conexionPDO();
+                        $sql="Select rol from usuarios where name is ".$_SESSION['usuario'];
+                        
+                        if ($_SESSION['usuario'] == extraerTablas($sql)[0]) 
+                            
+                            echo'
                         <li class="nav-item m-1">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="./gestionClientes.php">
                                 <i class="fa-solid fa-children mx-2"></i>Gestion de Clientes
                             </a>
                         </li>
                         <li class="nav-item m-1">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="./gestionEmpleados">
                                 <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
                             </a>
                         </li>
+                              ';  
+                                
+                        ?>
                     </ul>
                 </div>
             </nav>

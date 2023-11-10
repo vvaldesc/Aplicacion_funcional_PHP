@@ -11,21 +11,27 @@
     ?>
 </head>
 <body>
+    
+    
+    
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Coches</h1>
         <!-- Caracteristicas de coches -->
         <table class="table">
             <thead>
                 <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Año</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Fecha de alta</th>
+                    <th>Fecha de nacimiento</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
+                
+                //EN ROL ROL JEFE, MUESTRA LOS EMMPLEADOS(VENDEDORES)
+                
                 
                 //Un cliente no debería poder entrar aquí
                 //Un admin puede ver y gestionar la informacion de todos los clientes

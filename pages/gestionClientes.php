@@ -27,6 +27,9 @@
             <tbody>
                 <?php
                 /*
+                 * AQUI SE MUESTRAN TODOS LOS CLIENTES, SOLO JEFE
+                 * 
+                 * 
                 //Un cliente no debería poder entrar aquí
                 //Un admin puede ver y gestionar la informacion de todos los clientes
                     $sentencia='SELECT * FROM usuarios where rol is not admin';

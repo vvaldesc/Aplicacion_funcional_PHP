@@ -10,6 +10,7 @@
         include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
     ?>
 </head>
+
 <body>
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Coches</h1>
@@ -17,16 +18,18 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>VIN</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Año</th>
                     <th>Precio</th>
-                    <th>Acciones</th>
+                    <th>Fecha Mat</th>
+                    <th>Fecha ITV</th>
+                    <th>Kilometraje</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                
+                    //EMPLEADOS Y JEFE PUEDEN VER LOS COCHES
                     //si la sesion corresponde a un admin, puede ver todos los coches y toda la info sobre cada uno
                 
                     $sentencia='SELECT * FROM coches';
