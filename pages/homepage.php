@@ -52,7 +52,7 @@
                                 <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
                             </a>
                         </li>
-                              ';  
+                              ';
                                 
                         ?>
                     </ul>
