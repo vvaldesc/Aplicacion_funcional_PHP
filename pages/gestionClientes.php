@@ -17,11 +17,11 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Año</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Domicilio</th>
+                    <th>Fecha Nacimiento</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +44,7 @@
                                  <td>'.$tabla[0][1].'</td>
                                  <td>'.$tabla[0][2].'</td>
                                  <td>'.$tabla[0][3].'</td>
+                                 <td>'.$tabla[0][4].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
                     }

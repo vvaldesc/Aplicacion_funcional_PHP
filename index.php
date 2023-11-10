@@ -66,10 +66,7 @@
                     <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
                 </div>
                 
-                <div class="d-flex m-2">
                     <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
-                    <a class="btn btn-primary" href="./pages/registrar.php">Registrar</a>
-                </div>
             </form>
 
         </div>
