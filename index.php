@@ -20,6 +20,9 @@
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 
+                
+                
+                
                 if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
                     if($_POST["pass"]!='' && $_POST["usr"]!=''){
                         
@@ -62,9 +65,11 @@
                     <label for="pass">Contraseña</label>
                     <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
                 </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-
+                
+                <div class="d-flex m-2">
+                    <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+                    <a class="btn btn-primary" href="./pages/registrar.php">Registrar</a>
+                </div>
             </form>
 
         </div>
