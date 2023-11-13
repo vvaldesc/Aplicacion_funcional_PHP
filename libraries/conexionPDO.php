@@ -29,24 +29,22 @@ function extraerTablas($sql) {
 function comprobarBD(){
     try {
         $BD = conexionPDO();
-        $sql='SHOW databases';
-        $cursorSql = $BD->query($sql);
-        if($cursorSql){
-            foreach ($cursorSql as $row) {
-                if($row=='concesionario'){
-                    return true;
-                }else{
-                    crearBD();
-                }
-            }
+        $result = extraerTablas("SHOW TABLES");
+        if (count($result) < 3 ) {
+            crearBD();
         }   
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
             echo 'Conexión a la base de datos incorrecta, acceso denegado al usuario';
-        }else{
+        }
+        if($exc->getCode() == 1049){
+            echo 'No existe la base de datos en el sistema';
+        }
+        else{
             echo $exc->getMessage();
         }
     }
+    $BD=null;
 }
 //Creación de tablas inciciales
 function crearBD() {
@@ -57,19 +55,22 @@ function crearBD() {
     
     
         try {
-            
-            //COCHE DEBERÍA TENER COMO PROPIEDAD DNI (DNI DEL TOMADOR DEL SEGURO)
-            crearTabla("coches", array("VIN" => "varchar(20)", "DNI" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), array("VIN"));
-            insertar("coches", array("VIN" => "23456GFDB", "DNI" => "45137187D","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
-            
             //En insertar la letra ñ da error (puede ser la función bindValues)
-            crearTabla("clientes", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Clientes"));
-            insertar("clientes", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
-            insertar("clientes", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
-           
-            crearTabla("vendedores", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Vendedores"));
-            insertar("vendedores", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
-            insertar("vendedores", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "jefe"));            
+            eliminarTabla('vendedores');
+            crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
+                "Rol" => "varchar(20)"), array("DNI"));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior"));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin"));
+            
+            eliminarTabla('coches');
+            crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
+            insertar("coches", array("VIN" => "23456GFDB", "Matricula" => "3467LKF","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000,"DNI_vendedores"=> "06293364H"));
+            insertar("coches", array("VIN" => "23456YHUS", "Matricula" => "0493HGS","Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000,"DNI_vendedores"=> "03245754K"));
+            
+            eliminarTabla('clientes');
+            crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","Domicilio" => "varchar(20)","FechaNac" => "DATE"), array("DNI"));
+            insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo","Apellidos" => "Pérez","Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>"2000-04-11","VIN_coches" => "23456GFDB"));
+            insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro","Apellidos" => "Sánchez","Domicilio" => "Calle Sol, 8","FechaNac"=>"2002-08-19","VIN_coches" => "23456YHUS"));        
             
         } catch (Exception $exc) {
             echo $exc->getMessage();
@@ -122,6 +123,7 @@ function eliminarTabla($tabla) {
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     }
+    $BD=null;
 }
 
 //valores es un array asociativo columna => valor
