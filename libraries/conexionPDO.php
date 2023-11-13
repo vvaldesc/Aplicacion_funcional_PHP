@@ -56,19 +56,22 @@ function crearBD() {
     
         try {
             //En insertar la letra ñ da error (puede ser la función bindValues)
+            eliminarTabla('clientes','VIN_coches');
+            eliminarTabla('coches','DNI_vendedores');
             eliminarTabla('vendedores');
+            
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
                 "Rol" => "varchar(20)","contrasena" => "varchar(20)"), array("DNI"));
             insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>"52f87a36d63aaaeb8e413bd8498b3d8d7918af494b20ded56c16cc03e8eb27e7"));
             insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>"29bb72f3aa2d13f4c0da08cda282f6dce2edf9ef58e800123effc5666059351b"));
             
-            eliminarTabla('coches');
+            
             crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
             anadirForanea('coches', 'DNI', 'vendedores');
             insertar("coches", array("VIN" => "23456GFDB", "Matricula" => "3467LKF","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000,"DNI_vendedores"=> "06293364H"));
             insertar("coches", array("VIN" => "23456YHUS", "Matricula" => "0493HGS","Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000,"DNI_vendedores"=> "03245754K"));
             
-            eliminarTabla('clientes');
+            
             crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","Domicilio" => "varchar(20)","FechaNac" => "DATE"), array("DNI"));
             anadirForanea('clientes', 'VIN', 'coches');
             insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo","Apellidos" => "Pérez","Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>"2000-04-11","VIN_coches" => "23456GFDB"));
@@ -78,12 +81,12 @@ function crearBD() {
             echo $exc->getMessage();
         }
 }
-
+//Añadir Foranea
 function anadirForanea($tabla,$foranea,$tablaForanea){
     $BD = conexionPDO();
     $sql = "ALTER TABLE $tabla
-            ADD COLUMN ${foranea}_${tablaForanea} varchar(20) NOT NULL,
-            ADD CONSTRAINT fk_${foranea}_${tablaForanea} FOREIGN KEY (${foranea}_${tablaForanea})
+            ADD COLUMN ".$foranea."_".$tablaForanea." varchar(20) NOT NULL,
+            ADD CONSTRAINT fk_".$foranea."_".$tablaForanea." FOREIGN KEY (".$foranea."_".$tablaForanea.")
             REFERENCES $tablaForanea ($foranea)";
     
     $stmt = $BD->prepare($sql);
@@ -126,13 +129,17 @@ function crearTabla($tabla, $columnas, $primaryKeys=array()) {
     }
 }
 
-function eliminarTabla($tabla) {
+function eliminarTabla($tabla,$fk = null) {
 
     $BD = conexionPDO();
-    $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
+    $result = extraerTablas("SHOW TABLES LIKE '".$tabla."'");
     if (count($result) == 1) {
         //$BD= conexionPDO();
         //$BD = conexionPDO();
+        if($fk!=null){
+            $sql="ALTER TABLE ".$tabla." DROP FOREIGN KEY fk_$fk";
+            $stmt = $BD->exec($sql);
+        }
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     }
