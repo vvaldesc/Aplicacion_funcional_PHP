@@ -27,12 +27,18 @@ function extraerTablas($sql) {
     }
 }
 function comprobarBD(){
+    $creada=false;
     try {
-        $BD = conexionPDO();
-        $result = extraerTablas("SHOW TABLES");
-        if (count($result) < 3 ) {
-            crearBD();
-        }   
+        $BD = new PDO("mysql:host=localhost", 'root', '');
+        $sentencia=$BD->query('SHOW DATABASES');
+        foreach ($sentencia as $key => $value) {
+            if($value[0]=='concesionario'){
+                $creada=true;
+            }
+        }
+        if($creada==false){
+            crearBD($BD);
+        }
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
             echo 'Conexión a la base de datos incorrecta, acceso denegado al usuario';
@@ -44,10 +50,11 @@ function comprobarBD(){
             echo $exc->getMessage();
         }
     }
+    
     $BD=null;
 }
 //Creación de tablas inciciales
-function crearBD() {
+function crearBD($BD) {
     
         //FALTA AÑADIR ALGUNOS PREPARES, CREO QUE SOLO HAY UNO
         //NO ESTARÍA MAL HACER UNA FUNCION DE ACTUALIZAR COLUMNAS DE UN REGISTRO (USAR EXTRAERTABLAS() DENTRO DE ESTA FUNCIÓN SERÍA LO SUYO)
@@ -56,12 +63,14 @@ function crearBD() {
     
         try {
             //En insertar la letra ñ da error (puede ser la función bindValues)
-            eliminarTabla('clientes','VIN_coches');
+            $BD->exec('CREATE DATABASE concesionario');
+            
+            /*eliminarTabla('clientes','VIN_coches');
             eliminarTabla('coches','DNI_vendedores');
-            eliminarTabla('vendedores');
+            eliminarTabla('vendedores');*/
             
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
-                "Rol" => "varchar(20)","contrasena" => "varchar(20)"), array("DNI"));
+                "Rol" => "varchar(20)","contrasena" => "varchar(100)"), array("DNI"));
             insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>"52f87a36d63aaaeb8e413bd8498b3d8d7918af494b20ded56c16cc03e8eb27e7"));
             insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>"29bb72f3aa2d13f4c0da08cda282f6dce2edf9ef58e800123effc5666059351b"));
             

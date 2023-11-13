@@ -11,10 +11,11 @@ if (!function_exists('mensajeError')) {
                 </p>
             </div>
         </nav>';
+    }
 }
-}
-
-function generaToken(&$token,$session_id) {
-    $hora = date('H:i'); 
-    $token=hash('sha256', $hora.$session_id);    
+if (!function_exists('generaToken')) {
+    function generaToken(&$token,$session_id) {
+        $hora = date('H:i'); 
+        $token=hash('sha256', $hora.$session_id);    
+    }
 }
