@@ -36,11 +36,9 @@
                             $contrasena= hash('sha256', $_POST['pass']);
                             $tabla= extraerTablas($sql);
                             if (count($tabla) == 1 && $tabla[0][6]==$contrasena) {
-                                if($tabla[0][5]=='junior'){
-                                    $_SESSION['rol']='junior';
-                                }else{
-                                    $_SESSION['rol']='admin';
-                                }
+                                $_SESSION['rol']=$tabla[0][5];
+                                $_SESSION['name']=$tabla[0][1];
+                                $_SESSION['apellidos']=$tabla[0][2];
                                 header('Location: ./pages/homepage.php');
                             } else {
                                 echo mensajeError("La contraseña o el usuario no es correcto");

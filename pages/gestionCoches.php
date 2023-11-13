@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
         include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+        session_start();
     ?>
 </head>
 
@@ -19,12 +20,14 @@
             <thead>
                 <tr>
                     <th>VIN</th>
+                    <th>Matricula</th>
                     <th>Marca</th>
                     <th>Modelo</th>
+                    <th>Año</th>
                     <th>Precio</th>
-                    <th>Fecha Mat</th>
-                    <th>Fecha ITV</th>
-                    <th>Kilometraje</th>
+                    <th>Km</th>
+                    <th>Cod_vendedor</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,15 +44,20 @@
                     
                     
                     $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($row);$i++){
+                    for($i=0;$i< count($tabla);$i++){
                         //No lo he comprobado
                         echo '<tr>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][2].'</td>
-                                 <td>'.$tabla[0][3].'</td>
+                                <td>'.$tabla[$i][0].'</td>
+                                <td>'.$tabla[$i][1].'</td>
+                                <td>'.$tabla[$i][2].'</td>
+                                <td>'.$tabla[$i][3].'</td>
+                                <td>'.$tabla[$i][4].'</td>
+                                <td>'.$tabla[$i][5].'</td>
+                                <td>'.$tabla[$i][6].'</td>
+                                <td>'.$tabla[$i][7].'</td> 
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
+                        $vendedores[]=$tabla[$i][7];
                     }
                 
                 ?>
@@ -71,6 +79,14 @@
                       <!-- Agregar Nuevo coche-->
                       <form method="POST" action="#">
                           <div class="form-group">
+                              <label for="vin">VIN</label>
+                              <input type="text" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="matricula">Matricula</label>
+                              <input type="text" class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
+                          </div>
+                          <div class="form-group">
                               <label for="marca">Marca</label>
                               <input type="text" class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
                           </div>
@@ -84,7 +100,44 @@
                           </div>
                           <div class="form-group">
                               <label for="precio">Precio</label>
-                              <input type="text" class="form-control" id="precio" placeholder="Ejemplo: 25000.00" required>
+                              <input type="text" class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="km">KM</label>
+                              <input type="text" class="form-control" id="km" placeholder="Ejemplo: 150000" required>
+                          </div>
+                          <div class="form-group d-flex flex-column">
+                              <label for="vendedor">Vendedor</label>
+                              <div class="form-group">
+                                  <select class="col-xl-9" id="vendedor" name="vendedor">
+                                  <?php
+                                    for ($i = 0; $i < count($vendedores); $i++) {
+                                        echo '<option value="' . $vendedores[$i] . '">' . $vendedores[$i] . '</option>';
+                                    }
+                                  ?>
+                              </select>
+                              <?php
+                                if($_SESSION['rol']=='admin'){
+                                    echo '<a href="./gestionEmpleados.php"><i class="fa-solid fa-circle-plus"></i></a>';
+                                }
+                              ?>
+                              </div>                    
+                          </div>
+                          <div class="form-group d-flex flex-column">
+                              <label for="cliente">Cliente</label>
+                              <div class="form-group">
+                                  <select class="col-xl-9" id="cliente" name="Cliente">
+                                    <?php
+                                        $tabla= extraerTablas('SELECT Nombre,Apellidos FROM clientes;');
+                                        foreach ($tabla as $key => $value) {
+                                            echo '<option value="' . $value[0].' '.$value[1] . '">' . $value[0].' '.$value[1] . '</option>';
+                                        }
+                                    ?> 
+                                  </select>
+                                  <a href="./gestionClientes.php.php"><i class="fa-solid fa-circle-plus"></i></a>
+                                  
+                              </div>
+                                
                           </div>
                       </form>
                   </div>

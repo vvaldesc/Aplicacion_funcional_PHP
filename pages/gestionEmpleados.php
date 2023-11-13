@@ -15,7 +15,7 @@
     
     
     <div class="container mt-4">
-        <h1 class="text-center mb-5">Gestión de Coches</h1>
+        <h1 class="text-center mb-5">Gestión de Empleados</h1>
         <!-- Caracteristicas de coches -->
         <table class="table">
             <thead>
@@ -40,7 +40,7 @@
                     
                     
                     $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($row);$i++){
+                    for($i=0;$i< count($tabla);$i++){
                         //No lo he comprobado
                         echo '<tr>
                                  <td>'.$tabla[0][1].'</td>
