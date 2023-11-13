@@ -6,6 +6,9 @@
         <title></title>
     </head>
     <body>
+        
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+        
         <div class="container mt-4">
             <!-- container -->
 
@@ -73,6 +76,6 @@
             </form>
 
         </div>
-
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
     </body>
 </html>
