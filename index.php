@@ -24,6 +24,7 @@
                 
                 
                 if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
+                    
                     if($_POST["pass"]!='' && $_POST["usr"]!=''){
                         
                         $BD= conexionPDO();
@@ -35,10 +36,11 @@
                         // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
                         // ESTO NO LO HE COMPROBADO TODAVÍA
                         if ($cursorSql->rowCount() == 1 && $cursorSql[0]==$_POST['pass']) {
-
                             //si usr y pass son correctos...
                             session_start();
                             $_SESSION["usuario"] = $_POST["usr"];
+                            //primer param por referencia
+                            generaToken($_SESSION['token'],$session_id);
                             header('Location:pages/homepage.php');                        
 
                         } else {
@@ -65,7 +67,7 @@
                     <label for="pass">Contraseña</label>
                     <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
                 </div>
-                
+                    <!--<input type="hidden" class="form-control" id="token" name="token" value="</*?= $_SESSION['token'] ?*/>">-->
                     <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
             </form>
 

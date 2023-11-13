@@ -9,6 +9,7 @@
     
 </head>
 <body>
+    <?php session_start() ?>
     <header>
         <h1>Concesionarios García</h1>
     </header>

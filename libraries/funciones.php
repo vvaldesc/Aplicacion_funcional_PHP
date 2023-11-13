@@ -1,4 +1,6 @@
 <?php
+
+//No se si esto es necesario - Víctor
 if (!function_exists('mensajeError')) {
     function mensajeError($message) {
     
@@ -10,4 +12,9 @@ if (!function_exists('mensajeError')) {
             </div>
         </nav>';
 }
+}
+
+function generaToken(&$token,$session_id) {
+    $hora = date('H:i'); 
+    $token=hash('sha256', $hora.$session_id);    
 }
