@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Coches</h1>
         <!-- Caracteristicas de coches -->
@@ -97,7 +98,7 @@
       </div>
     </div>
 
-
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
     <!-- JavaScript y jQuery para habilitar los componentes de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
