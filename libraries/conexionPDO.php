@@ -64,11 +64,13 @@ function crearBD() {
             
             eliminarTabla('coches');
             crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
+            anadirForanea('coches', 'DNI', 'vendedores');
             insertar("coches", array("VIN" => "23456GFDB", "Matricula" => "3467LKF","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000,"DNI_vendedores"=> "06293364H"));
             insertar("coches", array("VIN" => "23456YHUS", "Matricula" => "0493HGS","Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000,"DNI_vendedores"=> "03245754K"));
             
             eliminarTabla('clientes');
             crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","Domicilio" => "varchar(20)","FechaNac" => "DATE"), array("DNI"));
+            anadirForanea('clientes', 'VIN', 'coches');
             insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo","Apellidos" => "Pérez","Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>"2000-04-11","VIN_coches" => "23456GFDB"));
             insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro","Apellidos" => "Sánchez","Domicilio" => "Calle Sol, 8","FechaNac"=>"2002-08-19","VIN_coches" => "23456YHUS"));        
             
@@ -77,6 +79,17 @@ function crearBD() {
         }
 }
 
+function anadirForanea($tabla,$foranea,$tablaForanea){
+    $BD = conexionPDO();
+    $sql = "ALTER TABLE $tabla
+            ADD COLUMN ${foranea}_${tablaForanea} varchar(20) NOT NULL,
+            ADD CONSTRAINT fk_${foranea}_${tablaForanea} FOREIGN KEY (${foranea}_${tablaForanea})
+            REFERENCES $tablaForanea ($foranea)";
+    
+    $stmt = $BD->prepare($sql);
+    $stmt->execute();
+    
+}
 //javi no me borres esto
 function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
