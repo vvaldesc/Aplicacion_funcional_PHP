@@ -36,8 +36,9 @@
                             $sql="SELECT * FROM vendedores WHERE DNI = '".$_POST['usr']."';";
                             // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
                             // ESTO NO LO HE COMPROBADO TODAVÍA
+                            $contrasena= hash('sha256', $_POST['pass']);
                             $tabla= extraerTablas($sql);
-                            if (count($tabla) == 1 && $tabla[0][6]==$_POST['pass']) {
+                            if (count($tabla) == 1 && $tabla[0][6]==$contrasena) {
                                 if($tabla[0][5]=='junior'){
                                     $_SESSION['rol']='junior';
                                 }else{
