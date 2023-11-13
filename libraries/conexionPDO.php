@@ -58,9 +58,9 @@ function crearBD() {
             //En insertar la letra ñ da error (puede ser la función bindValues)
             eliminarTabla('vendedores');
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
-                "Rol" => "varchar(20)"), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior"));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin"));
+                "Rol" => "varchar(20)","contrasena" => "varchar(20)"), array("DNI"));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>"52f87a36d63aaaeb8e413bd8498b3d8d7918af494b20ded56c16cc03e8eb27e7"));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>"29bb72f3aa2d13f4c0da08cda282f6dce2edf9ef58e800123effc5666059351b"));
             
             eliminarTabla('coches');
             crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
