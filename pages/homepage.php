@@ -9,6 +9,7 @@
     
 </head>
 <body>
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php session_start() ?>
     <header>
         <h1>Concesionarios García</h1>
@@ -71,6 +72,8 @@
             </main>
         </div>
     </div>
+    
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
     <!-- Agrega el enlace a Bootstrap JavaScript (asegúrate de que la URL sea correcta) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
