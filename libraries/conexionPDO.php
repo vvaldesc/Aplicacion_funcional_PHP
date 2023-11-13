@@ -27,29 +27,34 @@ function extraerTablas($sql) {
     }
 }
 function comprobarBD(){
+    $creada=false;
     try {
-        $BD = conexionPDO();
-        $sql='SHOW databases';
-        $cursorSql = $BD->query($sql);
-        if($cursorSql){
-            foreach ($cursorSql as $row) {
-                if($row=='concesionario'){
-                    return true;
-                }else{
-                    crearBD();
-                }
+        $BD = new PDO("mysql:host=localhost", 'root', '');
+        $sentencia=$BD->query('SHOW DATABASES');
+        foreach ($sentencia as $key => $value) {
+            if($value[0]=='concesionario'){
+                $creada=true;
             }
-        }   
+        }
+        if($creada==false){
+            crearBD($BD);
+        }
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
             echo 'Conexión a la base de datos incorrecta, acceso denegado al usuario';
-        }else{
+        }
+        if($exc->getCode() == 1049){
+            echo 'No existe la base de datos en el sistema';
+        }
+        else{
             echo $exc->getMessage();
         }
     }
+    
+    $BD=null;
 }
 //Creación de tablas inciciales
-function crearBD() {
+function crearBD($BD) {
     
         //FALTA AÑADIR ALGUNOS PREPARES, CREO QUE SOLO HAY UNO
         //NO ESTARÍA MAL HACER UNA FUNCION DE ACTUALIZAR COLUMNAS DE UN REGISTRO (USAR EXTRAERTABLAS() DENTRO DE ESTA FUNCIÓN SERÍA LO SUYO)
@@ -57,25 +62,46 @@ function crearBD() {
     
     
         try {
-            
-            //COCHE DEBERÍA TENER COMO PROPIEDAD DNI (DNI DEL TOMADOR DEL SEGURO)
-            crearTabla("coches", array("VIN" => "varchar(20)", "DNI" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), array("VIN"));
-            insertar("coches", array("VIN" => "23456GFDB", "DNI" => "45137187D","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
-            
             //En insertar la letra ñ da error (puede ser la función bindValues)
-            crearTabla("clientes", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Clientes"));
-            insertar("clientes", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
-            insertar("clientes", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
-           
-            crearTabla("vendedores", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Vendedores"));
-            insertar("vendedores", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
-            insertar("vendedores", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "jefe"));            
+            $BD->exec('CREATE DATABASE concesionario');
+            
+            /*eliminarTabla('clientes','VIN_coches');
+            eliminarTabla('coches','DNI_vendedores');
+            eliminarTabla('vendedores');*/
+            
+            crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
+                "Rol" => "varchar(20)","contrasena" => "varchar(100)"), array("DNI"));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>"52f87a36d63aaaeb8e413bd8498b3d8d7918af494b20ded56c16cc03e8eb27e7"));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>"29bb72f3aa2d13f4c0da08cda282f6dce2edf9ef58e800123effc5666059351b"));
+            
+            
+            crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
+            anadirForanea('coches', 'DNI', 'vendedores');
+            insertar("coches", array("VIN" => "23456GFDB", "Matricula" => "3467LKF","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000,"DNI_vendedores"=> "06293364H"));
+            insertar("coches", array("VIN" => "23456YHUS", "Matricula" => "0493HGS","Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000,"DNI_vendedores"=> "03245754K"));
+            
+            
+            crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","Domicilio" => "varchar(20)","FechaNac" => "DATE"), array("DNI"));
+            anadirForanea('clientes', 'VIN', 'coches');
+            insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo","Apellidos" => "Pérez","Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>"2000-04-11","VIN_coches" => "23456GFDB"));
+            insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro","Apellidos" => "Sánchez","Domicilio" => "Calle Sol, 8","FechaNac"=>"2002-08-19","VIN_coches" => "23456YHUS"));        
             
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }
 }
-
+//Añadir Foranea
+function anadirForanea($tabla,$foranea,$tablaForanea){
+    $BD = conexionPDO();
+    $sql = "ALTER TABLE $tabla
+            ADD COLUMN ".$foranea."_".$tablaForanea." varchar(20) NOT NULL,
+            ADD CONSTRAINT fk_".$foranea."_".$tablaForanea." FOREIGN KEY (".$foranea."_".$tablaForanea.")
+            REFERENCES $tablaForanea ($foranea)";
+    
+    $stmt = $BD->prepare($sql);
+    $stmt->execute();
+    
+}
 //javi no me borres esto
 function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
@@ -112,16 +138,21 @@ function crearTabla($tabla, $columnas, $primaryKeys=array()) {
     }
 }
 
-function eliminarTabla($tabla) {
+function eliminarTabla($tabla,$fk = null) {
 
     $BD = conexionPDO();
-    $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
+    $result = extraerTablas("SHOW TABLES LIKE '".$tabla."'");
     if (count($result) == 1) {
         //$BD= conexionPDO();
         //$BD = conexionPDO();
+        if($fk!=null){
+            $sql="ALTER TABLE ".$tabla." DROP FOREIGN KEY fk_$fk";
+            $stmt = $BD->exec($sql);
+        }
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     }
+    $BD=null;
 }
 
 //valores es un array asociativo columna => valor

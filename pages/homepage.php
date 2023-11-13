@@ -37,23 +37,24 @@
                         <!-- No debería ser visible para clientes a partir de aquí -->
                         <?php
                         
-                        $BD = conexionPDO();
-                        $sql="Select rol from usuarios where name is ".$_SESSION['usuario'];
+                       
                         
-                        if ($_SESSION['usuario'] == extraerTablas($sql)[0]) 
-                            
+                        if ($_SESSION['rol'] == 'admin'){
                             echo'
-                        <li class="nav-item m-1">
-                            <a class="nav-link" href="./gestionClientes.php">
-                                <i class="fa-solid fa-children mx-2"></i>Gestion de Clientes
-                            </a>
-                        </li>
-                        <li class="nav-item m-1">
-                            <a class="nav-link" href="./gestionEmpleados">
-                                <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
-                            </a>
-                        </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link" href="./gestionClientes.php">
+                                        <i class="fa-solid fa-children mx-2"></i>Gestion de Clientes
+                                    </a>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link" href="./gestionEmpleados">
+                                        <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
+                                    </a>
+                                </li>
                               ';
+                        } 
+                            
+                            
                                 
                         ?>
                     </ul>
