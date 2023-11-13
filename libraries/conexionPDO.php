@@ -26,7 +26,28 @@ function extraerTablas($sql) {
         echo $exc->getMessage();
     }
 }
-
+function comprobarBD(){
+    try {
+        $BD = conexionPDO();
+        $sql='SHOW databases';
+        $cursorSql = $BD->query($sql);
+        if($cursorSql){
+            foreach ($cursorSql as $row) {
+                if($row=='concesionario'){
+                    return true;
+                }else{
+                    crearBD();
+                }
+            }
+        }   
+    } catch (Exception $exc) {
+        if($exc->getCode() == 1045){
+            echo 'Conexión a la base de datos incorrecta, acceso denegado al usuario';
+        }else{
+            echo $exc->getMessage();
+        }
+    }
+}
 //Creación de tablas inciciales
 function crearBD() {
     
@@ -38,18 +59,15 @@ function crearBD() {
         try {
             
             //COCHE DEBERÍA TENER COMO PROPIEDAD DNI (DNI DEL TOMADOR DEL SEGURO)
-            eliminarTabla("coches");
             crearTabla("coches", array("VIN" => "varchar(20)", "DNI" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer"), array("VIN"));
             insertar("coches", array("VIN" => "23456GFDB", "DNI" => "45137187D","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500));
             
             //En insertar la letra ñ da error (puede ser la función bindValues)
-            eliminarTabla("usuarios");
-            crearTabla("usuarios", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
-            insertar("usuarios", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
-            insertar("usuarios", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
+            crearTabla("clientes", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Clientes"));
+            insertar("clientes", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
+            insertar("clientes", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "admin"));
            
-            eliminarTabla("vendedores");
-            crearTabla("vendedores", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Usuario"));
+            crearTabla("vendedores", array("Usuario" => "varchar(20)", "Contrasena" => "varchar(20)", "Rol" => "varchar(20)"), array("Vendedores"));
             insertar("vendedores", array("Usuario" => "vvaldesc", "Contrasena" => "12345", "Rol" => "junior"));
             insertar("vendedores", array("Usuario" => "jdiazm", "Contrasena" => "admin", "Rol" => "jefe"));            
             
