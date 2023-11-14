@@ -30,7 +30,7 @@
                             </a>
                         </li>
                         <li class="nav-item m-1">
-                            <a class="nav-link" href="./gestionCoches.php.php">
+                            <a class="nav-link" href="./gestionCoches.php">
                                 <i class="fa-solid fa-car mx-2"></i>Gestión de Coches
                             </a>
                         </li>
@@ -62,11 +62,11 @@
                 </div>
             </nav>
             <main class="col-md-8 ms-sm-auto px-md-4">
-                <div class="col-xl-5 col-sm-6 mb-5 mx-auto">
+                <div class="col-xl-5 col-sm-7 mb-5 mx-auto">
                     <div class="bg-white rounded shadow-sm py-5 px-4">
                         <img src="../assets/img/jefe.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 mx-auto d-block  img-thumbnail shadow-sm">
-                        <h2 class="mb-0 text-center">Bienvenido NOMBRE</h2>
-                        <p class="small text-uppercase text-muted text-center">PUESTO</p>
+                        <h2 class="mb-3 mx-auto col-lg-14 text-center">Bienvenido <span class="display-4"><?php echo $_SESSION['name'].' '.$_SESSION['apellidos'] ?></span></h2>
+                        <p class="small text-uppercase text-muted text-center"><?php echo $_SESSION['rol'] ?></p>
                     </div>
                 </div>
             </main>
