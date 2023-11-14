@@ -13,7 +13,7 @@
 <body>
     <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <div class="container mt-4">
-        <h1 class="text-center mb-5">Gestión de Coches</h1>
+        <h1 class="text-center mb-5">Gestión de Clientes</h1>
         <!-- Caracteristicas de coches -->
         <table class="table">
             <thead>
@@ -51,7 +51,6 @@
                                 <td>'.$tabla[$i][4].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
-                        $vendedores[]=$tabla[$i][7];
                     }
                 
                 
