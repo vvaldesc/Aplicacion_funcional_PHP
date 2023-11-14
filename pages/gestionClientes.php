@@ -22,7 +22,7 @@
                     <th>Nombre</th>
                     <th>Apellidos</th>
                     <th>Domicilio</th>
-                    <th>Fecha Nacimiento</th>
+                    <th>Fecha de Nacimiento</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,25 +31,30 @@
                  * AQUI SE MUESTRAN TODOS LOS CLIENTES, SOLO JEFE
                  * 
                  * 
-                //Un cliente no debería poder entrar aquí
-                //Un admin puede ver y gestionar la informacion de todos los clientes
+                */
+                /*Un cliente no debería poder entrar aquí
+                Un admin puede ver y gestionar la informacion de todos los clientes
                     $sentencia='SELECT * FROM usuarios where rol is not admin';
                     
-                    
-                    
+                */    
+                
+                    $sentencia='SELECT * FROM CLIENTES';
+                                        
                     $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($row);$i++){
+                    for($i=0;$i< count($tabla);$i++){
                         //No lo he comprobado
                         echo '<tr>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][2].'</td>
-                                 <td>'.$tabla[0][3].'</td>
-                                 <td>'.$tabla[0][4].'</td>
+                                <td>'.$tabla[$i][0].'</td>
+                                <td>'.$tabla[$i][1].'</td>
+                                <td>'.$tabla[$i][2].'</td>
+                                <td>'.$tabla[$i][3].'</td>
+                                <td>'.$tabla[$i][4].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
+                        $vendedores[]=$tabla[$i][7];
                     }
-                */
+                
+                
                 ?>
                 
             </tbody>
