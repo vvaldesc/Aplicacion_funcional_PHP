@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Coches - Concesionario</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
         include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
@@ -13,7 +13,7 @@
 <body>
     <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <div class="container mt-4">
-        <h1 class="text-center mb-5">Gestión de Coches</h1>
+        <h1 class="text-center mb-5">Gestión de Clientes</h1>
         <!-- Caracteristicas de coches -->
         <table class="table">
             <thead>
@@ -22,7 +22,7 @@
                     <th>Nombre</th>
                     <th>Apellidos</th>
                     <th>Domicilio</th>
-                    <th>Fecha Nacimiento</th>
+                    <th>Fecha de Nacimiento</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,25 +31,29 @@
                  * AQUI SE MUESTRAN TODOS LOS CLIENTES, SOLO JEFE
                  * 
                  * 
-                //Un cliente no debería poder entrar aquí
-                //Un admin puede ver y gestionar la informacion de todos los clientes
+                */
+                /*Un cliente no debería poder entrar aquí
+                Un admin puede ver y gestionar la informacion de todos los clientes
                     $sentencia='SELECT * FROM usuarios where rol is not admin';
                     
-                    
-                    
+                */    
+                
+                    $sentencia='SELECT * FROM CLIENTES';
+                                        
                     $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($row);$i++){
+                    for($i=0;$i< count($tabla);$i++){
                         //No lo he comprobado
                         echo '<tr>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][2].'</td>
-                                 <td>'.$tabla[0][3].'</td>
-                                 <td>'.$tabla[0][4].'</td>
+                                <td>'.$tabla[$i][0].'</td>
+                                <td>'.$tabla[$i][1].'</td>
+                                <td>'.$tabla[$i][2].'</td>
+                                <td>'.$tabla[$i][3].'</td>
+                                <td>'.$tabla[$i][4].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
                     }
-                */
+                
+                
                 ?>
                 
             </tbody>

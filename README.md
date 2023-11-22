@@ -4,4 +4,7 @@ Autores: Javier Díaz Molina, Victor Valdés Cobos
 
 DESC: Aplicación sencilla para gestionar un concesionario mediante conexión PHPMyAdmin
 
-Rama pricipal de desarrollo: master
+Rama de desarrollo: master
+
+
+
