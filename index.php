@@ -16,6 +16,8 @@
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
             
+            
+            
             session_start();
             
             generaToken($_SESSION['token'],session_id());
