@@ -1,12 +1,14 @@
 <?php
 
+            use PHPMailer\PHPMailer\PHPMailer;
+            use PHPMailer\PHPMailer\Exception;
+
+
             require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/PHPMailer/Exception.php';
             require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/PHPMailer/PHPMailer.php';
             require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/PHPMailer/SMTP.php';
             
-            function mail($DNI){
-                
-                $mailDeDni=mailDNI($DNI);
+            function mail($mailDeDni){
                 
                 try {
                     

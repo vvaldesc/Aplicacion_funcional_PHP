@@ -3,12 +3,6 @@ include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/conexion.
 include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones.php";
 
 
-function mailDNI($DNI){
-    
-    $sql="Select Email from vendedores where dni is "+$DNI;
-    return extraerTablas($sql)[0];
-    
-}
 
 //Creo variable global con los parámetros necesarios para la conexión PDO
 //$BD = conexionPDO();
