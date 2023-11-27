@@ -9,14 +9,11 @@ include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones
 
 
 function extraerTablas($sql) {
-    try {
+     try {
         $BD = conexionPDO();
-        $cursorSql = $BD->query($sql);
-        if ($cursorSql) {
-            $tabla = Array();
-            foreach ($cursorSql as $row) {
-                $tabla[] = $row; //podría ser un array_push?
-            }
+        $cursorSql = $BD->prepare($sql);
+        if ($cursorSql->execute()) {
+            $tabla = $cursorSql->fetchAll();
             return $tabla;
             //esto podría ser una excepción
         } else {
