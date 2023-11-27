@@ -51,6 +51,7 @@
                                 $_SESSION['rol']=$tabla[0][5];
                                 $_SESSION['name']=$tabla[0][1];
                                 $_SESSION['apellidos']=$tabla[0][2];
+                                $_SESSION['email']=$tabla[0][7];
                                 header('Location: ./pages/homepage.php');
                             } else {
                                 echo mensajeError("La contraseña o el usuario no es correcto");
