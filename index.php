@@ -13,16 +13,9 @@
 
             <?php
             
-
-
-            /*use $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/Exception';
-            use $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/SMTP';
-            use $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/EXCEPTION';*/
-            
-            
-            
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+
             
             
             
