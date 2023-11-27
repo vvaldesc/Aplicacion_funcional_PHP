@@ -13,9 +13,7 @@
 
             <?php
             
-            require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/Exception.php';
-            require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/PHPMailer.php';
-            require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/SMTP.php';
+
 
             /*use $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/Exception';
             use $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/PHPMailer/SMTP';
