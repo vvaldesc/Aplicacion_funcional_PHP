@@ -15,12 +15,11 @@ function extraerTablas($sql) {
         if ($cursorSql->execute()) {
             $tabla = $cursorSql->fetchAll();
             return $tabla;
-            //esto podría ser una excepción
         } else {
             echo "Error en la consulta: " . $BD->error;
         }
     } catch (Exception $exc) {
-        echo $exc->getMessage();
+        mensajeError("Error general ");
     }
 }
 function comprobarBD(){
@@ -41,13 +40,13 @@ function comprobarBD(){
         }
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
-            echo 'Conexión a la base de datos incorrecta, acceso denegado al usuario';
+            mensajeError('Conexión a la base de datos incorrecta, acceso denegado al usuario');
         }
         if($exc->getCode() == 1049){
-            echo 'No existe la base de datos en el sistema';
+            mensajeError('No existe la base de datos en el sistema');
         }
         else{
-            echo $exc->getMessage();
+            mensajeError('Error comprobando BD');
         }
     }
     
@@ -71,9 +70,9 @@ function crearBD($BD) {
             eliminarTabla('vendedores');*/
             
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
-                "Rol" => "varchar(20)","contrasena" => "varchar(100)"), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234')));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234')));
+                "Rol" => "varchar(20)","contrasena" => "varchar(100)",'Email' => 'varchar(100)'), array("DNI"));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234'), 'Email' => 'javierdiazmolina@youpmail.com'));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@youpmail.com'));
             
             
             crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
