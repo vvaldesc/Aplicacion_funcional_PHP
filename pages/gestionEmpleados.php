@@ -24,6 +24,8 @@
                     <th>Fecha de alta</th>
                     <th>Fecha de nacimiento</th>
                     <th>Rol</th>
+                    <th>Mail</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +50,7 @@
                                  <td>'.$tabla[0][3].'</td>
                                  <td>'.$tabla[0][4].'</td>
                                  <td>'.$tabla[0][5].'</td>
+                                 <td>'.$tabla[0][7].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
                     }

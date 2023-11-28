@@ -33,7 +33,7 @@
                     if($_POST["pass"]!='' && $_POST["usr"]!=''){
                         
                         try {
-                            $BD= conexionPDO();
+                            $BD = conexionPDO();
                             //Sentencia SQL
                             $sql="SELECT * FROM vendedores WHERE DNI = '".$_POST['usr']."';";
                             // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
@@ -41,12 +41,20 @@
                             $contrasena= hash('sha256', $_POST['pass']);
                             $tabla= extraerTablas($sql);
                             if (count($tabla) == 1 && $tabla[0][6]==$contrasena) {
+                               
                                 $_SESSION['rol']=$tabla[0][5];
                                 $_SESSION['name']=$tabla[0][1];
                                 $_SESSION['apellidos']=$tabla[0][2];
+                                $_SESSION['email']=$tabla[0][7];
+                                
+                                //variable manual (CUIDADO)
+                                enviarMail($_SESSION['email']="alt.z3-coc583z6@yopmail.com");
+                                
+                                
+                                
                                 header('Location: ./pages/homepage.php');
                             } else {
-                                echo mensajeError("La contraseña o el usuario no es correcto");
+                                echo mensajeError("La contraseña o el usuario no es correcto o BD no creada");
                             }
                         } catch (Exception $exc) {
                             echo $exc->getTraceAsString();
