@@ -15,9 +15,6 @@
             
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
-
-            
-            
             
             session_start();
             
@@ -49,9 +46,7 @@
                                 
                                 //variable manual (CUIDADO)
                                 enviarMail($_SESSION['email']="concesionarioconce@gmail.com");
-                                
-                                
-                                
+                                                                
                                 header('Location: ./pages/homepage.php');
                             } else {
                                 echo mensajeError("La contraseña o el usuario no es correcto o BD no creada");
@@ -64,8 +59,11 @@
                     }
                 }
             }
+            
+            //Esta funcion no es muy acertada para implementar el boton crearBD
             comprobarBD();
             ?>
+            
 
             <h1 class="text-center">Inicio de sesión</h1>
 
@@ -81,7 +79,8 @@
                     <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
                 </div>
                     <!--<input type="hidden" class="form-control" id="token" name="token" value="</*?= $_SESSION['token'] ?*/>">-->
-                    <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+                    <button type="submit" class="mt-3 btn btn-primary">Iniciar Sesión</button>
+                    <button type="button" class="mt-3 btn btn-primary">Crear BD</button>
             </form>
 
         </div>
