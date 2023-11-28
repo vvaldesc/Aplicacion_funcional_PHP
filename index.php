@@ -83,7 +83,7 @@
                 </div>
                     <!--<input type="hidden" class="form-control" id="token" name="token" value="</*?= $_SESSION['token'] ?*/>">-->
                     <button type="submit" class="mt-3 btn btn-primary">Iniciar Sesión</button>
-                    <?= (comprobarBD()) ? '' : '<button value="crearBD" type="button" class="mt-3 btn btn-primary">Crear BD</button>'; ?>
+                    <?= (comprobarBD()) ? '' : '<button value="crearBD" type="submit" class="mt-3 btn btn-primary">Crear BD</button>'; ?>
 
             </form>
 
