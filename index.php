@@ -48,7 +48,7 @@
                                 $_SESSION['email']=$tabla[0][7];
                                 
                                 //variable manual (CUIDADO)
-                                enviarMail($_SESSION['email']="alt.z3-coc583z6@yopmail.com");
+                                enviarMail($_SESSION['email']="concesionarioconce@gmail.com");
                                 
                                 
                                 

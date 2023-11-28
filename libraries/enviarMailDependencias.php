@@ -1,38 +1,37 @@
 <?php
 
-        use PHPMailer\PHPMailer\PHPMailer;
-        use PHPMailer\PHPMailer\SMTP;
-        use PHPMailer\PHPMailer\Exception;
-        
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/PHPMailer/PHPMailer.php';
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/PHPMailer/Exception.php';
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/PHPMailer/SMTP.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/vendor/autoload.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
-            $mail = new PHPMailer(true); //Objeto de la clase PHPMailer
+/*
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/vendor/phpmailer/phpmailer/src/Exception.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/vendor/phpmailer/phpmailer/src/SMTP.php';
+*/
+$mail = new PHPMailer(true); //Objeto de la clase PHPMailer
+try {
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'concesionarioconce@gmail.com'; // Cambia esto
+    $mail->Password = 'conce200#'; // Cambia esto
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+    $mail->Timeout = 5;
 
-        try {
+    $mail->setFrom('concesionarioconce@gmail.com');
+    $mail->addAddress('victorvaldescobos@gmail.com'); // Cambia esto al destinatario real
 
-            $mail->isSMTP();
-            $mail->Host = 'smtp.yopmail.com'; //Tipo de host: gmail en este caso
-            $mail->SMTPAuth = true; //Autentificación activada
+    $mail->isHTML(false);
+    $mail->Subject = "Inicio de sesión con tu cuenta";
+    $mail->Body = "Inicio de sesión en concesionario";
 
-
-            $mail->Username = $mailDeDni; //Tu gmail
-            $mail->Password = ''; //Tu contraseña de aplicación de gamil
-            $mail->SMTPSecure = 'tls'; //Tipo de seguridad
-            $mail->Port = 587; //Puerto de smtp
-            $mail->Timeout = 5;
-
-            $mail->setFrom('concesionario@yopmail.com'); //Gmail desde el que se envía el mensaje
-
-            $mail->addAddress($mailDeDni); //El email que recibe el correo
-
-            $mail->isHTML(false); //El mensaje enviado es HTML
-
-            $mail->Subject = "Inicio de sesión con tu cuenta"; //Asunto del mensaje
-            $mail->Body = "Inicio de sesión en concsionario"; //Cuerpo del mensaje                    
-        } catch (Exception $exc) {
-            echo $exc->getMessage();
-        }
+    $mail->send();
+    echo 'Correo enviado con éxito';
+} catch (Exception $exc) {
+    echo 'Error al enviar el correo. Detalles: ' . $exc->getMessage();
+}
 
