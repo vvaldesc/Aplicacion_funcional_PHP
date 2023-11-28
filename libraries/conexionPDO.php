@@ -23,7 +23,7 @@ function extraerTablas($sql) {
 function comprobarBD(){
     $creada=false;
     try {
-        $BD = new PDO("mysql:host=localhost", 'root', '');
+        $BD = conexionPDO();
         $sentencia='SHOW DATABASES';
         $sentencia=extraerTablas($sentencia);
         $creada=false;  $i=0;
@@ -33,21 +33,21 @@ function comprobarBD(){
             }
             $i++;
         }
-        if($creada==false){
             
             //RETORNA UN BOTON EL CUAL CREA LA BD, ESTE BOTÓN ESTÁ DENTRO DEL FORM
             //Y PODRIAMOS USAR UNA VARIABLE POST PARA AVISAR DE QUE SE TIENE QUE CREAR LA BD
             
-            return false;
+            
             
             //crearBD($BD);
-        }
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
             mensajeError('Conexión a la base de datos incorrecta, acceso denegado al usuario');
         }
+        //Excepción Cuando no está creada la base de datos
         if($exc->getCode() == 1049){
-            mensajeError('No existe la base de datos en el sistema');
+            //mensajeError('No existe la base de datos en el sistema');
+            return false;
         }
         else{
             mensajeError('Error comprobando BD');
@@ -58,13 +58,13 @@ function comprobarBD(){
     return true;
 }
 //Creación de tablas inciciales
-function crearBD($BD) {
+function crearBD() {
     
         //FALTA AÑADIR ALGUNOS PREPARES, CREO QUE SOLO HAY UNO
         //NO ESTARÍA MAL HACER UNA FUNCION DE ACTUALIZAR COLUMNAS DE UN REGISTRO (USAR EXTRAERTABLAS() DENTRO DE ESTA FUNCIÓN SERÍA LO SUYO)
         //Y SUS RESPECTIVAS EXCEPCIONES
     
-    
+        $BD = new PDO("mysql:host=localhost", 'root', '');
         try {
             //En insertar la letra ñ da error (puede ser la función bindValues)
             $BD->exec('CREATE DATABASE concesionario');
@@ -190,11 +190,9 @@ function insertar($tabla, $valores) {
             $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
         }
 
-        if ($stmt->execute()) {
-            echo "Registro insertado con éxito.";
-        } else {
+        if (!$stmt->execute()) {
             throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
-        }
+        } 
     } else {
         throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
     }
