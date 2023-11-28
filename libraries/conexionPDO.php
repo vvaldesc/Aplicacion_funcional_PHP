@@ -34,6 +34,11 @@ function comprobarBD(){
             $i++;
         }
         if($creada==false){
+            
+            //RETORNA UN BOTON EL CUAL CREA LA BD, ESTE BOTÓN ESTÁ DENTRO DEL FORM
+            //Y PODRIAMOS USAR UNA VARIABLE POST PARA AVISAR DE QUE SE TIENE QUE CREAR LA BD
+            
+            
             crearBD($BD);
         }
     } catch (Exception $exc) {
