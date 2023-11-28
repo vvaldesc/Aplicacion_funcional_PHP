@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('enviarMail')) {
 
 
 /**
@@ -47,7 +48,7 @@ function checkForm($datosForm, $noClave = null) {//Recibe dos arrays, (asociativ
     return $bandera;
 }
 
-
+}
 if (!function_exists('enviarMail')) {
 
     function enviarMail($mailDeDni) {
