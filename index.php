@@ -17,18 +17,20 @@
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
             
             session_start();
-            
             generaToken($_SESSION['token'],session_id());
 
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage
-
+            
+            if (isset($_POST['guardar'])) {
+                // Check if the form is submitted
+                crearBD();
+            }
+            
+             
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
-                if (isset($_POST["crearBD"])) {
-                    crearBD($BD);
-                }
-                else if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
+                if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
                     
                     if($_POST["pass"]!='' && $_POST["usr"]!=''){
                         
@@ -83,11 +85,42 @@
                 </div>
                     <!--<input type="hidden" class="form-control" id="token" name="token" value="</*?= $_SESSION['token'] ?*/>">-->
                     <button type="submit" class="mt-3 btn btn-primary">Iniciar Sesión</button>
-                    <?= (comprobarBD()) ? '' : '<button value="crearBD" type="submit" class="mt-3 btn btn-primary">Crear BD</button>'; ?>
+                    </form>
+                    <?php
+                        if (comprobarBD() === false) {
+                            echo '<button class="btn btn-primary my-3" data-toggle="modal" data-target="#agregarCoche">Agregar Base de Datos</button>';
+                            echo '<div class="modal fade" id="agregarCoche">
+                                    <div class="modal-dialog">
+                                          <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title">Crear BD</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <form method="POST" action="'.$_SERVER['PHP_SELF'].'">
+                                                <div class="modal-body">
+                                                    <!-- Agregar Nuevo coche-->
+                                                    <h2>Usted no tiene la base de datos en su sistema. ¿Desea Guardarla?</h2>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <input type="submit" name="guardar" class="btn btn-primary" value="Guardar">
+                                                </div>
+                                              </form>
+                                          </div>
+                                      </div>
+                                  </div>';
+                        }
 
-            </form>
+                        
+
+                    ?>
 
         </div>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
+        <!-- JavaScript y jQuery para habilitar los componentes de Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 </html>
