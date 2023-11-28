@@ -38,8 +38,9 @@ function comprobarBD(){
             //RETORNA UN BOTON EL CUAL CREA LA BD, ESTE BOTÓN ESTÁ DENTRO DEL FORM
             //Y PODRIAMOS USAR UNA VARIABLE POST PARA AVISAR DE QUE SE TIENE QUE CREAR LA BD
             
+            return false;
             
-            crearBD($BD);
+            //crearBD($BD);
         }
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
@@ -54,6 +55,7 @@ function comprobarBD(){
     }
     
     $BD=null;
+    return true;
 }
 //Creación de tablas inciciales
 function crearBD($BD) {

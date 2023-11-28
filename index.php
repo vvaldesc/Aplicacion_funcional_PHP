@@ -24,8 +24,11 @@
             //el formulario te llevaría a homepage
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-                if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
+                
+                if (isset($_POST["crearBD"])) {
+                    crearBD($BD);
+                }
+                else if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
                     
                     if($_POST["pass"]!='' && $_POST["usr"]!=''){
                         
@@ -61,7 +64,7 @@
             }
             
             //Esta funcion no es muy acertada para implementar el boton crearBD
-            comprobarBD();
+            //if (comprobarBD());
             ?>
             
 
@@ -80,7 +83,8 @@
                 </div>
                     <!--<input type="hidden" class="form-control" id="token" name="token" value="</*?= $_SESSION['token'] ?*/>">-->
                     <button type="submit" class="mt-3 btn btn-primary">Iniciar Sesión</button>
-                    <button type="button" class="mt-3 btn btn-primary">Crear BD</button>
+                    <?= (comprobarBD()) ? '' : '<button value="crearBD" type="button" class="mt-3 btn btn-primary">Crear BD</button>'; ?>
+
             </form>
 
         </div>
