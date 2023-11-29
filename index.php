@@ -13,7 +13,6 @@
 
             <?php
             
-            include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
             include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
             
             session_start();
@@ -26,46 +25,13 @@
                 // Check if the form is submitted
                 crearBD();
             }
-            
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                
-                if (isset($_POST["pass"]) && isset($_POST["usr"]) ) {
-                    
-                    if($_POST["pass"]!='' && $_POST["usr"]!=''){
-                        
-                        try {
-                            $BD = conexionPDO();
-                            //Sentencia SQL
-                            $sql="SELECT * FROM vendedores WHERE DNI = '".$_POST['usr']."';";
-                            // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
-                            // ESTO NO LO HE COMPROBADO TODAVÍA
-                            $contrasena= hash('sha256', $_POST['pass']);
-                            $tabla= extraerTablas($sql);
-                            if (count($tabla) == 1 && $tabla[0][6]==$contrasena) {
-                               
-                                $_SESSION['rol']=$tabla[0][5];
-                                $_SESSION['name']=$tabla[0][1];
-                                $_SESSION['apellidos']=$tabla[0][2];
-                                $_SESSION['email']=$tabla[0][7];
-                                
-                                //variable manual (CUIDADO)
-                                enviarMail();
-                                                                
-                                header('Location: ./pages/homepage.php');
-                            } else {
-                                echo mensajeError("La contraseña o el usuario no es correcto o BD no creada");
-                            }
-                        } catch (Exception $exc) {
-                            echo $exc->getTraceAsString();
-                        }
-                                        }else{
-                        echo mensajeError("Formulario no rellenado");
-                    }
-                }
+                comprobarLogin($_POST);
             }
             
-            //Esta funcion no es muy acertada para implementar el boton crearBD
-            //if (comprobarBD());
+            
+            
+            
             ?>
             
 
@@ -87,7 +53,7 @@
                     </form>
                     <?php
                         if (comprobarBD() === false) {
-                            echo '<button class="btn btn-primary my-3" data-toggle="modal" data-target="#agregarCoche">Agregar Base de Datos</button>';
+                            echo '<button class="btn btn-primary my-3 mx-auto" data-toggle="modal" data-target="#agregarCoche">Agregar Base de Datos</button>';
                             echo '<div class="modal fade" id="agregarCoche">
                                     <div class="modal-dialog">
                                           <div class="modal-content">

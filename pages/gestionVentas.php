@@ -11,13 +11,44 @@
     ?>
 </head>
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+    <?php 
+    $mod='a';
+    include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php';
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        if(isset($_POST['datos'])){
+            $palabras = explode(' ', $_POST['vendedor']);
+                $dni_vendedor = end($palabras);
+                $palabras = explode(' ', $_POST['coche']);
+                $vin_coche = end($palabras);
+                $palabras = explode(' ', $_POST['cliente']);
+                $dni_cliente = end($palabras);
+            modificarTabla('ventas', 'DNI_vendedores', $dni_vendedor,'cod_ventas',$_POST['cod_venta'] );
+        }else{
+            if(isset($_POST['mod'])){
+                $mod=$_POST['mod'];
+            }else{
+                $palabras = explode(' ', $_POST['vendedor']);
+                $dni_vendedor = end($palabras);
+                $palabras = explode(' ', $_POST['coche']);
+                $vin_coche = end($palabras);
+                $palabras = explode(' ', $_POST['cliente']);
+                $dni_cliente = end($palabras);
+                insertar('ventas',array('COD_VENTAS' => $_POST['cod_ventas'],"DNI_vendedores"=>$dni_vendedor ,"VIN_coches" => $vin_coche,"DNI_clientes" => $dni_cliente));
+                
+            }
+        }
+        
+    }     
+           
+    ?>
     <div class="container mt-4">
-        <h1 class="text-center mb-5">Gestión de Coches</h1>
+        <h1 class="text-center mb-5">Gestión de Ventas</h1>
         <!-- Caracteristicas de coches -->
         <table class="table">
             <thead>
                 <tr>
+                    <th>Cod_Ventas</th>
                     <th>Vendedor</th>
                     <th>Coche</th>
                     <th>Cliente</th>
@@ -29,71 +60,133 @@
                  * AQUI SE MUESTRAN TODAS LAS VENTAS
                  * 
                  * 
-                //Un cliente no debería poder entrar aquí
                 //Un admin puede ver y gestionar la informacion de todos los clientes
+                 * y un vendedor también.
                  * 
                  * 
-                 * 
-                    $sentencia='SELECT clientes.nombre, clientes.DNI, coches.VIN, vendedores.DNI, vendedores.Nombre from clientes join coches on clientes.DNI = coches.VIN join vendedores vendedores.dni=coches.VIN';
+                 * */
+                    $sentencia='SELECT * from ventas';
                     
                     
                     
                     $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($row);$i++){
+                    for($i=0;$i< count($tabla);$i++){
+                        $cod_venta=$tabla[$i][0];
+                        
                         //No lo he comprobado
-                        echo '<tr>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][2].'</td>
-                                 <td>'.$tabla[0][3].'</td>
-                                 <td>'.$tabla[0][4].'</td>
-                                 <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
-                            </tr>';
+                        if($mod==$i){
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<input type="hidden" id="datos" name="datos" value="">';
+                            echo '<input type="hidden" id="cod_venta" name="cod_venta" value="'.$tabla[$i][0].'">';
+                            echo '<tr>
+                                     <td>'.$tabla[$i][0].'</td>
+                                     <td><select class="col-xl-9" id="vendedor" name="vendedor">
+                                    ';
+                            echo $vende = extraerTablas('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');
+                                    foreach ($vende as $key => $value) {
+                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
+                                    }        
+                            echo '       
+                                </select></td>
+                                     <td><select class="col-xl-9" id="coche" name="coche">
+                                    ';
+                            echo    $coche = extraerTablas('SELECT Marca , Modelo , vin FROM coches');
+                                    foreach ($coche as $key => $value) {
+                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
+                                    }
+                                    
+                            echo   '</select></td>
+                                     <td><select class="col-xl-9" id="cliente" name="cliente">
+                                    ';
+                            echo    $cliente = extraerTablas('SELECT Nombre , Apellidos , dni FROM clientes');
+                                    foreach ($cliente as $key => $value) {
+                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
+                                    }
+                                    
+                            echo    '</select></td>
+                                    </tr>';
+                            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+                            echo '</form>';
+                        }else{
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<input type="hidden" id="mod" name="mod" value="'.$i.'">';
+                            echo '<tr>
+                                     <td>'.$tabla[$i][0].'</td>
+                                     <td>'.$tabla[$i][1].'</td>
+                                     <td>'.$tabla[$i][2].'</td>
+                                     <td>'.$tabla[$i][3].'</td>
+                                     <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></a></td>
+                                    </tr>';
+                            echo '</form>';
+                        }
+                        
                     }
-                */
+                    
+                
                 ?>
                 
             </tbody>
         </table>
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar Coche</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarVenta">Agregar Coche</button>
 
-        <div class="modal fade" id="agregarCoche" >
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title">Agregar Coche</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <!-- Agregar Nuevo coche-->
-                      <form method="POST" action="#">
-                          <div class="form-group">
-                              <label for="marca">Marca</label>
-                              <input type="text" class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="modelo">Modelo</label>
-                              <input type="text" class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="año">Año</label>
-                              <input type="number" class="form-control" id="año" placeholder="Ejemplo: 2023" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="precio">Precio</label>
-                              <input type="text" class="form-control" id="precio" placeholder="Ejemplo: 25000.00" required>
-                          </div>
-                      </form>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                      <input type="submit" class="btn btn-primary" value="Guardar">
-                  </div>
-              </div>
-          </div>
-      </div>
+        <div class="modal fade" id="agregarVenta" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Venta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Agregar Nuevo coche-->
+                        <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+                            <div class="form-group">
+                                <label for="marca">Seleccione un Vendedor</label>
+
+                                <input type="hidden" id="cod_ventas" name="cod_ventas" value="<?php echo $cod_venta + 1; ?>">
+                                <select class="col-xl-9" id="vendedor" name="vendedor">
+                                    <?php
+                                    $vendedores = extraerTablas('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');
+                                    foreach ($vendedores as $key => $value) {
+                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="modelo">Seleccione un Coche</label>
+                                <select class="col-xl-9" id="coche" name="coche">
+                                    <?php
+                                    $coches = extraerTablas('SELECT Marca , Modelo , vin FROM coches');
+                                    foreach ($coches as $key => $value) {
+                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="año">Seleccione un Cliente</label>
+                                <select class="col-xl-9" id="cliente" name="cliente">
+                                    <?php
+                                    $clientes = extraerTablas('SELECT Nombre , Apellidos , dni FROM clientes');
+                                    foreach ($clientes as $key => $value) {
+                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>

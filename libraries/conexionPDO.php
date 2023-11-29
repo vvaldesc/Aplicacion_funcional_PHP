@@ -203,3 +203,26 @@ function insertar($tabla, $valores) {
         throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
     }
 }
+
+function modificarTabla($tabla, $dato, $valor, $referencia, $valorReferencia) {
+    $BD = conexionPDO();
+
+    try {
+
+        
+        $sql ="UPDATE $tabla SET $dato = '$valor' WHERE $referencia = '$valorReferencia'";
+        $stmt = $BD->prepare($sql);
+
+        $stmt->execute();
+
+        echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    'Se ha modificado la tabla correctamente '
+                </p>
+            </div>
+        </nav>'";
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
