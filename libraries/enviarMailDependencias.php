@@ -25,7 +25,7 @@ try {
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'concesionarioconce@gmail.com'; // Cambia esto
-    $mail->Password = 'conce200#'; // Cambia esto
+    $mail->Password = 'jgoc mmcv txze hvvb'; // Cambia esto // 'conce200#'
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
     $mail->Timeout = 5;
