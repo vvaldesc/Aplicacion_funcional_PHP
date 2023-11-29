@@ -26,7 +26,10 @@
                 modificarTabla('coches', 'km', $_POST["km"],'VIN',$_POST["vin"] );
                 
         }else{
-            if(isset($_POST['mod'])){
+            if(isset($_POST['clear'])){
+                eliminarDatos('coches', 'VIN', $_POST['clear']);
+            }else{
+                if(isset($_POST['mod'])){
                 $mod=$_POST['mod'];
             }else{
                 if (checkForm($_POST)){
@@ -34,6 +37,8 @@
                 }else{
                     $formError=true;
                 }
+            }
+            
         }}
         }
     
@@ -96,9 +101,14 @@
                                 <td>'.$tabla[$i][4].'</td>
                                 <td>'.$tabla[$i][5].'</td>
                                 <td>'.$tabla[$i][6].'</td>
-                                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></a></td>
-                                </tr>';
+                                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
+                                ';
                             echo '</form>';
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">
+                                    <input type="hidden" id="clear" name="clear" value="'.$tabla[$i][0].'">
+                                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
+                                </form>';
+                            echo '</tr>';
                     }
                     }
                 

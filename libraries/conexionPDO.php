@@ -226,3 +226,31 @@ function modificarTabla($tabla, $dato, $valor, $referencia, $valorReferencia) {
         echo "Error: " . $e->getMessage();
     }
 }
+
+function eliminarDatos($tabla,$dato,$valor){
+    $BD = conexionPDO();
+
+    try {
+        
+        $sql ="DELETE FROM $tabla WHERE $dato = '".$valor."'";
+        $stmt = $BD->prepare($sql);
+
+        $stmt->execute();
+
+        echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    'Se ha eliminado la columna correctamente '
+                </p>
+            </div>
+        </nav>'";
+    } catch (Exception $e) {
+        echo "<nav class='navbar bg-body-tertiary bg-danger rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    'No se puede eliminar este valor, porque es foranea de otra.'
+                </p>
+            </div>
+        </nav>'";
+    }
+}
