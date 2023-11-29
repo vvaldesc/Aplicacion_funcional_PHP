@@ -15,14 +15,27 @@
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php 
+        $mod='a';
         $formError=false;
-    if ($_SERVER["REQUEST_METHOD"] == "PHP_SELF") {
-        if (checkForm($_POST)){
-            insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"],"DNI_vendedores"=> $_POST["vendedor"]));
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if(isset($_POST['datos'])){
+                modificarTabla('coches', 'matricula', $_POST["matricula"],'VIN',$_POST["vin"] );
+                modificarTabla('coches', 'marca', $_POST["marca"],'VIN',$_POST["vin"] );
+                modificarTabla('coches', 'modelo', $_POST["modelo"],'VIN',$_POST["vin"] );
+                modificarTabla('coches', 'ano', $_POST["ano"],'VIN',$_POST["vin"] );
+                modificarTabla('coches', 'km', $_POST["km"],'VIN',$_POST["vin"] );
+                
         }else{
-            $formError=true;
+            if(isset($_POST['mod'])){
+                $mod=$_POST['mod'];
+            }else{
+                if (checkForm($_POST)){
+                insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
+                }else{
+                    $formError=true;
+                }
+        }}
         }
-    }
     
     ?>
 
@@ -57,8 +70,25 @@
                     
                     $tabla=extraerTablas($sentencia);
                     for($i=0;$i< count($tabla);$i++){
-                        //No lo he comprobado
-                        echo '<tr>
+                        if($mod==$i){
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<input type="hidden" id="datos" name="datos" value="">';
+                            echo '<input type="hidden" id="vin" name="vin" value="'.$tabla[$i][0].'">';
+                            echo '<tr>
+                                     <td>'.$tabla[$i][0].'</td>
+                                     <td><input value="'.$tabla[$i][1].'" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required></td>
+                                     <td> <input value="'.$tabla[$i][2].'" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required></td>
+                                     <td><input value="'.$tabla[$i][3].'" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required></td>
+                                     <td><input value="'.$tabla[$i][4].'" type="number" name="ano"  class="form-control" id="año" placeholder="Ejemplo: 2023" required></td>
+                                     <td><input value="'.$tabla[$i][5].'" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
+                                     <td><input value="'.$tabla[$i][6].'" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
+                                    </tr>';
+                            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+                            echo '</form>';
+                        }else{
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<input type="hidden" id="mod" name="mod" value="'.$i.'">';
+                            echo '<tr>
                                 <td>'.$tabla[$i][0].'</td>
                                 <td>'.$tabla[$i][1].'</td>
                                 <td>'.$tabla[$i][2].'</td>
@@ -66,8 +96,10 @@
                                 <td>'.$tabla[$i][4].'</td>
                                 <td>'.$tabla[$i][5].'</td>
                                 <td>'.$tabla[$i][6].'</td>
-                                 <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
-                            </tr>';
+                                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></a></td>
+                                </tr>';
+                            echo '</form>';
+                    }
                     }
                 
                 ?>
