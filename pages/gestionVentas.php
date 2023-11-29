@@ -24,7 +24,12 @@
                 $palabras = explode(' ', $_POST['cliente']);
                 $dni_cliente = end($palabras);
             modificarTabla('ventas', 'DNI_vendedores', $dni_vendedor,'cod_ventas',$_POST['cod_venta'] );
+            modificarTabla('ventas', 'VIN_coches', $vin_coche,'cod_ventas',$_POST['cod_venta'] );
+            modificarTabla('ventas', 'DNI_clientes', $dni_cliente,'cod_ventas',$_POST['cod_venta'] );
         }else{
+            if(isset($_POST['clear'])){
+                eliminarDatos('ventas', 'cod_ventas', $_POST['clear']);
+            }else{
             if(isset($_POST['mod'])){
                 $mod=$_POST['mod'];
             }else{
@@ -38,7 +43,7 @@
                 
             }
         }
-        
+        }
     }     
            
     ?>
@@ -52,6 +57,7 @@
                     <th>Vendedor</th>
                     <th>Coche</th>
                     <th>Cliente</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +81,7 @@
                         
                         //No lo he comprobado
                         if($mod==$i){
-                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<form class="mx-0" method="POST" action="'.$_SERVER["PHP_SELF"].'">';
                             echo '<input type="hidden" id="datos" name="datos" value="">';
                             echo '<input type="hidden" id="cod_venta" name="cod_venta" value="'.$tabla[$i][0].'">';
                             echo '<tr>
@@ -115,9 +121,14 @@
                                      <td>'.$tabla[$i][1].'</td>
                                      <td>'.$tabla[$i][2].'</td>
                                      <td>'.$tabla[$i][3].'</td>
-                                     <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></a></td>
-                                    </tr>';
+                                     <td class="mx-0"><button class="btn btn-primary mx-0 border" type="submit"><i class="fa-solid fa-pencil"></i></button></td>
+                            ';
                             echo '</form>';
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">
+                                    <input type="hidden" id="clear" name="clear" value="'.$tabla[$i][0].'">
+                                    <td><button class="btn btn-danger mx-0 border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
+                                </form>';
+                            echo '</tr>';
                         }
                         
                     }
