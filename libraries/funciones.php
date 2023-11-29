@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
 if (!function_exists('enviarMail')) {
 
 
@@ -70,6 +71,7 @@ if (!function_exists('enviarMail')) {
     }
 
 }
+
 //No se si esto es necesario - Víctor
 if (!function_exists('mensajeError')) {
 
@@ -85,11 +87,64 @@ if (!function_exists('mensajeError')) {
     }
 
 }
+/**
+ * Genera el token en funcion de fecha y la hora.
+ * 
+ * @param array $POST Array que contiene los datos del formulario login.
+ * 
+ */
 if (!function_exists('generaToken')) {
 
     function generaToken(&$token, $session_id) {
         $hora = date('H:i');
         $token = hash('sha256', $hora . $session_id);
+    }
+
+}
+/**
+ * Comprueba si el usuario y contraseña son correctos para acceder a la aplicación.
+ * 
+ * @param array $POST Array que contiene los datos del formulario login.
+ * 
+ */
+if (!function_exists('comprobarLogin')) {
+
+    function comprobarLogin($post) {
+
+
+        if (isset($post["pass"]) && isset($post["usr"])) {
+
+            if ($post["pass"] != '' && $post["usr"] != '') {
+
+                try {
+                    $BD = conexionPDO();
+                    //Sentencia SQL
+                    $sql = "SELECT * FROM vendedores WHERE DNI = '" . $_POST['usr'] . "';";
+                    // AL SER USUARIO CLAVE UNICA LA PRIMERA CONDICIÓN ES PRÁCTICAMENTE INNECESARIA
+                    // ESTO NO LO HE COMPROBADO TODAVÍA
+                    $contrasena = hash('sha256', $_POST['pass']);
+                    $tabla = extraerTablas($sql);
+                    if (count($tabla) == 1 && $tabla[0][6] == $contrasena) {
+
+                        $_SESSION['rol'] = $tabla[0][5];
+                        $_SESSION['name'] = $tabla[0][1];
+                        $_SESSION['apellidos'] = $tabla[0][2];
+                        $_SESSION['email'] = $tabla[0][7];
+
+                        //variable manual (CUIDADO)
+                        enviarMail();
+
+                        header('Location: ./pages/homepage.php');
+                    } else {
+                        echo mensajeError("La contraseña o el usuario no es correcto");
+                    }
+                } catch (Exception $exc) {
+                    echo $exc->getTraceAsString();
+                }
+            } else {
+                echo mensajeError("Formulario no rellenado");
+            }
+        }
     }
 
 }
