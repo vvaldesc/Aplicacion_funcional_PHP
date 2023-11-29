@@ -1,4 +1,8 @@
-
+<?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    session_start();
+    comprobarInicio($_SESSION);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

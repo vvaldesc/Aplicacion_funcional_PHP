@@ -1,3 +1,8 @@
+<?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    session_start();
+    comprobarInicio($_SESSION);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -148,7 +153,7 @@
                           </div>
                           <div class="form-group">
                               <label for="año">Año</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="number" name="año"  class="form-control" id="año" placeholder="Ejemplo: 2023" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
                           </div>
                           <div class="form-group">
                               <label for="precio">Precio</label>
