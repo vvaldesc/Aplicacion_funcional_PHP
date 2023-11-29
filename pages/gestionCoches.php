@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Coches - Concesionario</title>
-    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
         include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
@@ -13,7 +13,19 @@
 </head>
 
 <body>
-    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+    <?php 
+        
+    if ($_SERVER["REQUEST_METHOD"] == "PHP_SELF") {
+        if (checkForm($_POST)){
+            insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"],"DNI_vendedores"=> $_POST["vendedor"]));
+        }else{
+            $formError=true;
+        }
+    }
+    
+    ?>
+
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Coches</h1>
         <!-- Caracteristicas de coches -->
@@ -78,34 +90,34 @@
                   </div>
                   <div class="modal-body">
                       <!-- Agregar Nuevo coche-->
-                      <form method="POST" action="#">
+                      <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
                           <div class="form-group">
                               <label for="vin">VIN</label>
-                              <input type="text" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
                           </div>
                           <div class="form-group">
                               <label for="matricula">Matricula</label>
-                              <input type="text" class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
                           </div>
                           <div class="form-group">
                               <label for="marca">Marca</label>
-                              <input type="text" class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
                           </div>
                           <div class="form-group">
                               <label for="modelo">Modelo</label>
-                              <input type="text" class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
                           </div>
                           <div class="form-group">
                               <label for="año">Año</label>
-                              <input type="number" class="form-control" id="año" placeholder="Ejemplo: 2023" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="number" name="año"  class="form-control" id="año" placeholder="Ejemplo: 2023" required>
                           </div>
                           <div class="form-group">
                               <label for="precio">Precio</label>
-                              <input type="text" class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
                           </div>
                           <div class="form-group">
                               <label for="km">KM</label>
-                              <input type="text" class="form-control" id="km" placeholder="Ejemplo: 150000" required>
+                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
                           </div>
                           <div class="form-group d-flex flex-column">
                               <label for="vendedor">Vendedor</label>
@@ -118,6 +130,7 @@
                                   ?>
                               </select>
                               <?php
+                                //Boton añadir vendedor
                                 if($_SESSION['rol']=='admin'){
                                     echo '<a href="./gestionEmpleados.php"><i class="fa-solid fa-circle-plus"></i></a>';
                                 }
@@ -151,7 +164,7 @@
       </div>
     </div>
 
-    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
     <!-- JavaScript y jQuery para habilitar los componentes de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

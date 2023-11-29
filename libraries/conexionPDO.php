@@ -6,30 +6,24 @@ include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones
 
 //Creo variable global con los parámetros necesarios para la conexión PDO
 //$BD = conexionPDO();
-
-
 function extraerTablas($sql) {
-    try {
+     try {
         $BD = conexionPDO();
-        $cursorSql = $BD->query($sql);
-        if ($cursorSql) {
-            $tabla = Array();
-            foreach ($cursorSql as $row) {
-                $tabla[] = $row; //podría ser un array_push?
-            }
+        $cursorSql = $BD->prepare($sql);
+        if ($cursorSql->execute()) {
+            $tabla = $cursorSql->fetchAll();
             return $tabla;
-            //esto podría ser una excepción
         } else {
             echo "Error en la consulta: " . $BD->error;
         }
     } catch (Exception $exc) {
-        echo $exc->getMessage();
+        mensajeError("Error general ");
     }
 }
 function comprobarBD(){
     $creada=false;
     try {
-        $BD = new PDO("mysql:host=localhost", 'root', '');
+        $BD = conexionPDO();
         $sentencia='SHOW DATABASES';
         $sentencia=extraerTablas($sentencia);
         $creada=false;  $i=0;
@@ -39,31 +33,38 @@ function comprobarBD(){
             }
             $i++;
         }
-        if($creada==false){
-            crearBD($BD);
-        }
+            
+            //RETORNA UN BOTON EL CUAL CREA LA BD, ESTE BOTÓN ESTÁ DENTRO DEL FORM
+            //Y PODRIAMOS USAR UNA VARIABLE POST PARA AVISAR DE QUE SE TIENE QUE CREAR LA BD
+            
+            
+            
+            //crearBD($BD);
     } catch (Exception $exc) {
         if($exc->getCode() == 1045){
-            echo 'Conexión a la base de datos incorrecta, acceso denegado al usuario';
+            mensajeError('Conexión a la base de datos incorrecta, acceso denegado al usuario');
         }
+        //Excepción Cuando no está creada la base de datos
         if($exc->getCode() == 1049){
-            echo 'No existe la base de datos en el sistema';
+            //mensajeError('No existe la base de datos en el sistema');
+            return false;
         }
         else{
-            echo $exc->getMessage();
+            mensajeError('Error comprobando BD');
         }
     }
     
     $BD=null;
+    return true;
 }
 //Creación de tablas inciciales
-function crearBD($BD) {
+function crearBD() {
     
         //FALTA AÑADIR ALGUNOS PREPARES, CREO QUE SOLO HAY UNO
         //NO ESTARÍA MAL HACER UNA FUNCION DE ACTUALIZAR COLUMNAS DE UN REGISTRO (USAR EXTRAERTABLAS() DENTRO DE ESTA FUNCIÓN SERÍA LO SUYO)
         //Y SUS RESPECTIVAS EXCEPCIONES
     
-    
+        $BD = new PDO("mysql:host=localhost", 'root', '');
         try {
             //En insertar la letra ñ da error (puede ser la función bindValues)
             $BD->exec('CREATE DATABASE concesionario');
@@ -74,9 +75,11 @@ function crearBD($BD) {
             eliminarTabla('vendedores');*/
             
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
-                "Rol" => "varchar(20)","contrasena" => "varchar(100)"), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234')));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234')));
+                "Rol" => "varchar(20)","contrasena" => "varchar(100)",'Email' => 'varchar(100)'), array("DNI"));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234'), 'Email' => 'javierdiazmolina@yopmail.com'));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
+            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
+
             
             
             crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
@@ -187,11 +190,9 @@ function insertar($tabla, $valores) {
             $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
         }
 
-        if ($stmt->execute()) {
-            echo "Registro insertado con éxito.";
-        } else {
+        if (!$stmt->execute()) {
             throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
-        }
+        } 
     } else {
         throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
     }

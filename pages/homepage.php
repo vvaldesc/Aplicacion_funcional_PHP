@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,7 +10,7 @@
     
 </head>
 <body>
-    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php session_start() ?>
     <header>
         <h1>Concesionarios García</h1>
@@ -43,12 +44,12 @@
                         if ($_SESSION['rol'] == 'admin'){
                             echo'
                                 <li class="nav-item m-1">
-                                    <a class="nav-link" href="./gestionClientes.php">
+                                    <a class="nav-link" href="gestionClientes.php">
                                         <i class="fa-solid fa-children mx-2"></i>Gestion de Clientes
                                     </a>
                                 </li>
                                 <li class="nav-item m-1">
-                                    <a class="nav-link" href="./gestionEmpleados">
+                                    <a class="nav-link" href="gestionEmpleados">
                                         <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
                                     </a>
                                 </li>
@@ -73,7 +74,7 @@
         </div>
     </div>
     
-    <?= include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
     <!-- Agrega el enlace a Bootstrap JavaScript (asegúrate de que la URL sea correcta) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
