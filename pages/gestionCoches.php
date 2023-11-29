@@ -15,7 +15,7 @@
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php 
-        
+        $formError=false;
     if ($_SERVER["REQUEST_METHOD"] == "PHP_SELF") {
         if (checkForm($_POST)){
             insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"],"DNI_vendedores"=> $_POST["vendedor"]));
@@ -39,7 +39,6 @@
                     <th>Año</th>
                     <th>Precio</th>
                     <th>Km</th>
-                    <th>Cod_vendedor</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -67,10 +66,8 @@
                                 <td>'.$tabla[$i][4].'</td>
                                 <td>'.$tabla[$i][5].'</td>
                                 <td>'.$tabla[$i][6].'</td>
-                                <td>'.$tabla[$i][7].'</td> 
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
-                        $vendedores[]=$tabla[$i][7];
                     }
                 
                 ?>
@@ -93,7 +90,7 @@
                       <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
                           <div class="form-group">
                               <label for="vin">VIN</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
+                              <input  value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
                           </div>
                           <div class="form-group">
                               <label for="matricula">Matricula</label>
@@ -124,8 +121,9 @@
                               <div class="form-group">
                                   <select class="col-xl-9" id="vendedor" name="vendedor">
                                   <?php
-                                    for ($i = 0; $i < count($vendedores); $i++) {
-                                        echo '<option value="' . $vendedores[$i] . '">' . $vendedores[$i] . '</option>';
+                                    $tabla= extraerTablas('SELECT Nombre,Apellidos FROM vendedores;');
+                                    foreach ($tabla as $key => $value) {
+                                        echo '<option value="' . $value[0].' '.$value[1] . '">' . $value[0].' '.$value[1] . '</option>';
                                     }
                                   ?>
                               </select>
@@ -148,17 +146,18 @@
                                         }
                                     ?> 
                                   </select>
-                                  <a href="./gestionClientes.php.php"><i class="fa-solid fa-circle-plus"></i></a>
+                                  <a href="./gestionClientes.php"><i class="fa-solid fa-circle-plus"></i></a>
                                   
                               </div>
                                 
                           </div>
-                      </form>
-                  </div>
+                      
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                       <input type="submit" class="btn btn-primary" value="Guardar">
                   </div>
+                    </form>
+                </div>
               </div>
           </div>
       </div>
