@@ -19,13 +19,14 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
 
+
 $mail = new PHPMailer(true); //Objeto de la clase PHPMailer
 try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
-    $mail->Username = 'concesionarioconce@gmail.com'; // Cambia esto
-    $mail->Password = 'jgoc mmcv txze hvvb'; // Cambia esto // 'conce200#'
+    $mail->Username ='concesionarioconce@gmail.com'; // Cambia esto
+    $mail->Password = 'foad dfhp viwj vhmo'; // Cambia esto // 'conce200#'
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
     $mail->Timeout = 5;
