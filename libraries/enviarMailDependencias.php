@@ -31,7 +31,7 @@ try {
     $mail->Timeout = 5;
 
     $mail->setFrom('concesionarioconce@gmail.com');
-    $mail->addAddress('javier.diazmolina@riberadeltajo.es'); // Cambia esto al destinatario real
+    $mail->addAddress($_SESSION['email']); // Cambia esto al destinatario real
 
     $mail->isHTML(false);
     $mail->Subject = "Inicio de sesión con tu cuenta";

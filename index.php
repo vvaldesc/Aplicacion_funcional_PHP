@@ -50,7 +50,7 @@
                                 $_SESSION['email']=$tabla[0][7];
                                 
                                 //variable manual (CUIDADO)
-                                enviarMail($_SESSION['email']="concesionarioconce@gmail.com");
+                                enviarMail();
                                                                 
                                 header('Location: ./pages/homepage.php');
                             } else {
