@@ -186,5 +186,7 @@ if(!function_exists('cerrarSesion')){
         session_destroy();
         setcookie("nombreSesion",123,time()-1000,"localhost");
         setcookie("ultCone",123,time()-1000,"localhost");
+        setcookie("PHPSESSID",123,time()-1000,"localhost");
+
     }
 }

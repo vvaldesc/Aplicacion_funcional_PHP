@@ -14,9 +14,9 @@
 
 include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
 
-    if (!isset($_COOKIE["ultCone"])) {
-        cerrarSesion($_SESSION);
-        header('Location: ../index.php');
+    if (!isset($_COOKIE["ultCone"]) || isset($_GET["logOut"])) {
+        //cerrarSesion($_SESSION);
+        //header('Location: ../index.php');
     } else {
         comprobarInicio($_SESSION);
         //La cookie se actualiza, por tanto solo expira la sesión por inactividad
@@ -62,9 +62,6 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                         
                         <!-- No debería ser visible para clientes a partir de aquí -->
                         <?php
-                        
-                       
-                        
                         if ($_SESSION['rol'] == 'admin'){
                             echo'
                                 <li class="nav-item m-1">
@@ -78,11 +75,13 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                                     </a>
                                 </li>
                               ';
-                        } 
-                            
-                            
-                                
+                        }   
                         ?>
+                        <li class="nav-item m-1">
+                            <a class="nav-link" href="homepage.php?logOut=true">
+                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
