@@ -15,8 +15,8 @@
 include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
 
     if (!isset($_COOKIE["ultCone"]) || isset($_GET["logOut"])) {
-        //cerrarSesion($_SESSION);
-        //header('Location: ../index.php');
+        cerrarSesion($_SESSION);
+        header('Location: ../index.php');
     } else {
         comprobarInicio($_SESSION);
         //La cookie se actualiza, por tanto solo expira la sesión por inactividad

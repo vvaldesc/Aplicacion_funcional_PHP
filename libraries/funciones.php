@@ -126,6 +126,8 @@ if (!function_exists('comprobarLogin')) {
                     $tabla = extraerTablas($sql);
                     if (count($tabla) == 1 && $tabla[0][6] == $contrasena) {
                         
+                        session_start();
+                        
                         $valido=true;
 
                         $_SESSION['rol'] = $tabla[0][5];
