@@ -168,21 +168,7 @@ function eliminarTabla($tabla,$fk = null) {
     $BD=null;
 }
 
-//Valido la contraseña
-function validarContraseña($pass) {
-    // Verificar longitud mínima
-    if (strlen($pass) < 5) {
-        return false;
-    }
 
-    // Verificar que contenga al menos una letra y un número
-    if (!preg_match('/[A-Za-z]/', $pass) || !preg_match('/[0-9]/', $pass)) {
-        return false;
-    }
-
-    // Todas las verificaciones pasaron, la contraseña es válida
-    return true;
-}
 
 //valores es un array asociativo columna => valor
 function insertar($tabla, $valores) {
@@ -193,13 +179,11 @@ function insertar($tabla, $valores) {
     if (count($result) == 1) {
 
         if ($tabla=="vendedor") {
-            
             if (validarContraseña($valores['contrasena'])) {
                 $valores['contrasena']=hash('sha256', $valores['contrasena']);
             }else{
                 throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
             }
-            
         } 
             //Parámetros en caso de que no haya
             //$BD= conexionPDO();

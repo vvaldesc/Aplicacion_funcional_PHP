@@ -153,6 +153,25 @@ if (!function_exists('comprobarLogin')) {
     }
 
 }
+
+if (!function_exists('comprobarInicio')) {
+//Valido la contraseña
+    function validarContraseña($pass) {
+        // Verificar longitud mínima
+        if (strlen($pass) < 5) {
+            return false;
+        }
+
+        // Verificar que contenga al menos una letra y un número
+        if (!preg_match('/[A-Za-z]/', $pass) || !preg_match('/[0-9]/', $pass)) {
+            return false;
+        }
+
+        // Todas las verificaciones pasaron, la contraseña es válida
+        return true;
+    }
+}
+
 if(!function_exists('comprobarInicio')){
     function comprobarInicio($sesion){
         if(!$sesion['rol']){
