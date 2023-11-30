@@ -1,27 +1,7 @@
-
-
 <?php 
-            include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if(comprobarLogin($_POST)){
-            $nombreParaCookie = $_SESSION["name"];
-            $apellidoParaCookie = $_SESSION["apellidos"];
-            $nombreCompleto = $nombreParaCookie . ' ' . $apellidoParaCookie;
-            $fechaActualObjeto = new DateTime();
-            $fechaActualString = $fechaActualObjeto->format('Y-m-d H:i:s');
-
-            setcookie("nombreSesion", $nombreCompleto, time() + 300, 'localhost'); //la cookie dura 5 minutos
-            setcookie("ultCone", $fechaActualString, time() + 300, 'localhost');
-
-            unset($nombreParaCookie);
-            unset($apellidoParaCookie);
-            unset($nombreCompleto);
-            unset($fechaActualObjeto);
-            unset($fechaActualString);
-            unset($fechaActualString); 
-        }
-    }
+    comprobarCookieInicio($_POST,$_SESSION);
 ?>
 
 
@@ -33,7 +13,6 @@
         <title></title>
     </head>
     <body>
-       <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
      
         <div class="container mt-4">
             <!-- container -->
@@ -112,7 +91,6 @@
                     ?>
 
         </div>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
         <!-- JavaScript y jQuery para habilitar los componentes de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
