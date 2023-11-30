@@ -76,9 +76,9 @@ function crearBD() {
             
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
                 "Rol" => "varchar(20)","contrasena" => "varchar(100)",'Email' => 'varchar(100)'), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234'), 'Email' => 'javierdiazmolina@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>'javier1234', 'Email' => 'javierdiazmolina@yopmail.com'));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
 
             
             
@@ -168,37 +168,64 @@ function eliminarTabla($tabla,$fk = null) {
     $BD=null;
 }
 
+//Valido la contraseña
+function validarContraseña($pass) {
+    // Verificar longitud mínima
+    if (strlen($pass) < 5) {
+        return false;
+    }
+
+    // Verificar que contenga al menos una letra y un número
+    if (!preg_match('/[A-Za-z]/', $pass) || !preg_match('/[0-9]/', $pass)) {
+        return false;
+    }
+
+    // Todas las verificaciones pasaron, la contraseña es válida
+    return true;
+}
+
 //valores es un array asociativo columna => valor
 function insertar($tabla, $valores) {
 
+    //COMPRUEBO SI EXISTE A TABLA
     $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
 
     if (count($result) == 1) {
 
-        //Parámetros en caso de que no haya
-        //$BD= conexionPDO();
-        $BD = conexionPDO();
-
-        //para mostrar errores
-        $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $columnasSql = implode(", ", array_keys($valores));
-        $valoresSql = ":" . implode(", :", array_keys($valores));
-
-        $sql = "INSERT INTO " . $tabla . " (" . $columnasSql . ") VALUES (" . $valoresSql . ");";
-
-        //stmt se convierte en un array
-
-        $stmt = $BD->prepare($sql);
-
-        foreach ($valores as $clave => $valor) {
-            // Esto sustituye las claves por sus respectivas columnas
-            $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
-        }
-
-        if (!$stmt->execute()) {
-            throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
+        if ($tabla=="vendedor") {
+            
+            if (validarContraseña($valores['contrasena'])) {
+                $valores['contrasena']=hash('sha256', $valores['contrasena']);
+            }else{
+                throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
+            }
+            
         } 
+            //Parámetros en caso de que no haya
+            //$BD= conexionPDO();
+            $BD = conexionPDO();
+
+            //para mostrar errores
+            $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $columnasSql = implode(", ", array_keys($valores));
+            $valoresSql = ":" . implode(", :", array_keys($valores));
+
+            $sql = "INSERT INTO " . $tabla . " (" . $columnasSql . ") VALUES (" . $valoresSql . ");";
+
+            //stmt se convierte en un array
+
+            $stmt = $BD->prepare($sql);
+
+            foreach ($valores as $clave => $valor) {
+                // Esto sustituye las claves por sus respectivas columnas
+                $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+
+            if (!$stmt->execute()) {
+                throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
+            }
+        
     } else {
         throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
     }
