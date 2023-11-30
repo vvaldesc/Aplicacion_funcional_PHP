@@ -74,32 +74,28 @@ function crearBD() {
             eliminarTabla('coches','DNI_vendedores');
             eliminarTabla('vendedores');*/
             
-            crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
-                "Rol" => "varchar(20)","contrasena" => "varchar(100)",'Email' => 'varchar(100)'), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>'javier1234', 'Email' => 'javierdiazmolina@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+            crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)", "Apellidos" => "varchar(20)", "FechaAlta" => "DATE", "FechaNac" => "DATE",
+            "Rol" => "varchar(20)", "contrasena" => "varchar(100)", 'Email' => 'varchar(100)'), array("DNI"));
 
-            
-            
-            crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
-            insertar("coches", array("VIN" => "23456GFDB", "Matricula" => "3467LKF","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000));
-            insertar("coches", array("VIN" => "23456YHUS", "Matricula" => "0493HGS","Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000));
-            
-            
-            crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","Domicilio" => "varchar(20)","FechaNac" => "DATE"), array("DNI"));
-            insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo","Apellidos" => "Pérez","Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>"2000-04-11"));
-            insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro","Apellidos" => "Sánchez","Domicilio" => "Calle Sol, 8","FechaNac"=>"2002-08-19"));        
-            
-            crearTabla('ventas', array ('COD_VENTAS' => 'varchar(20)'),array('COD_VENTAS'));
-            anadirForanea('ventas', 'DNI', 'vendedores');
-            anadirForanea('ventas', 'VIN', 'coches');
-            anadirForanea('ventas', 'DNI', 'clientes');
-            insertar('ventas',array('COD_VENTAS' => '1',"DNI_vendedores"=> "06293364H","VIN_coches" => "23456GFDB","DNI_clientes" => "05245677L"));
-            insertar('ventas',array('COD_VENTAS' => '2',"DNI_vendedores"=> "03245754K","VIN_coches" => "23456YHUS","DNI_clientes" => "12304964Y"));
-            
-            
-        } catch (Exception $exc) {
+        insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier", "Apellidos" => "Diaz", "FechaAlta" => "2023-11-13", "FechaNac" => "2004-10-01", "Rol" => "junior", "contrasena" => 'javier1234', 'Email' => 'javierdiazmolina@yopmail.com'));
+        insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor", "Apellidos" => "Valdes", "FechaAlta" => "2023-11-11", "FechaNac" => "2001-03-13", "Rol" => "admin", "contrasena" => 'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+        insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin", "Apellidos" => "Valdes", "FechaAlta" => "2023-11-11", "FechaNac" => "2001-03-13", "Rol" => "", "contrasena" => 'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+
+        crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
+        insertar("coches", array("VIN" => "JH4DC4400SS012345", "Matricula" => "3467-LKF", "Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000));
+        insertar("coches", array("VIN" => "KLATF08Y1VB363633", "Matricula" => "0493-HGS", "Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000));
+
+        crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)", "Apellidos" => "varchar(20)", "Domicilio" => "varchar(20)", "FechaNac" => "DATE"), array("DNI"));
+        insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo", "Apellidos" => "Pérez", "Domicilio" => "Calle Fernandez De los Rios, 9", "FechaNac" => "2000-04-11"));
+        insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro", "Apellidos" => "Sánchez", "Domicilio" => "Calle Sol, 8", "FechaNac" => "2002-08-19"));
+
+        crearTabla('ventas', array('COD_VENTAS' => 'varchar(20)'), array('COD_VENTAS'));
+        anadirForanea('ventas', 'DNI', 'vendedores');
+        anadirForanea('ventas', 'VIN', 'coches');
+        anadirForanea('ventas', 'DNI', 'clientes');
+        insertar('ventas', array('COD_VENTAS' => '1', "DNI_vendedores" => "06293364H", "VIN_coches" => "23456GFDB", "DNI_clientes" => "05245677L"));
+        insertar('ventas', array('COD_VENTAS' => '2', "DNI_vendedores" => "03245754K", "VIN_coches" => "23456YHUS", "DNI_clientes" => "12304964Y"));
+    } catch (Exception $exc) {
             echo $exc->getMessage();
         }
 }
