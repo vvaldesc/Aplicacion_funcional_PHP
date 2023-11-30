@@ -53,7 +53,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item m-1">
-                                    <a class="nav-link" href="gestionEmpleados">
+                                    <a class="nav-link" href="gestionEmpleados.php">
                                         <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
                                     </a>
                                 </li>

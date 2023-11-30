@@ -12,11 +12,23 @@
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-        include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
     ?>
 </head>
 <body>    
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+    
+    <?php 
+    $formError=false;
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (checkForm($_POST)){
+            insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]));
+    }else{
+            $formError=true;
+        }
+    }
+    
+    ?>    
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Empleados</h1>
         <!-- Caracteristicas de coches -->
@@ -41,7 +53,7 @@
                 
                 //Un cliente no debería poder entrar aquí
                 //Un admin puede ver y gestionar la informacion de todos los clientes
-                    $sentencia='SELECT * FROM usuarios where rol is admin';
+                    $sentencia='SELECT * FROM vendedores';
                     
                     
                     
@@ -49,13 +61,13 @@
                     for($i=0;$i< count($tabla);$i++){
                         //No lo he comprobado
                         echo '<tr>
-                                 <td>'.$tabla[0][0].'</td>
-                                 <td>'.$tabla[0][1].'</td>
-                                 <td>'.$tabla[0][2].'</td>
-                                 <td>'.$tabla[0][3].'</td>
-                                 <td>'.$tabla[0][4].'</td>
-                                 <td>'.$tabla[0][5].'</td>
-                                 <td>'.$tabla[0][7].'</td>
+                                 <td>'.$tabla[$i][0].'</td>
+                                 <td>'.$tabla[$i][1].'</td>
+                                 <td>'.$tabla[$i][2].'</td>
+                                 <td>'.$tabla[$i][3].'</td>
+                                 <td>'.$tabla[$i][4].'</td>
+                                 <td>'.$tabla[$i][5].'</td>
+                                 <td>'.$tabla[$i][7].'</td>
                                  <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
                             </tr>';
                     }
@@ -77,28 +89,48 @@
                   </div>
                   <div class="modal-body">
                       <!-- Agregar Nuevo coche-->
-                      <form method="POST" action="#">
+                      <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
                           <div class="form-group">
-                              <label for="marca">Marca</label>
-                              <input type="text" class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
+                              <label for="dni">DNI</label>
+                              <input value="<?= $formError ? $_POST["dni"] : "" ?>"  name="dni" type="text" class="form-control" id="dni" placeholder="dni" required>
                           </div>
                           <div class="form-group">
-                              <label for="modelo">Modelo</label>
-                              <input type="text" class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
+                              <label for="modelo">Nombre</label>
+                              <input value="<?= $formError ? $_POST["nombre"] : "" ?>"  name="nombre" type="text" class="form-control" id="nombre" placeholder="Nombre" required>
                           </div>
                           <div class="form-group">
-                              <label for="año">Año</label>
-                              <input type="number" class="form-control" id="año" placeholder="Ejemplo: 2023" required>
+                              <label for="apellidos">Apellidos</label>
+                              <input value="<?= $formError ? $_POST["apellidos"] : "" ?>"  name="apellidos" type="text" class="form-control" id="apellidos" placeholder="Apellidos" required>
                           </div>
                           <div class="form-group">
-                              <label for="precio">Precio</label>
-                              <input type="text" class="form-control" id="precio" placeholder="Ejemplo: 25000.00" required>
+                              <label for="domicilio">Domicilio</label>
+                              <input value="<?= $formError ? $_POST["domicilio"] : "" ?>"  name="domicilio" type="text" class="form-control" id="domicilio" placeholder="Domicilio" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="rol">rol</label>
+                              <input value="<?= $formError ? $_POST["rol"] : "" ?>"  name="rol" type="text" class="form-control" id="rol" placeholder="rol" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="rol">mail</label>
+                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="text" class="form-control" id="mail" placeholder="mail" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="rol">Contraseña</label>
+                              <input name="contrasena" type="text" class="form-control" id="contrasena" placeholder="Contraseña" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="fechanac">Fecha de alta</label>
+                              <input name="fechaAlta" type="date" class="form-control" id="fechaAlta" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="fechanac">Fecha de nacimiento</label>
+                              <input name="fechanac" type="date" class="form-control" id="fechanac" required>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                              <input type="submit" class="btn btn-primary" value="Guardar">
                           </div>
                       </form>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                      <input type="submit" class="btn btn-primary" value="Guardar">
                   </div>
               </div>
           </div>
