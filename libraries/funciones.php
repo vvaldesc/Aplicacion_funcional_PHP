@@ -155,3 +155,27 @@ if(!function_exists('comprobarInicio')){
         }
     }
 }
+
+if(!function_exists('ultimaPalabra')){
+    function ultimaPalabra($dato){
+        $palabras = explode(' ', $dato);
+        return end($palabras);
+   }   
+}
+
+if(!function_exists('imprimirSelects')){
+    function imprimirSelects($sql){
+        $vendedores = extraerTablas($sql);
+            foreach ($vendedores as $key => $value) {
+                echo '<option value="' ;
+                for($i=0;$i< count($vendedores[0])/2;$i++){
+                    echo ' '.$value[$i];
+                }
+                echo  '">' ;
+                for($i=0;$i< count($vendedores[0])/2;$i++){
+                    echo ' '. $value[$i];
+                }
+                echo '</option>';
+            }
+        }   
+}

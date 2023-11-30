@@ -22,15 +22,9 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if(isset($_POST['datos'])){
-            $palabras = explode(' ', $_POST['vendedor']);
-                $dni_vendedor = end($palabras);
-                $palabras = explode(' ', $_POST['coche']);
-                $vin_coche = end($palabras);
-                $palabras = explode(' ', $_POST['cliente']);
-                $dni_cliente = end($palabras);
-            modificarTabla('ventas', 'DNI_vendedores', $dni_vendedor,'cod_ventas',$_POST['cod_venta'] );
-            modificarTabla('ventas', 'VIN_coches', $vin_coche,'cod_ventas',$_POST['cod_venta'] );
-            modificarTabla('ventas', 'DNI_clientes', $dni_cliente,'cod_ventas',$_POST['cod_venta'] );
+            modificarTabla('ventas', 'DNI_vendedores', ultimaPalabra($_POST['vendedor']),'cod_ventas',$_POST['cod_venta'] );
+            modificarTabla('ventas', 'VIN_coches', ultimaPalabra( $_POST['coche']),'cod_ventas',$_POST['cod_venta'] );
+            modificarTabla('ventas', 'DNI_clientes', ultimaPalabra( $_POST['cliente']),'cod_ventas',$_POST['cod_venta'] );
         }else{
             if(isset($_POST['clear'])){
                 eliminarDatos('ventas', 'cod_ventas', $_POST['clear']);
@@ -38,13 +32,9 @@
             if(isset($_POST['mod'])){
                 $mod=$_POST['mod'];
             }else{
-                $palabras = explode(' ', $_POST['vendedor']);
-                $dni_vendedor = end($palabras);
-                $palabras = explode(' ', $_POST['coche']);
-                $vin_coche = end($palabras);
-                $palabras = explode(' ', $_POST['cliente']);
-                $dni_cliente = end($palabras);
-                insertar('ventas',array('COD_VENTAS' => $_POST['cod_ventas'],"DNI_vendedores"=>$dni_vendedor ,"VIN_coches" => $vin_coche,"DNI_clientes" => $dni_cliente));
+                insertar('ventas',array('COD_VENTAS' => $_POST['cod_ventas'],"DNI_vendedores"
+                    . ""=>ultimaPalabra( $_POST['vendedor']) ,"VIN_coches" => ultimaPalabra( $_POST['coche']),
+                    "DNI_clientes" => ultimaPalabra( $_POST['cliente'])));
                 
             }
         }
@@ -93,26 +83,17 @@
                                      <td>'.$tabla[$i][0].'</td>
                                      <td><select class="col-xl-9" id="vendedor" name="vendedor">
                                     ';
-                            echo $vende = extraerTablas('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');
-                                    foreach ($vende as $key => $value) {
-                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
-                                    }        
+                            imprimirSelects('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');    
                             echo '       
                                 </select></td>
                                      <td><select class="col-xl-9" id="coche" name="coche">
                                     ';
-                            echo    $coche = extraerTablas('SELECT Marca , Modelo , vin FROM coches');
-                                    foreach ($coche as $key => $value) {
-                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
-                                    }
+                            imprimirSelects('SELECT Marca , Modelo , vin FROM coches');
                                     
                             echo   '</select></td>
                                      <td><select class="col-xl-9" id="cliente" name="cliente">
                                     ';
-                            echo    $cliente = extraerTablas('SELECT Nombre , Apellidos , dni FROM clientes');
-                                    foreach ($cliente as $key => $value) {
-                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
-                                    }
+                            imprimirSelects('SELECT Nombre , Apellidos , dni FROM clientes');
                                     
                             echo    '</select></td>
                                     </tr>';
@@ -163,10 +144,7 @@
                                 <input type="hidden" id="cod_ventas" name="cod_ventas" value="<?php echo $cod_venta + 1; ?>">
                                 <select class="col-xl-9" id="vendedor" name="vendedor">
                                     <?php
-                                    $vendedores = extraerTablas('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');
-                                    foreach ($vendedores as $key => $value) {
-                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
-                                    }
+                                    imprimirSelects('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');                      
                                     ?>
                                 </select>
                             </div>
@@ -174,10 +152,7 @@
                                 <label for="modelo">Seleccione un Coche</label>
                                 <select class="col-xl-9" id="coche" name="coche">
                                     <?php
-                                    $coches = extraerTablas('SELECT Marca , Modelo , vin FROM coches');
-                                    foreach ($coches as $key => $value) {
-                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
-                                    }
+                                        imprimirSelects('SELECT Marca , Modelo , VIN FROM coches');
                                     ?>
                                 </select>
                             </div>
@@ -185,10 +160,7 @@
                                 <label for="año">Seleccione un Cliente</label>
                                 <select class="col-xl-9" id="cliente" name="cliente">
                                     <?php
-                                    $clientes = extraerTablas('SELECT Nombre , Apellidos , dni FROM clientes');
-                                    foreach ($clientes as $key => $value) {
-                                        echo '<option value="' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '">' . $value[0] . ' ' . $value[1] . ' ' . $value[2] . '</option>';
-                                    }
+                                        imprimirSelects('SELECT Nombre , Apellidos , dni FROM clientes');
                                     ?>
                                 </select>
                             </div>
