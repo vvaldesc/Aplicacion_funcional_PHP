@@ -214,3 +214,37 @@ if(!function_exists('cerrarSesion')){
 
     }
 }
+
+if (!function_exists('validarDNI')) {
+
+    function validarDNI($dni) {
+        // Eliminar posibles espacios en blanco al principio o al final
+        $dni = trim($dni);
+
+        // Verificar que el DNI tiene una longitud válida
+        if (strlen($dni) !== 9) {
+            return false;
+        }
+
+        // Extraer la letra y los números del DNI
+        $letra = strtoupper(substr($dni, -1));
+        $numeros = substr($dni, 0, -1);
+
+        // Verificar que los números son válidos
+        if (!is_numeric($numeros)) {
+            return false;
+        }
+
+        // Calcular la letra esperada
+        $letraEsperada = substr("TRWAGMYFPDXBNJZSQVHLCKE", $numeros % 23, 1);
+
+        // Verificar que la letra sea correcta
+        if ($letra !== $letraEsperada) {
+            return false;
+        }
+
+        // Si todas las verificaciones pasaron, el DNI es válido
+        return true;
+    }
+
+}

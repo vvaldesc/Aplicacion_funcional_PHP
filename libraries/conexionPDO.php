@@ -178,11 +178,16 @@ function insertar($tabla, $valores) {
 
     if (count($result) == 1) {
 
-        if ($tabla=="vendedor") {
+        if (isset($valores['contrasena'])) {
             if (validarContraseña($valores['contrasena'])) {
                 $valores['contrasena']=hash('sha256', $valores['contrasena']);
             }else{
                 throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
+            }
+        } 
+        if (isset($valores['DNI'])) {
+            if (!validarDNI($valores['contrasena'])) {
+                throw new Exception(mensajeError("(insertar): DNI no válido."));
             }
         } 
             //Parámetros en caso de que no haya
