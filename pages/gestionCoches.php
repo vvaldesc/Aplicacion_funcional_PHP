@@ -12,7 +12,7 @@
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-        include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+    include_once ''; $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
         session_start();
     ?>
 </head>
@@ -30,19 +30,19 @@
                 modificarTabla('coches', 'ano', $_POST["ano"],'VIN',$_POST["vin"] );
                 modificarTabla('coches', 'km', $_POST["km"],'VIN',$_POST["vin"] );
                 
-        }else{
-            if(isset($_POST['clear'])){
-                eliminarDatos('coches', 'VIN', $_POST['clear']);
             }else{
-                if(isset($_POST['mod'])){
-                $mod=$_POST['mod'];
-            }else{
-                if (checkForm($_POST)){
-                insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
+                if(isset($_POST['clear'])){
+                    eliminarDatos('coches', 'VIN', $_POST['clear']);
                 }else{
-                    $formError=true;
+                    if(isset($_POST['mod'])){
+                    $mod=$_POST['mod'];
+                }else{
+                    if (checkForm($_POST)){
+                    insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
+                    }else{
+                        $formError=true;
+                    }
                 }
-            }
             
         }}
         }
@@ -168,10 +168,10 @@
                               <div class="form-group">
                                   <select class="col-xl-9" id="vendedor" name="vendedor">
                                   <?php
-                                    $tabla= extraerTablas('SELECT Nombre,Apellidos FROM vendedores;');
-                                    foreach ($tabla as $key => $value) {
-                                        echo '<option value="' . $value[0].' '.$value[1] . '">' . $value[0].' '.$value[1] . '</option>';
-                                    }
+                                        $tabla= extraerTablas('SELECT Nombre,Apellidos,DNI FROM vendedores;');
+                                        foreach ($tabla as $key => $value) {
+                                            echo '<option value="' . $value[0].' '.$value[1] . ' '.$value[2] . '">' . $value[0].' '.$value[1] .' ' .$value[2] .'</option>';
+                                        }
                                   ?>
                               </select>
                               <?php
@@ -187,9 +187,9 @@
                               <div class="form-group">
                                   <select class="col-xl-9" id="cliente" name="Cliente">
                                     <?php
-                                        $tabla= extraerTablas('SELECT Nombre,Apellidos FROM clientes;');
+                                        $tabla= extraerTablas('SELECT Nombre,Apellidos,DNI FROM clientes;');
                                         foreach ($tabla as $key => $value) {
-                                            echo '<option value="' . $value[0].' '.$value[1] . '">' . $value[0].' '.$value[1] . '</option>';
+                                            echo '<option value="' . $value[0].' '.$value[1] . ' '.$value[2] . '">' . $value[0].' '.$value[1] . ' ' .$value[2] .' </option>';
                                         }
                                     ?> 
                                   </select>
