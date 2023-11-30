@@ -2,31 +2,6 @@
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
     comprobarCookie($_SESSION,$_COOKIE);
-
-
-    /*session_start();
-    $nombreParaCookie=$_SESSION["name"];
-    $apellidoParaCookie=$_SESSION["apellidos"];
-    $nombreCompleto=$nombreParaCookie.' '.$apellidoParaCookie;
-    $fechaActualObjeto = new DateTime();
-    $fechaActualString = $fechaActualObjeto->format('Y-m-d H:i:s');
-    setcookie("nombreSesion", $_SESSION["name"] . " " . $_SESSION["apellidos"], time() + 300, 'localhost'); //la cookie dura 5 minutos
-    setcookie("ultCone", $fechaActualString , time() + 300, 'localhost');
-    
-    unset($nombreParaCookie);    unset($apellidoParaCookie);    unset($nombreCompleto);
-    unset($fechaActualObjeto);    unset($fechaActualString);    unset($fechaActualString);
-
-
-include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
-
-    if (!isset($_COOKIE["ultCone"]) || isset($_GET["logOut"])) {
-        cerrarSesion($_SESSION);
-        header('Location: ../index.php');
-    } else {
-        comprobarInicio($_SESSION);
-        //La cookie se actualiza, por tanto solo expira la sesión por inactividad
-        setcookie("ultCone", date('Y-m-d H:i:s'), 300, '/'); //la cookie dura 10 minutos
-    }*/
     
 ?>
 <!DOCTYPE html>
@@ -39,7 +14,6 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
-        //session_start(); Este sobra
     ?>
 </head>
 

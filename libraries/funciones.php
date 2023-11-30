@@ -111,7 +111,6 @@
                     $tabla = extraerTablas($sql);
                     if (count($tabla) == 1 && $tabla[0][6] == $contrasena) {
 
-                        session_start();
 
                         $valido = true;
 
