@@ -1,6 +1,6 @@
 <?php 
     include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
-
+    session_start();
     comprobarCookieInicio($_POST,$_SESSION);
 ?>
 
