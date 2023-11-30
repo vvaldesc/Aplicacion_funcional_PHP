@@ -1,5 +1,10 @@
 <?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
+    comprobarCookie($_SESSION,$_COOKIE);
+
+
+    /*session_start();
     $nombreParaCookie=$_SESSION["name"];
     $apellidoParaCookie=$_SESSION["apellidos"];
     $nombreCompleto=$nombreParaCookie.' '.$apellidoParaCookie;
@@ -21,7 +26,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
         comprobarInicio($_SESSION);
         //La cookie se actualiza, por tanto solo expira la sesión por inactividad
         setcookie("ultCone", date('Y-m-d H:i:s'), 300, '/'); //la cookie dura 10 minutos
-    }
+    }*/
     
 ?>
 <!DOCTYPE html>
@@ -33,15 +38,12 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-    include_once ''; $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
         //session_start(); Este sobra
     ?>
 </head>
 
 <body>
-                                <a class="nav-link" href="homepage.php?logOut=true">
-                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
-                            </a>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php 
         $mod='a';
@@ -192,10 +194,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                               <div class="form-group">
                                   <select class="col-xl-9" id="vendedor" name="vendedor">
                                   <?php
-                                        $tabla= extraerTablas('SELECT Nombre,Apellidos,DNI FROM vendedores;');
-                                        foreach ($tabla as $key => $value) {
-                                            echo '<option value="' . $value[0].' '.$value[1] . ' '.$value[2] . '">' . $value[0].' '.$value[1] .' ' .$value[2] .'</option>';
-                                        }
+                                    imprimirSelects('SELECT Nombre,Apellidos,DNI FROM vendedores;');
                                   ?>
                               </select>
                               <?php
