@@ -12,7 +12,9 @@
 
         // Obtén el nombre del archivo actual sin la ruta
         $nombreArchivo = basename($_SERVER['PHP_SELF']);
-        
+        echo '<a class="nav-link" href="homepage.php?logOut=true">
+                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
+                            </a>';
         // Genera dinámicamente los enlaces
         foreach ($enlaces as $texto => $ruta) {
             $claseActiva = ($nombreArchivo === $ruta) ? 'active' : '';
