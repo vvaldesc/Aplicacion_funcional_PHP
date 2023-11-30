@@ -245,6 +245,55 @@
         // Si todas las verificaciones pasaron, el DNI es válido
         return true;
     }
+}
+
+if(!function_exists('cerrarSesion')){
+    function cerrarSesion(&$sesion){
+        $sesion=array();
+        session_destroy();
+        setcookie("nombreSesion",123,time()-1000,"localhost");
+        setcookie("ultCone",123,time()-1000,"localhost");
+        setcookie("PHPSESSID",123,time()-1000,"localhost");
+
+    }
+}
+
+//https://stackoverflow.com/questions/3831764/how-to-validate-a-vin-number
+if (!function_exists('validarVIN')) {
+function validarVIN($vin) {
+    return $esValido = (strlen($vin) === 17);
+}
+
+}
+
+if (!function_exists('validarMatricula')) {
+    function validarMatricula($matricula) {
+        // Patrón para matrículas españolas (ejemplo: 1234-ABC)
+        $patron = '/^[0-9]{4}-[A-Z]{3}$/';
+
+        // Verificar el formato de la matrícula
+        if (!preg_match($patron, $matricula)) {
+            return false;
+        }
+
+        // Otros posibles criterios de validación, como verificar el número y letras específicas
+        // Ejemplo: Verificar que el número de la matrícula sea mayor que 0
+        $numeroMatricula = intval(substr($matricula, 0, 4));
+        if ($numeroMatricula <= 0) {
+            return false;
+        }
+
+        // Ejemplo: Verificar que las letras sean solo letras mayúsculas
+        $letrasMatricula = substr($matricula, 5, 3);
+        if (!ctype_upper($letrasMatricula)) {
+            return false;
+        }
+
+        // Otros criterios de validación pueden agregarse según las reglas específicas
+
+        return true;
+    }
+}
     
     function comprobarCookieInicio($post,$session){
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
