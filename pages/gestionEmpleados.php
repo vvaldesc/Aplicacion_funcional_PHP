@@ -1,27 +1,7 @@
 <?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
-    $nombreParaCookie=$_SESSION["name"];
-    $apellidoParaCookie=$_SESSION["apellidos"];
-    $nombreCompleto=$nombreParaCookie.' '.$apellidoParaCookie;
-    $fechaActualObjeto = new DateTime();
-    $fechaActualString = $fechaActualObjeto->format('Y-m-d H:i:s');
-    setcookie("nombreSesion", $_SESSION["name"] . " " . $_SESSION["apellidos"], time() + 300, 'localhost'); //la cookie dura 5 minutos
-    setcookie("ultCone", $fechaActualString , time() + 300, 'localhost');
-    
-    unset($nombreParaCookie);    unset($apellidoParaCookie);    unset($nombreCompleto);
-    unset($fechaActualObjeto);    unset($fechaActualString);    unset($fechaActualString);
-
-
-include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
-
-    if (!isset($_COOKIE["ultCone"]) || isset($_GET["logOut"])) {
-        cerrarSesion($_SESSION);
-        header('Location: ../index.php');
-    } else {
-        comprobarInicio($_SESSION);
-        //La cookie se actualiza, por tanto solo expira la sesión por inactividad
-        setcookie("ultCone", date('Y-m-d H:i:s'), 300, '/'); //la cookie dura 10 minutos
-    }
+    comprobarCookie($_SESSION,$_COOKIE);
     
 ?>
 <!DOCTYPE html>
@@ -42,22 +22,13 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     <?php 
     $formError=false;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (checkForm($_POST) && validarContraseña($_POST["contrasena"])&& validarDNI($_POST["dni"])){
-            try {
-                insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => $_POST["contrasena"], 'Email' => $_POST["mail"]));
-            } catch (Exception $ex) {
-                $ex->getMessage();
-            }
+        if (checkForm($_POST)){
+            insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]));
     }else{
-        echo mensajeError("Contraseña no válida");
             $formError=true;
         }
     }
-    
     ?>    
-                                <a class="nav-link" href="homepage.php?logOut=true">
-                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
-                            </a>
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Empleados</h1>
         <!-- Caracteristicas de coches -->
@@ -105,23 +76,23 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                 
             </tbody>
         </table>
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar empleado</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar Empleado</button>
 
         <div class="modal fade" id="agregarCoche" >
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                      <h5 class="modal-title">Agregar Coche</h5>
+                      <h5 class="modal-title">Agregar Empleado</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                       </button>
                   </div>
                   <div class="modal-body">
-                      <!-- Agregar Nuevo coche-->
+                      <!-- Agregar Nuevo Empleado-->
                       <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
                           <div class="form-group">
                               <label for="dni">DNI</label>
-                              <input value="<?= $formError ? $_POST["dni"] : "" ?>"  name="dni" type="text" class="form-control" id="dni" placeholder="dni" required>
+                              <input value="<?= $formError ? $_POST["dni"] : "" ?>"  name="dni" type="text" class="form-control" id="DNI" placeholder="dni" required>
                           </div>
                           <div class="form-group">
                               <label for="modelo">Nombre</label>
@@ -135,21 +106,24 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                               <label for="domicilio">Domicilio</label>
                               <input value="<?= $formError ? $_POST["domicilio"] : "" ?>"  name="domicilio" type="text" class="form-control" id="domicilio" placeholder="Domicilio" required>
                           </div>
-                          <div class="form-group">
-                              <label for="rol">rol</label>
-                              <input value="<?= $formError ? $_POST["rol"] : "" ?>"  name="rol" type="text" class="form-control" id="rol" placeholder="rol" required>
+                          <div class="form-group d-flex flex-column">
+                              <label for="rol">Rol</label>
+                              <select class="form-select form-select-sm" id="rol" name="rol">
+                                  <option value="junior">Junior</option>
+                                  <option value="admin">Admin</option>
+                              </select>
+
                           </div>
                           <div class="form-group">
-                              <label for="rol">mail</label>
-                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="text" class="form-control" id="mail" placeholder="mail" required>
+                              <label for="rol">E-mail</label>
+                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="text" class="form-control" id="mail" placeholder="E-mail" required>
                           </div>
                           <div class="form-group">
                               <label for="rol">Contraseña</label>
-                              <input name="contrasena" type="text" class="form-control" id="contrasena" placeholder="Contraseña" required>
+                              <input name="contrasena" type="password" class="form-control" id="contrasena" placeholder="Contraseña" required>
                           </div>
                           <div class="form-group">
-                              <label for="fechanac">Fecha de alta</label>
-                              <input name="fechaAlta" type="date" class="form-control" id="fechaAlta" required>
+                              <input name="fechaAlta" type="hidden" value="<?php echo date('Y-m-d'); ?>" class="form-control" id="fechaAlta">
                           </div>
                           <div class="form-group">
                               <label for="fechanac">Fecha de nacimiento</label>
