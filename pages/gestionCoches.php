@@ -47,31 +47,33 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
         $mod='a';
         $formError=false;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if(isset($_POST['datos'])){
-                modificarTabla('coches', 'matricula', $_POST["matricula"],'VIN',$_POST["vin"] );
-                modificarTabla('coches', 'marca', $_POST["marca"],'VIN',$_POST["vin"] );
-                modificarTabla('coches', 'modelo', $_POST["modelo"],'VIN',$_POST["vin"] );
-                modificarTabla('coches', 'ano', $_POST["ano"],'VIN',$_POST["vin"] );
-                modificarTabla('coches', 'km', $_POST["km"],'VIN',$_POST["vin"] );
-                
-            }else{
-                if(isset($_POST['clear'])){
-                    eliminarDatos('coches', 'VIN', $_POST['clear']);
-                }else{
-                    if(isset($_POST['mod'])){
-                    $mod=$_POST['mod'];
-                }else{
-                    if (checkForm($_POST)){
-                    insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
-                    }else{
-                        $formError=true;
+    if (isset($_POST['datos'])) {
+        modificarTabla('coches', 'matricula', $_POST["matricula"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'marca', $_POST["marca"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'modelo', $_POST["modelo"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'ano', $_POST["ano"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'km', $_POST["km"], 'VIN', $_POST["vin"]);
+    } else {
+        if (isset($_POST['clear'])) {
+            eliminarDatos('coches', 'VIN', $_POST['clear']);
+        } else {
+            if (isset($_POST['mod'])) {
+                $mod = $_POST['mod'];
+            } else {
+                if (checkForm($_POST) && validarVIN($_POST["vin"]) && validarMatricula($_POST["matricula"])) {
+                    try {
+                        insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
+                    } catch (Exception $exc) {
+                        echo $exc->getTraceAsString();
                     }
+                } else {
+                    $formError = true;
                 }
-            
-        }}
+            }
         }
-    
-    ?>
+    }
+}
+?>
 
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Coches</h1>
@@ -165,27 +167,27 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                           </div>
                           <div class="form-group">
                               <label for="matricula">Matricula</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
+                              <input value="<?= $formError ? $_POST["matricula"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
                           </div>
                           <div class="form-group">
                               <label for="marca">Marca</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
+                              <input value="<?= $formError ? $_POST["marca"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
                           </div>
                           <div class="form-group">
                               <label for="modelo">Modelo</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
+                              <input value="<?= $formError ? $_POST["modelo"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
                           </div>
                           <div class="form-group">
                               <label for="año">Año</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
+                              <input value="<?= $formError ? $_POST["año"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
                           </div>
                           <div class="form-group">
                               <label for="precio">Precio</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
+                              <input value="<?= $formError ? $_POST["precio"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
                           </div>
                           <div class="form-group">
                               <label for="km">KM</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
+                              <input value="<?= $formError ? $_POST["km"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
                           </div>
                           <div class="form-group d-flex flex-column">
                               <label for="vendedor">Vendedor</label>

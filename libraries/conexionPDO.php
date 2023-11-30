@@ -178,18 +178,30 @@ function insertar($tabla, $valores) {
 
     if (count($result) == 1) {
 
-        if (isset($valores['contrasena'])) {
-            if (validarContraseña($valores['contrasena'])) {
-                $valores['contrasena']=hash('sha256', $valores['contrasena']);
-            }else{
-                throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
-            }
-        } 
+ 
         if (isset($valores['DNI'])) {
             if (!validarDNI($valores['DNI'])) {
                 throw new Exception(mensajeError("(insertar): DNI no válido."));
             }
-        } 
+            if (isset($valores['contrasena'])) {
+                if (validarContraseña($valores['contrasena'])) {
+                    $valores['contrasena']=hash('sha256', $valores['contrasena']);
+                }else{
+                    throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
+                }
+            }            
+        }else{
+            if (isset($valores['VIN'])) {
+                if (!validarVIN($valores['VIN'])) {
+                    throw new Exception(mensajeError("(insertar): VIN no válido."));
+                }
+                if (isset($valores['Matricula'])) {
+                    if (!validarMatricula($valores['Matricula'])) {
+                    throw new Exception(mensajeError("(insertar): Matrícula no válida."));
+                    }
+                }
+            }            
+        }
             //Parámetros en caso de que no haya
             //$BD= conexionPDO();
             $BD = conexionPDO();
