@@ -1,7 +1,30 @@
 <?php
-    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
-    comprobarInicio($_SESSION);
+    
+    $fechaActualObjeto = new DateTime();
+    $fechaActualString = $fechaActualObjeto->format('Y-m-d H:i:s');
+    setcookie("nombreSesion", $_SESSION["name"] . " " . $_SESSION["apellidos"], time() + 300, 'localhost'); //la cookie dura 5 minutos
+    setcookie("ultCone", $fechaActualString , time() + 300, 'localhost');
+
+include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    /*
+    if (time() > (new DateTime($_COOKIE["ultCone"]))->add(new DateInterval('PT10M'))) {
+        cerrarSesion($_SESSION);
+    } else {
+        session_start();
+        comprobarInicio($_SESSION);
+    }
+    */
+    
+    if (!isset($_COOKIE["ultCone"])) {
+        cerrarSesion($_SESSION);
+    } else {
+        comprobarInicio($_SESSION);
+        //La cookie se actualiza, por tanto solo expira la sesión por inactividad
+        setcookie("ultCone", date('Y-m-d H:i:s'), 300, '/'); //la cookie dura 10 minutos
+
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -69,8 +92,8 @@
                 <div class="col-xl-5 col-sm-7 mb-5 mx-auto">
                     <div class="bg-white rounded shadow-sm py-5 px-4">
                         <img src="../assets/img/jefe.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 mx-auto d-block  img-thumbnail shadow-sm">
-                        <h2 class="mb-3 mx-auto col-lg-14 text-center">Bienvenido <span class="display-4"><?php echo $_SESSION['name'].' '.$_SESSION['apellidos'] ?></span></h2>
-                        <p class="small text-uppercase text-muted text-center"><?php echo $_SESSION['rol'] ?></p>
+                        <h2 class="mb-3 mx-auto col-lg-14 text-center">Bienvenido <span class="display-4"><?php echo isset($_COOKIE["nombreSesion"]) ? $_COOKIE["nombreSesion"] : "error no existe la cookie nombreSesion"; ?></span></h2>
+                        <p class="small text-uppercase text-muted text-center">Última conexión <span><?php echo isset($_COOKIE["ultCone"]) ? $_COOKIE["ultCone"] : "error no existe la cookie ultCone"; ?></p>
                     </div>
                 </div>
             </main>
