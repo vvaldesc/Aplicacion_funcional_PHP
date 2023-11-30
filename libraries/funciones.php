@@ -245,7 +245,7 @@
         // Si todas las verificaciones pasaron, el DNI es válido
         return true;
     }
-}
+
 
 if(!function_exists('cerrarSesion')){
     function cerrarSesion(&$sesion){
