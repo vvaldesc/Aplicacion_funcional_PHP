@@ -7,11 +7,18 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+$autoload=$_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/vendor/autoload.php';
 //Load Composer's autoloader
-require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/vendor/autoload.php';
+if(file_exists($autoload)){
+    require $autoload;
+    $mail = new PHPMailer(true); //Objeto de la clase PHPMailer
+    
+}else{
+    trigger_error("No se ha encontrado el archivo autoload, para que funcione MailServer, intentelo de nuevo.", E_USER_ERROR);
+}
 
 
-$mail = new PHPMailer(true); //Objeto de la clase PHPMailer
+
 try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';
