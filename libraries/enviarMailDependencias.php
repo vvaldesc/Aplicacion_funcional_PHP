@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 //Load Composer's autoloader
-require 'vendor/autoload.php';
+require $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/vendor/autoload.php';
 
 
 $mail = new PHPMailer(true); //Objeto de la clase PHPMailer
