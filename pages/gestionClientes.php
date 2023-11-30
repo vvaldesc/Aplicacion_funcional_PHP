@@ -1,5 +1,9 @@
 <?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
+    comprobarCookie($_SESSION,$_COOKIE);
+    
+    /*session_start();
     $nombreParaCookie=$_SESSION["name"];
     $apellidoParaCookie=$_SESSION["apellidos"];
     $nombreCompleto=$nombreParaCookie.' '.$apellidoParaCookie;
@@ -12,7 +16,7 @@
     unset($fechaActualObjeto);    unset($fechaActualString);    unset($fechaActualString);
 
 
-include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
 
     if (!isset($_COOKIE["ultCone"]) || isset($_GET["logOut"])) {
         cerrarSesion($_SESSION);
@@ -22,7 +26,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
         //La cookie se actualiza, por tanto solo expira la sesión por inactividad
         setcookie("ultCone", date('Y-m-d H:i:s'), 300, '/'); //la cookie dura 10 minutos
     }
-    
+    */
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -33,24 +37,21 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-    include_once ''; $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+        include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
         $formError=false;
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if (checkForm($_POST && validarDNI($_POST["dni"]))){
-                    try {
-                        insertar("clientes", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"],"Apellidos" => $_POST["domicilio"],"Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>$_POST["fechanac"]));
-                    } catch (Exception $exc) {
-                        echo $exc->getMessage();
-                    }
-                }else{
-                    $formError=true;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (checkForm($_POST && validarDNI($_POST["dni"]))){
+                try {
+                    insertar("clientes", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"],"Apellidos" => $_POST["domicilio"],"Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>$_POST["fechanac"]));
+                } catch (Exception $exc) {
+                    echo $exc->getMessage();
+                }
+            }else{
+                $formError=true;
             }
-    }
-    ?>
+        }
+?>
 </head>
-                            <a class="nav-link" href="homepage.php?logOut=true">
-                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
-                            </a>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <div class="container mt-4">
@@ -112,7 +113,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                   </div>
                   <div class="modal-body">
                       <!-- Agregar Nuevo coche-->
-                      <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
+                      <form method="POST" action='<?php $_SERVER["PHP_SELF"] ?>'>
                           <div class="form-group">
                               <label for="dni">DNI</label>
                               <input value="<?= $formError ? $_POST["dni"] : "" ?>"  name="dni" type="text" class="form-control" id="dni" placeholder="dni" required>
