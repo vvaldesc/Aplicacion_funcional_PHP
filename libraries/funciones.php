@@ -267,3 +267,17 @@
             }
         }
     }
+    function imprimirTablas($tabla){
+        for($i=0;$i< count($tabla);$i++){
+            echo '<tr>
+                     <td>'.$tabla[$i][0].'</td>
+                     <td>'.$tabla[$i][1].'</td>
+                     <td>'.$tabla[$i][2].'</td>
+                     <td>'.$tabla[$i][3].'</td>
+                     <td>'.$tabla[$i][4].'</td>
+                     <td>'.$tabla[$i][5].'</td>
+                     <td>'.$tabla[$i][7].'</td>
+                     <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
+                </tr>';
+        }
+    }
