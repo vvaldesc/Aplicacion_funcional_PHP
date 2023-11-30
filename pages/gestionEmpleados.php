@@ -2,7 +2,10 @@
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
     comprobarCookie($_SESSION,$_COOKIE);
-    
+    if ($_SESSION['rol'] !== 'admin') {
+        header("Location: homepage.php");
+        exit(); // Ensure that no further code is executed after the redirect
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -73,11 +76,6 @@
                 //Un cliente no debería poder entrar aquí
                 //Un admin puede ver y gestionar la informacion de todos los clientes
                     $sentencia='SELECT * FROM vendedores';
-                    
-                    
-                    
-                    
-                    
                      $tabla=extraerTablas($sentencia);
                     for($i=0;$i< count($tabla);$i++){
                         if($mod==$i){

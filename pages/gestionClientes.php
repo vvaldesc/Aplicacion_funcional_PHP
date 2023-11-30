@@ -2,6 +2,10 @@
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
     comprobarCookie($_SESSION,$_COOKIE);
+    if ($_SESSION['rol'] !== 'admin') {
+        header("Location: homepage.php");
+        exit(); // Ensure that no further code is executed after the redirect
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
