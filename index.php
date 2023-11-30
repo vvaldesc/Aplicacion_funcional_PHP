@@ -20,7 +20,11 @@
 
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage
-            
+            if(isset($_GET['login'])){
+                if($_GET['login']=='false'){
+                    echo mensajeError('No se ha iniciado sesión, o rol aun no asignado.');
+                }
+            }
             if (isset($_POST['guardar'])) {
                 // Check if the form is submitted
                 crearBD();
@@ -46,7 +50,7 @@
                 </div>
                 <div class="form-group m-2" style="width: 300px">
                     <label for="pass">Contraseña</label>
-                    <input type="text" class="form-control" id="pass" name="pass" placeholder="Contraseña">
+                    <input type="password" class="form-control" id="pass" name="pass" placeholder="Contraseña">
                 </div>
                     <!--<input type="hidden" class="form-control" id="token" name="token" value="</*?= $_SESSION['token'] ?*/>">-->
                     <button type="submit" class="mt-3 btn btn-primary">Iniciar Sesión</button>

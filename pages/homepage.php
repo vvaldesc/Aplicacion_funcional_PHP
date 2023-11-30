@@ -15,7 +15,6 @@
 </head>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
-    <?php session_start() ?>
     <header>
         <h1>Concesionarios García</h1>
     </header>
