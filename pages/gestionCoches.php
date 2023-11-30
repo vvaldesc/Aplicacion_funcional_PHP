@@ -1,3 +1,9 @@
+<?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    session_start();
+    comprobarCookie($_SESSION,$_COOKIE);
+    
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,24 +13,43 @@
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-        include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
-        session_start();
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
     ?>
 </head>
 
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php 
-        
-    if ($_SERVER["REQUEST_METHOD"] == "PHP_SELF") {
-        if (checkForm($_POST)){
-            insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"],"Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"],"DNI_vendedores"=> $_POST["vendedor"]));
-        }else{
-            $formError=true;
+        $mod='a';
+        $formError=false;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['datos'])) {
+        modificarTabla('coches', 'matricula', $_POST["matricula"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'marca', $_POST["marca"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'modelo', $_POST["modelo"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'ano', $_POST["ano"], 'VIN', $_POST["vin"]);
+        modificarTabla('coches', 'km', $_POST["km"], 'VIN', $_POST["vin"]);
+    } else {
+        if (isset($_POST['clear'])) {
+            eliminarDatos('coches', 'VIN', $_POST['clear']);
+        } else {
+            if (isset($_POST['mod'])) {
+                $mod = $_POST['mod'];
+            } else {
+                if (checkForm($_POST) && validarVIN($_POST["vin"]) && validarMatricula($_POST["matricula"])) {
+                    try {
+                        insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
+                    } catch (Exception $exc) {
+                        echo $exc->getTraceAsString();
+                    }
+                } else {
+                    $formError = true;
+                }
+            }
         }
     }
-    
-    ?>
+}
+?>
 
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Coches</h1>
@@ -39,7 +64,6 @@
                     <th>Año</th>
                     <th>Precio</th>
                     <th>Km</th>
-                    <th>Cod_vendedor</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -58,8 +82,25 @@
                     
                     $tabla=extraerTablas($sentencia);
                     for($i=0;$i< count($tabla);$i++){
-                        //No lo he comprobado
-                        echo '<tr>
+                        if($mod==$i){
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<input type="hidden" id="datos" name="datos" value="">';
+                            echo '<input type="hidden" id="vin" name="vin" value="'.$tabla[$i][0].'">';
+                            echo '<tr>
+                                     <td>'.$tabla[$i][0].'</td>
+                                     <td><input value="'.$tabla[$i][1].'" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required></td>
+                                     <td> <input value="'.$tabla[$i][2].'" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required></td>
+                                     <td><input value="'.$tabla[$i][3].'" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required></td>
+                                     <td><input value="'.$tabla[$i][4].'" type="number" name="ano"  class="form-control" id="año" placeholder="Ejemplo: 2023" required></td>
+                                     <td><input value="'.$tabla[$i][5].'" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
+                                     <td><input value="'.$tabla[$i][6].'" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
+                                    </tr>';
+                            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+                            echo '</form>';
+                        }else{
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+                            echo '<input type="hidden" id="mod" name="mod" value="'.$i.'">';
+                            echo '<tr>
                                 <td>'.$tabla[$i][0].'</td>
                                 <td>'.$tabla[$i][1].'</td>
                                 <td>'.$tabla[$i][2].'</td>
@@ -67,10 +108,15 @@
                                 <td>'.$tabla[$i][4].'</td>
                                 <td>'.$tabla[$i][5].'</td>
                                 <td>'.$tabla[$i][6].'</td>
-                                <td>'.$tabla[$i][7].'</td> 
-                                 <td><a class="btn btn-primary border" href="#"><i class="fa-solid fa-pencil"></i></a><a class="btn btn-danger border" href="#"><i class="fa-solid fa-trash"></i></i></a></td>
-                            </tr>';
-                        $vendedores[]=$tabla[$i][7];
+                                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
+                                ';
+                            echo '</form>';
+                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">
+                                    <input type="hidden" id="clear" name="clear" value="'.$tabla[$i][0].'">
+                                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
+                                </form>';
+                            echo '</tr>';
+                    }
                     }
                 
                 ?>
@@ -93,40 +139,38 @@
                       <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
                           <div class="form-group">
                               <label for="vin">VIN</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
+                              <input  value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
                           </div>
                           <div class="form-group">
                               <label for="matricula">Matricula</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
+                              <input value="<?= $formError ? $_POST["matricula"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
                           </div>
                           <div class="form-group">
                               <label for="marca">Marca</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
+                              <input value="<?= $formError ? $_POST["marca"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
                           </div>
                           <div class="form-group">
                               <label for="modelo">Modelo</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
+                              <input value="<?= $formError ? $_POST["modelo"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
                           </div>
                           <div class="form-group">
                               <label for="año">Año</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="number" name="año"  class="form-control" id="año" placeholder="Ejemplo: 2023" required>
+                              <input value="<?= $formError ? $_POST["año"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
                           </div>
                           <div class="form-group">
                               <label for="precio">Precio</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
+                              <input value="<?= $formError ? $_POST["precio"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
                           </div>
                           <div class="form-group">
                               <label for="km">KM</label>
-                              <input value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
+                              <input value="<?= $formError ? $_POST["km"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
                           </div>
                           <div class="form-group d-flex flex-column">
                               <label for="vendedor">Vendedor</label>
                               <div class="form-group">
                                   <select class="col-xl-9" id="vendedor" name="vendedor">
                                   <?php
-                                    for ($i = 0; $i < count($vendedores); $i++) {
-                                        echo '<option value="' . $vendedores[$i] . '">' . $vendedores[$i] . '</option>';
-                                    }
+                                    imprimirSelects('SELECT Nombre,Apellidos,DNI FROM vendedores;');
                                   ?>
                               </select>
                               <?php
@@ -142,23 +186,24 @@
                               <div class="form-group">
                                   <select class="col-xl-9" id="cliente" name="Cliente">
                                     <?php
-                                        $tabla= extraerTablas('SELECT Nombre,Apellidos FROM clientes;');
+                                        $tabla= extraerTablas('SELECT Nombre,Apellidos,DNI FROM clientes;');
                                         foreach ($tabla as $key => $value) {
-                                            echo '<option value="' . $value[0].' '.$value[1] . '">' . $value[0].' '.$value[1] . '</option>';
+                                            echo '<option value="' . $value[0].' '.$value[1] . ' '.$value[2] . '">' . $value[0].' '.$value[1] . ' ' .$value[2] .' </option>';
                                         }
                                     ?> 
                                   </select>
-                                  <a href="./gestionClientes.php.php"><i class="fa-solid fa-circle-plus"></i></a>
+                                  <a href="./gestionClientes.php"><i class="fa-solid fa-circle-plus"></i></a>
                                   
                               </div>
                                 
                           </div>
-                      </form>
-                  </div>
+                      
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                       <input type="submit" class="btn btn-primary" value="Guardar">
                   </div>
+                    </form>
+                </div>
               </div>
           </div>
       </div>

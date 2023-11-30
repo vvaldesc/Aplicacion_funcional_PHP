@@ -1,4 +1,9 @@
-
+<?php
+    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    session_start();
+    comprobarCookie($_SESSION, $_COOKIE)
+    
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +16,6 @@
 </head>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
-    <?php session_start() ?>
     <header>
         <h1>Concesionarios García</h1>
     </header>
@@ -38,9 +42,6 @@
                         
                         <!-- No debería ser visible para clientes a partir de aquí -->
                         <?php
-                        
-                       
-                        
                         if ($_SESSION['rol'] == 'admin'){
                             echo'
                                 <li class="nav-item m-1">
@@ -49,16 +50,18 @@
                                     </a>
                                 </li>
                                 <li class="nav-item m-1">
-                                    <a class="nav-link" href="gestionEmpleados">
+                                    <a class="nav-link" href="gestionEmpleados.php">
                                         <i class="fa-solid fa-user-nurse mx-2"></i>Gestion de Empleados
                                     </a>
                                 </li>
                               ';
-                        } 
-                            
-                            
-                                
+                        }   
                         ?>
+                        <li class="nav-item m-1">
+                            <a class="nav-link" href="homepage.php?logOut=true">
+                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -66,8 +69,8 @@
                 <div class="col-xl-5 col-sm-7 mb-5 mx-auto">
                     <div class="bg-white rounded shadow-sm py-5 px-4">
                         <img src="../assets/img/jefe.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 mx-auto d-block  img-thumbnail shadow-sm">
-                        <h2 class="mb-3 mx-auto col-lg-14 text-center">Bienvenido <span class="display-4"><?php echo $_SESSION['name'].' '.$_SESSION['apellidos'] ?></span></h2>
-                        <p class="small text-uppercase text-muted text-center"><?php echo $_SESSION['rol'] ?></p>
+                        <h2 class="mb-3 mx-auto col-lg-14 text-center">Bienvenido <span class="display-4"><?php echo isset($_COOKIE["nombreSesion"]) ? $_COOKIE["nombreSesion"] : "error no existe la cookie nombreSesion"; ?></span></h2>
+                        <p class="small text-uppercase text-muted text-center">Última conexión <span><?php echo isset($_COOKIE["ultCone"]) ? $_COOKIE["ultCone"] : "error no existe la cookie ultCone"; ?></p>
                     </div>
                 </div>
             </main>

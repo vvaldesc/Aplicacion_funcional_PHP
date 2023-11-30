@@ -1,6 +1,6 @@
 <?php
 include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/conexion.php";
-include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones.php";
+include_once $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones.php";
 
 
 
@@ -68,32 +68,30 @@ function crearBD() {
         try {
             //En insertar la letra ñ da error (puede ser la función bindValues)
             $BD->exec('CREATE DATABASE concesionario');
-            /*
-             * dan error si no existen (Hay que arreglar eso)
-            eliminarTabla('clientes','VIN_coches');
-            eliminarTabla('coches','DNI_vendedores');
-            eliminarTabla('vendedores');*/
             
-            crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
-                "Rol" => "varchar(20)","contrasena" => "varchar(100)",'Email' => 'varchar(100)'), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234'), 'Email' => 'javierdiazmolina@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
 
-            
-            
-            crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
-            anadirForanea('coches', 'DNI', 'vendedores');
-            insertar("coches", array("VIN" => "23456GFDB", "Matricula" => "3467LKF","Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000,"DNI_vendedores"=> "06293364H"));
-            insertar("coches", array("VIN" => "23456YHUS", "Matricula" => "0493HGS","Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000,"DNI_vendedores"=> "03245754K"));
-            
-            
-            crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","Domicilio" => "varchar(20)","FechaNac" => "DATE"), array("DNI"));
-            anadirForanea('clientes', 'VIN', 'coches');
-            insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo","Apellidos" => "Pérez","Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>"2000-04-11","VIN_coches" => "23456GFDB"));
-            insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro","Apellidos" => "Sánchez","Domicilio" => "Calle Sol, 8","FechaNac"=>"2002-08-19","VIN_coches" => "23456YHUS"));        
-            
-        } catch (Exception $exc) {
+            crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)", "Apellidos" => "varchar(20)", "FechaAlta" => "DATE", "FechaNac" => "DATE",
+            "Rol" => "varchar(20)", "contrasena" => "varchar(100)", 'Email' => 'varchar(100)'), array("DNI"));
+
+        insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier", "Apellidos" => "Diaz", "FechaAlta" => "2023-11-13", "FechaNac" => "2004-10-01", "Rol" => "junior", "contrasena" => 'javier1234', 'Email' => 'javierdiazmolina@yopmail.com'));
+        insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor", "Apellidos" => "Valdes", "FechaAlta" => "2023-11-11", "FechaNac" => "2001-03-13", "Rol" => "admin", "contrasena" => 'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+        insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin", "Apellidos" => "Valdes", "FechaAlta" => "2023-11-11", "FechaNac" => "2001-03-13", "Rol" => "", "contrasena" => 'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+
+        crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
+        insertar("coches", array("VIN" => "JH4DC4400SS012345", "Matricula" => "3467-LKF", "Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000));
+        insertar("coches", array("VIN" => "KLATF08Y1VB363633", "Matricula" => "0493-HGS", "Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000));
+
+        crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)", "Apellidos" => "varchar(20)", "Domicilio" => "varchar(20)", "FechaNac" => "DATE"), array("DNI"));
+        insertar("clientes", array("DNI" => "05245677L", "Nombre" => "Rodrigo", "Apellidos" => "Pérez", "Domicilio" => "Calle Fernandez De los Rios, 9", "FechaNac" => "2000-04-11"));
+        insertar("clientes", array("DNI" => "12304964Y", "Nombre" => "Alejandro", "Apellidos" => "Sánchez", "Domicilio" => "Calle Sol, 8", "FechaNac" => "2002-08-19"));
+
+        crearTabla('ventas', array('COD_VENTAS' => 'varchar(20)'), array('COD_VENTAS'));
+        anadirForanea('ventas', 'DNI', 'vendedores');
+        anadirForanea('ventas', 'VIN', 'coches');
+        anadirForanea('ventas', 'DNI', 'clientes');
+        insertar('ventas', array('COD_VENTAS' => '1', "DNI_vendedores" => "06293364H", "VIN_coches" => "23456GFDB", "DNI_clientes" => "05245677L"));
+        insertar('ventas', array('COD_VENTAS' => '2', "DNI_vendedores" => "03245754K", "VIN_coches" => "23456YHUS", "DNI_clientes" => "12304964Y"));
+
             echo $exc->getMessage();
         }
 }
@@ -109,7 +107,6 @@ function anadirForanea($tabla,$foranea,$tablaForanea){
     $stmt->execute();
     
 }
-//javi no me borres esto
 function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
 
@@ -159,7 +156,6 @@ function eliminarTabla($tabla,$fk = null) {
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     }
-    $BD=null;
 }
 
 //valores es un array asociativo columna => valor
@@ -169,31 +165,120 @@ function insertar($tabla, $valores) {
 
     if (count($result) == 1) {
 
-        //Parámetros en caso de que no haya
-        //$BD= conexionPDO();
-        $BD = conexionPDO();
+ 
+        if (isset($valores['DNI'])) {
+            if (!validarDNI($valores['DNI'])) {
+                throw new Exception(mensajeError("(insertar): DNI no válido."));
+            }
+            if (isset($valores['contrasena'])) {
+                if (validarContraseña($valores['contrasena'])) {
+                    $valores['contrasena']=hash('sha256', $valores['contrasena']);
+                }else{
+                    throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
+                }
+            }            
+        }else{
+            if (isset($valores['VIN'])) {
+                if (!validarVIN($valores['VIN'])) {
+                    throw new Exception(mensajeError("(insertar): VIN no válido."));
+                }
+                if (isset($valores['Matricula'])) {
+                    if (!validarMatricula($valores['Matricula'])) {
+                    throw new Exception(mensajeError("(insertar): Matrícula no válida."));
+                    }
+                }
+            }            
+        }
+            //Parámetros en caso de que no haya
 
-        //para mostrar errores
-        $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $BD = conexionPDO();
 
-        $columnasSql = implode(", ", array_keys($valores));
-        $valoresSql = ":" . implode(", :", array_keys($valores));
+            //para mostrar errores
+            $BD->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "INSERT INTO " . $tabla . " (" . $columnasSql . ") VALUES (" . $valoresSql . ");";
+            $columnasSql = implode(", ", array_keys($valores));
+            $valoresSql = ":" . implode(", :", array_keys($valores));
 
-        //stmt se convierte en un array
+            $sql = "INSERT INTO " . $tabla . " (" . $columnasSql . ") VALUES (" . $valoresSql . ");";
 
+            //stmt se convierte en un array
+
+            $stmt = $BD->prepare($sql);
+
+            foreach ($valores as $clave => $valor) {
+                // Esto sustituye las claves por sus respectivas columnas
+                $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+
+            if (!$stmt->execute()) {
+                throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
+            } 
+        } catch (Exception $exc) {
+            echo mensajeError('No se puede insertar el registro, porque la clave principal está repetida.');
+        }
+        } else {
+        throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
+        }
+        if (isset($valores['contrasena'])) {
+            if (validarContraseña($valores['contrasena'])) {
+                $valores['contrasena']=hash('sha256', $valores['contrasena']);
+            }else{
+                throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
+            }
+        } 
+        if (isset($valores['DNI'])) {
+            if (!validarDNI($valores['DNI'])) {
+                throw new Exception(mensajeError("(insertar): DNI no válido."));
+            }
+        } 
+}
+
+function modificarTabla($tabla, $dato, $valor, $referencia, $valorReferencia) {
+    $BD = conexionPDO();
+
+    try {
+
+        
+        $sql ="UPDATE $tabla SET $dato = '$valor' WHERE $referencia = '$valorReferencia'";
         $stmt = $BD->prepare($sql);
 
-        foreach ($valores as $clave => $valor) {
-            // Esto sustituye las claves por sus respectivas columnas
-            $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
-        }
+        $stmt->execute();
 
-        if (!$stmt->execute()) {
-            throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
-        } 
-    } else {
-        throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
+        echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    'Se ha modificado la tabla correctamente '
+                </p>
+            </div>
+        </nav>'";
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+function eliminarDatos($tabla,$dato,$valor){
+    $BD = conexionPDO();
+    try {
+        
+        $sql ="DELETE FROM $tabla WHERE $dato = '".$valor."'";
+        $stmt = $BD->prepare($sql);
+
+        $stmt->execute();
+
+        echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    'Se ha eliminado la columna correctamente '
+                </p>
+            </div>
+        </nav>'";
+    } catch (Exception ) {
+        echo "<nav class='navbar bg-body-tertiary bg-danger rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    'No se puede eliminar este valor, porque es foranea de otra.'
+                </p>
+            </div>
+        </nav>'";
     }
 }
