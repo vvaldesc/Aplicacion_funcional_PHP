@@ -179,3 +179,12 @@ if(!function_exists('imprimirSelects')){
             }
         }   
 }
+
+if(!function_exists('cerrarSesion')){
+    function cerrarSesion(&$sesion){
+        $sesion=array();
+        session_destroy();
+        setcookie("nombreSesion",123,time()-1000,"/");
+        setcookie("ultCone",123,time()-1000,"/");
+    }
+}
