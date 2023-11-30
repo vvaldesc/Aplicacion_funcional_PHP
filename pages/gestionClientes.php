@@ -44,6 +44,9 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     }
     ?>
 </head>
+                            <a class="nav-link" href="homepage.php?logOut=true">
+                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
+                            </a>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <div class="container mt-4">

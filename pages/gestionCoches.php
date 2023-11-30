@@ -39,6 +39,9 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
 </head>
 
 <body>
+                                <a class="nav-link" href="homepage.php?logOut=true">
+                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
+                            </a>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
     <?php 
         $mod='a';

@@ -50,6 +50,9 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     }
     
     ?>    
+                                <a class="nav-link" href="homepage.php?logOut=true">
+                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
+                            </a>
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Empleados</h1>
         <!-- Caracteristicas de coches -->
