@@ -7,22 +7,13 @@
     setcookie("ultCone", $fechaActualString , time() + 300, 'localhost');
 
 include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
-    /*
-    if (time() > (new DateTime($_COOKIE["ultCone"]))->add(new DateInterval('PT10M'))) {
-        cerrarSesion($_SESSION);
-    } else {
-        session_start();
-        comprobarInicio($_SESSION);
-    }
-    */
-    
+
     if (!isset($_COOKIE["ultCone"])) {
         cerrarSesion($_SESSION);
     } else {
         comprobarInicio($_SESSION);
         //La cookie se actualiza, por tanto solo expira la sesión por inactividad
         setcookie("ultCone", date('Y-m-d H:i:s'), 300, '/'); //la cookie dura 10 minutos
-
     }
     
 ?>
