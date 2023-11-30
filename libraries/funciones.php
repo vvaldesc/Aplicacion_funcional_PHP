@@ -110,7 +110,7 @@ if (!function_exists('generaToken')) {
 if (!function_exists('comprobarLogin')) {
 
     function comprobarLogin($post) {
-
+        $valido=false;
 
         if (isset($post["pass"]) && isset($post["usr"])) {
 
@@ -125,6 +125,8 @@ if (!function_exists('comprobarLogin')) {
                     $contrasena = hash('sha256', $_POST['pass']);
                     $tabla = extraerTablas($sql);
                     if (count($tabla) == 1 && $tabla[0][6] == $contrasena) {
+                        
+                        $valido=true;
 
                         $_SESSION['rol'] = $tabla[0][5];
                         $_SESSION['name'] = $tabla[0][1];
@@ -145,6 +147,7 @@ if (!function_exists('comprobarLogin')) {
                 echo mensajeError("Formulario no rellenado");
             }
         }
+        return $valido;
     }
 
 }

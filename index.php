@@ -1,3 +1,30 @@
+
+
+<?php 
+            include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if(comprobarLogin($_POST)){
+            $nombreParaCookie = $_SESSION["name"];
+            $apellidoParaCookie = $_SESSION["apellidos"];
+            $nombreCompleto = $nombreParaCookie . ' ' . $apellidoParaCookie;
+            $fechaActualObjeto = new DateTime();
+            $fechaActualString = $fechaActualObjeto->format('Y-m-d H:i:s');
+
+            setcookie("nombreSesion", $nombreCompleto, time() + 300, 'localhost'); //la cookie dura 5 minutos
+            setcookie("ultCone", $fechaActualString, time() + 300, 'localhost');
+
+            unset($nombreParaCookie);
+            unset($apellidoParaCookie);
+            unset($nombreCompleto);
+            unset($fechaActualObjeto);
+            unset($fechaActualString);
+            unset($fechaActualString); 
+        }
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -13,9 +40,7 @@
 
             <?php
             
-            include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
             
-            session_start();
             generaToken($_SESSION['token'],session_id());
 
             //comprobar credenciales y token y si no, error
@@ -29,9 +54,9 @@
                 // Check if the form is submitted
                 crearBD();
             }
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            /*if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 comprobarLogin($_POST);
-            }
+            }*/
             
             
             
