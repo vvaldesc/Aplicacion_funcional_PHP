@@ -1,6 +1,6 @@
 <?php
 include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/conexion.php";
-include $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones.php";
+include_once $_SERVER["DOCUMENT_ROOT"]."/Aplicacion_funcional_PHP/libraries/funciones.php";
 
 
 
@@ -68,17 +68,12 @@ function crearBD() {
         try {
             //En insertar la letra ñ da error (puede ser la función bindValues)
             $BD->exec('CREATE DATABASE concesionario');
-            /*
-             * dan error si no existen (Hay que arreglar eso)
-            eliminarTabla('clientes','VIN_coches');
-            eliminarTabla('coches','DNI_vendedores');
-            eliminarTabla('vendedores');*/
             
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)","Apellidos" => "varchar(20)","FechaAlta" => "DATE","FechaNac" => "DATE",
                 "Rol" => "varchar(20)","contrasena" => "varchar(100)",'Email' => 'varchar(100)'), array("DNI"));
-            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>'javier1234', 'Email' => 'javierdiazmolina@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
-            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
+            insertar("vendedores", array("DNI" => "06293364H", "Nombre" => "Javier","Apellidos" => "Diaz","FechaAlta"=>"2023-11-13","FechaNac"=>"2004-10-01", "Rol" => "junior","contrasena"=>hash('sha256', 'javier1234'), 'Email' => 'javierdiazmolina@yopmail.com'));
+            insertar("vendedores", array("DNI" => "03245754K", "Nombre" => "Victor","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "admin","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
+            insertar("vendedores", array("DNI" => "03245755K", "Nombre" => "VictorNoAdmin","Apellidos" => "Valdes","FechaAlta"=>"2023-11-11","FechaNac"=>"2001-03-13", "Rol" => "","contrasena"=>hash('sha256', 'victor1234'), 'Email' => 'victorvaldescobos@yopmail.com'));
 
             
             
@@ -115,7 +110,6 @@ function anadirForanea($tabla,$foranea,$tablaForanea){
     $stmt->execute();
     
 }
-//javi no me borres esto
 function crearTabla($tabla, $columnas, $primaryKeys=array()) {
 
 
@@ -165,33 +159,18 @@ function eliminarTabla($tabla,$fk = null) {
         $sql = "DROP TABLE " . $tabla . ";";
         $stmt = $BD->exec($sql);
     }
-    $BD=null;
 }
-
-
 
 //valores es un array asociativo columna => valor
 function insertar($tabla, $valores) {
 
-    //COMPRUEBO SI EXISTE A TABLA
     $result = extraerTablas("SHOW TABLES LIKE '$tabla'");
 
     if (count($result) == 1) {
 
-        if (isset($valores['contrasena'])) {
-            if (validarContraseña($valores['contrasena'])) {
-                $valores['contrasena']=hash('sha256', $valores['contrasena']);
-            }else{
-                throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
-            }
-        } 
-        if (isset($valores['DNI'])) {
-            if (!validarDNI($valores['DNI'])) {
-                throw new Exception(mensajeError("(insertar): DNI no válido."));
-            }
-        } 
-            //Parámetros en caso de que no haya
-            //$BD= conexionPDO();
+        //Parámetros en caso de que no haya
+        //$BD= conexionPDO();
+        try {
             $BD = conexionPDO();
 
             //para mostrar errores
@@ -213,11 +192,25 @@ function insertar($tabla, $valores) {
 
             if (!$stmt->execute()) {
                 throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
-            }
-        
-    } else {
+            } 
+        } catch (Exception $exc) {
+            echo mensajeError('No se puede insertar el registro, porque la clave principal está repetida.');
+        }
+        } else {
         throw new Exception(mensajeError("(insertar): La tabla $tabla no existe, no es posible insertar."));
-    }
+        }
+        if (isset($valores['contrasena'])) {
+            if (validarContraseña($valores['contrasena'])) {
+                $valores['contrasena']=hash('sha256', $valores['contrasena']);
+            }else{
+                throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
+            }
+        } 
+        if (isset($valores['DNI'])) {
+            if (!validarDNI($valores['DNI'])) {
+                throw new Exception(mensajeError("(insertar): DNI no válido."));
+            }
+        } 
 }
 
 function modificarTabla($tabla, $dato, $valor, $referencia, $valorReferencia) {
@@ -245,7 +238,6 @@ function modificarTabla($tabla, $dato, $valor, $referencia, $valorReferencia) {
 
 function eliminarDatos($tabla,$dato,$valor){
     $BD = conexionPDO();
-
     try {
         
         $sql ="DELETE FROM $tabla WHERE $dato = '".$valor."'";
@@ -260,7 +252,7 @@ function eliminarDatos($tabla,$dato,$valor){
                 </p>
             </div>
         </nav>'";
-    } catch (Exception $e) {
+    } catch (Exception ) {
         echo "<nav class='navbar bg-body-tertiary bg-danger rounded m-2'>
             <div class='container-fluid'>
                 <p>
