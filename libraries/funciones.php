@@ -151,7 +151,7 @@ if (!function_exists('comprobarLogin')) {
 if(!function_exists('comprobarInicio')){
     function comprobarInicio($sesion){
         if(!$sesion['rol']){
-            header('Location: ../index.php');
+            header('Location: ../index.php?login=false');
         }
     }
 }
