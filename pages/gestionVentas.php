@@ -53,9 +53,17 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
             if(isset($_POST['mod'])){
                 $mod=$_POST['mod'];
             }else{
+                
+                try {
                 insertar('ventas',array('COD_VENTAS' => $_POST['cod_ventas'],"DNI_vendedores"
                     . ""=>ultimaPalabra( $_POST['vendedor']) ,"VIN_coches" => ultimaPalabra( $_POST['coche']),
                     "DNI_clientes" => ultimaPalabra( $_POST['cliente'])));
+                } catch (Exception $ex) {
+                    
+                }
+                
+                
+
                 
             }
         }

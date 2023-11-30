@@ -36,8 +36,12 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     include_once ''; $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
         $formError=false;
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                if (checkForm($_POST)){
-                    insertar("clientes", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"],"Apellidos" => $_POST["domicilio"],"Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>$_POST["fechanac"]));
+                if (checkForm($_POST && validarDNI($_POST["dni"]))){
+                    try {
+                        insertar("clientes", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"],"Apellidos" => $_POST["domicilio"],"Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>$_POST["fechanac"]));
+                    } catch (Exception $exc) {
+                        echo $exc->getMessage();
+                    }
                 }else{
                     $formError=true;
             }

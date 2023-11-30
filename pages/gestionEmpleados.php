@@ -42,9 +42,14 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
     <?php 
     $formError=false;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (checkForm($_POST)){
-            insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]));
+        if (checkForm($_POST) && validarContraseña($_POST["contrasena"])&& validarDNI($_POST["dni"])){
+            try {
+                insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => $_POST["contrasena"], 'Email' => $_POST["mail"]));
+            } catch (Exception $ex) {
+                $ex->getMessage();
+            }
     }else{
+        echo mensajeError("Contraseña no válida");
             $formError=true;
         }
     }
@@ -100,7 +105,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/func
                 
             </tbody>
         </table>
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar Coche</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar empleado</button>
 
         <div class="modal fade" id="agregarCoche" >
           <div class="modal-dialog">

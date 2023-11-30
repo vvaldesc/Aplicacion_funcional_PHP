@@ -186,7 +186,7 @@ function insertar($tabla, $valores) {
             }
         } 
         if (isset($valores['DNI'])) {
-            if (!validarDNI($valores['contrasena'])) {
+            if (!validarDNI($valores['DNI'])) {
                 throw new Exception(mensajeError("(insertar): DNI no válido."));
             }
         } 
