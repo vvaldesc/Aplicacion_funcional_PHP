@@ -184,7 +184,7 @@ if(!function_exists('cerrarSesion')){
     function cerrarSesion(&$sesion){
         $sesion=array();
         session_destroy();
-        setcookie("nombreSesion",123,time()-1000,"/");
-        setcookie("ultCone",123,time()-1000,"/");
+        setcookie("nombreSesion",123,time()-1000,"localhost");
+        setcookie("ultCone",123,time()-1000,"localhost");
     }
 }
