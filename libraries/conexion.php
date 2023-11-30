@@ -1,7 +1,7 @@
 <?php
     $cadena_conexion = 'mysql:dbname=concesionario;host=localhost';
-    $username = 'usrConcesionario';
-    $password = 'pbazEMdm)vf/d43_';
+    $username = 'root';
+    $password = '';
 
 function conexionPDO(){
     global $cadena_conexion,$username,$password;
