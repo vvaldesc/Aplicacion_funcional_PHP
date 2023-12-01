@@ -25,15 +25,16 @@
     <?php 
     $mod = 'a';
     $formError = false;
-
+    $nombreTabla='vendedores';
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['datos'])) {
-            modificarTabla('vendedores', 'Nombre', $_POST["nombre"], 'DNI', $_POST["DNI"]);
-            modificarTabla('vendedores', 'Apellidos', $_POST["apellido"], 'DNI', $_POST["DNI"]);
-            modificarTabla('vendedores', 'FechaAlta', $_POST["fechaAlta"], 'DNI', $_POST["DNI"]);
-            modificarTabla('vendedores', 'FechaNac', $_POST["fechaNac"], 'DNI', $_POST["DNI"]);
-            modificarTabla('vendedores', 'Rol', $_POST["rol"], 'DNI', $_POST["DNI"]);
-            modificarTabla('vendedores', 'Email', $_POST["email"], 'DNI', $_POST["DNI"]);
+            try {
+                $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
+                modificarTabla($nombreTabla,$tabla,$_POST);
+                modificacionCheck(); 
+            } catch (Exception $exc) {
+                echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+            }
         } else {
             if (isset($_POST['clear'])) {
                 eliminarDatos('vendedores', 'DNI', $_POST['clear']);
@@ -57,13 +58,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>DNI</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Fecha de alta</th>
-                    <th>Fecha de nacimiento</th>
-                    <th>Rol</th>
-                    <th>E-Mail</th>
+                     <?php
+                        vercolumnas($nombreTabla);
+                    ?>
 
                 </tr>
             </thead>

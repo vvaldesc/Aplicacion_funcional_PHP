@@ -18,14 +18,17 @@
     <?php
         $mod = 'a';
         $formError = false;
-
+        $nombreTabla='clientes';
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['datos'])) {
-                modificarTabla('clientes', 'Nombre', $_POST["nombre"], 'DNI', $_POST["DNI"]);
-                modificarTabla('clientes', 'Apellidos', $_POST["apellido"], 'DNI', $_POST["DNI"]);
-                modificarTabla('clientes', 'Domicilio', $_POST["domicilio"], 'DNI', $_POST["DNI"]);
-                modificarTabla('clientes', 'FechaNac', $_POST["fechaNac"], 'DNI', $_POST["DNI"]);
-            } else {
+                try {
+                    $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
+                    modificarTabla($nombreTabla,$tabla,$_POST);
+                    modificacionCheck(); 
+                } catch (Exception $exc) {
+                    echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+                }
+                        } else {
                 if (isset($_POST['clear'])) {
                     eliminarDatos('clientes', 'DNI', $_POST['clear']);
                 } else {
@@ -51,11 +54,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>DNI</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Domicilio</th>
-                    <th>Fecha de Nacimiento</th>
+                    <?php
+                        vercolumnas($nombreTabla);
+                    ?>
                 </tr>
             </thead>
             <tbody>
@@ -71,7 +72,7 @@
                     
                 */    
                 
-mostrarClientes($mod);
+                mostrarClientes($mod);
                     
                 
                 

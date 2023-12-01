@@ -19,12 +19,17 @@
 <body>
     <?php 
         $mod = 'a';
+        $nombreTabla='ventas';
         include $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/templates/header.php';
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['datos'])) {
-                modificarTabla('ventas', 'DNI_vendedores', ultimaPalabra($_POST['vendedor']), 'cod_ventas', $_POST['cod_venta']);
-                modificarTabla('ventas', 'VIN_coches', ultimaPalabra($_POST['coche']), 'cod_ventas', $_POST['cod_venta']);
-                modificarTabla('ventas', 'DNI_clientes', ultimaPalabra($_POST['cliente']), 'cod_ventas', $_POST['cod_venta']);
+                try {
+                    $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
+                    modificarTabla($nombreTabla,$tabla,$_POST);
+                    modificacionCheck(); 
+                } catch (Exception $exc) {
+                    echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+                }
             } else {
                 if (isset($_POST['clear'])) {
                     eliminarDatos('ventas', 'cod_ventas', $_POST['clear']);
@@ -50,11 +55,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Cod_Ventas</th>
-                    <th>Vendedor</th>
-                    <th>Coche</th>
-                    <th>Cliente</th>
-                    <th>Acciones</th>
+                     <?php
+                        vercolumnas($nombreTabla);
+                    ?>
                 </tr>
             </thead>
             <tbody>

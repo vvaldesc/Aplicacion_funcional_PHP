@@ -1,8 +1,7 @@
 <?php
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
-    comprobarCookie($_SESSION,$_COOKIE);
-    
+    comprobarCookie($_SESSION, $_COOKIE);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -10,45 +9,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Coches - Concesionario</title>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <?php
-    include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
-    ?>
+<?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
+?>
 </head>
 
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
-    <?php 
-        $mod='a';
-        $formError=false;
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['datos'])) {
-        modificarTabla('coches', 'matricula', $_POST["matricula"], 'VIN', $_POST["vin"]);
-        modificarTabla('coches', 'marca', $_POST["marca"], 'VIN', $_POST["vin"]);
-        modificarTabla('coches', 'modelo', $_POST["modelo"], 'VIN', $_POST["vin"]);
-        modificarTabla('coches', 'ano', $_POST["ano"], 'VIN', $_POST["vin"]);
-        modificarTabla('coches', 'km', $_POST["km"], 'VIN', $_POST["vin"]);
-    } else {
-        if (isset($_POST['clear'])) {
-            eliminarDatos('coches', 'VIN', $_POST['clear']);
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/templates/header.php' ?>
+<?php
+    $mod = 'a';
+    $formError = false;
+    $nombreTabla = 'coches';
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['datos'])) {
+            try {
+                $tabla = extraerTablas("SHOW COLUMNS FROM " . $nombreTabla . "");
+                modificarTabla($nombreTabla, $tabla, $_POST);
+                modificacionCheck();
+            } catch (Exception $exc) {
+                echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+            }
         } else {
-            if (isset($_POST['mod'])) {
-                $mod = $_POST['mod'];
+            if (isset($_POST['clear'])) {
+                eliminarDatos('coches', 'VIN', $_POST['clear']);
             } else {
-                if (checkForm($_POST) && validarVIN($_POST["vin"]) && validarMatricula($_POST["matricula"])) {
-                    try {
-                        insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
-                    } catch (Exception $exc) {
-                        echo $exc->getTraceAsString();
-                    }
+                if (isset($_POST['mod'])) {
+                    $mod = $_POST['mod'];
                 } else {
-                    $formError = true;
+                    if (checkForm($_POST) && validarVIN($_POST["vin"]) && validarMatricula($_POST["matricula"])) {
+                        try {
+                            insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
+                        } catch (Exception $exc) {
+                            echo $exc->getTraceAsString();
+                        }
+                    } else {
+                        $formError = true;
+                    }
                 }
             }
         }
     }
-}
 ?>
 
     <div class="container mt-4">
@@ -57,14 +59,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>VIN</th>
-                    <th>Matricula</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Año</th>
-                    <th>Precio</th>
-                    <th>Km</th>
-                    <th>Acciones</th>
+                    <?php
+                    verColumnas($nombreTabla);
+                    ?>
                 </tr>
             </thead>
             <tbody>

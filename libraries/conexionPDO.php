@@ -234,27 +234,31 @@ function insertar($tabla, $valores) {
         } 
 }
 
-function modificarTabla($tabla, $dato, $valor, $referencia, $valorReferencia) {
+function modificarTabla($tabla, $dato, $valor) {
     $BD = conexionPDO();
 
     try {
+        
+        for ($i=0;$i<count($dato);$i++){
+            $sql ="UPDATE $tabla SET ". $dato[$i][0]." = '".$_POST[$dato[$i][0]]."' WHERE ".$dato[0][0]." = '".$_POST[$dato[0][0]]."'";
+            $stmt = $BD->prepare($sql);
+            $stmt->execute();
+        }
 
         
-        $sql ="UPDATE $tabla SET $dato = '$valor' WHERE $referencia = '$valorReferencia'";
-        $stmt = $BD->prepare($sql);
 
-        $stmt->execute();
-
-        echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
+    } catch (Exception $e) {
+        throw new Exception('¡Algo salió mal!');
+    }
+}
+function modificacionCheck(){
+    echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
             <div class='container-fluid'>
                 <p>
                     'Se ha modificado la tabla correctamente '
                 </p>
             </div>
         </nav>'";
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
-    }
 }
 
 function eliminarDatos($tabla,$dato,$valor){
