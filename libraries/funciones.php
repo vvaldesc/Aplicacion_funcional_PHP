@@ -245,7 +245,7 @@
         // Si todas las verificaciones pasaron, el DNI es válido
         return true;
     }
-}
+
 
 if(!function_exists('cerrarSesion')){
     function cerrarSesion(&$sesion){
@@ -313,8 +313,14 @@ if (!function_exists('validarMatricula')) {
                 unset($fechaActualObjeto);
                 unset($fechaActualString);
                 unset($fechaActualString); 
+            }else{
+                
+                //hay error
+                return true;
             }
         }
+        //no hay error
+        return false;
     }
     function imprimirTablas($tabla){
         for($i=0;$i< count($tabla);$i++){
@@ -330,3 +336,29 @@ if (!function_exists('validarMatricula')) {
                 </tr>';
         }
     }
+    
+    function cearBDModal() {
+    echo '<button class="btn btn-primary my-3 mx-auto" data-toggle="modal" data-target="#agregarCoche">Agregar Base de Datos</button>';
+    echo '<div class="modal fade" id="agregarCoche">
+                                    <div class="modal-dialog">
+                                          <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title">Crear BD</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <form method="POST" action="' . $_SERVER['PHP_SELF'] . '">
+                                                <div class="modal-body">
+                                                    <!-- Agregar Nuevo coche-->
+                                                    <h2>Usted no tiene la base de datos en su sistema. ¿Desea Guardarla?</h2>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <input type="submit" name="guardar" class="btn btn-primary" value="Guardar">
+                                                </div>
+                                              </form>
+                                          </div>
+                                      </div>
+                                  </div>';
+}
