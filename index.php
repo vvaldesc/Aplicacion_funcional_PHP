@@ -25,7 +25,7 @@
             <form method="POST" class="text-center mt-4 p-4 border d-flex align-items-center flex-column" style="width: 400px; margin: auto" action='<?php $_SERVER["PHP_SELF"] ?>'>
                 <div class="form-group m-2" style="width: 300px">
                     <label for="usr">Usuario</label>
-                    <input value="<?= $formError ? $_POST["usr"] : "" ?>" type="text" class="form-control" id="usr" name="usr" placeholder="Usuario">
+                    <input value="<?= (isset($_POST["usr"]) && $formError) ? $_POST["usr"] : "" ?>" type="text" class="form-control" id="usr" name="usr" placeholder="Usuario">
                     <input type="hidden" id="token" name="token" value="<?php echo $_SESSION['token']; ?>"> 
                 </div>
                 <div class="form-group m-2" style="width: 300px">
