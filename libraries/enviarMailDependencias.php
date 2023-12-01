@@ -1,6 +1,14 @@
 <?php
 /*
     Importamos las dependencias de PHPMailer
+ * 
+ * Para haccer funcionar esto usamos composer
+ * -  composer require phpmailer/phpmailer
+ * introducimos la carpeta 'vendor' generada en libraries
+ * 
+ * Los arcivos de composer a veces se suelen borrar, para arreglar esto simplemente sobreescribir
+ * vendor soluciona el problema
+ * 
 */
 
 use PHPMailer\PHPMailer\PHPMailer;

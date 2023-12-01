@@ -20,9 +20,6 @@
             generaToken($_SESSION['token'],session_id());
             //comprobar credenciales y token y si no, error
             //el formulario te llevaría a homepage
-            if ($_GET['login'] ?? false) {
-                echo mensajeError('No se ha iniciado sesión, o rol aún no asignado.');
-            }
             ?>
             <h1 class="text-center">Inicio de sesión</h1>
             <form method="POST" class="text-center mt-4 p-4 border d-flex align-items-center flex-column" style="width: 400px; margin: auto" action='<?php $_SERVER["PHP_SELF"] ?>'>
