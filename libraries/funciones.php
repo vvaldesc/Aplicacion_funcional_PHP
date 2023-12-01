@@ -21,11 +21,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
  * @return bool
  */
 function checkForm($datosForm, $noClave = null, $numInputEsperados = null) {//Recibe dos arrays, (asociativo,indexado) y un integer
-    
+    /*
     if ($numInputEsperados != null || !is_int($numInputEsperados || $numInputEsperados!=$datosForm)) {
         throw new Exception(mensajeError("(checkForm) Error en parámetro inputs esperados"));
         return false;
-    }
+    }*/
     
     $bandera = true; // I assume that all essential parameters are filled
     $claves = array_keys($datosForm); // Store the keys of the associative array from the form (from the POST superglobal array)
