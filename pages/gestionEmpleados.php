@@ -27,7 +27,7 @@
     $formError = false;
     $nombreTabla='vendedores';
     if($_SERVER["REQUEST_METHOD"] == "POST"){
-        if(isset($_POST['cod_ventas'])){
+        if(isset($_POST['dni'])){
             $valorInsert= array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]);
              formularioGestion($nombreTabla, $_POST, $valorInsert);       
         }
