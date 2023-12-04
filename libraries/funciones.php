@@ -579,7 +579,7 @@ function mostrarCoches(&$mod){
                     <td>' . $tabla[$i][3] . '</td>
                     <td>' . $tabla[$i][4] . '</td>
                     <td>' . $tabla[$i][5] . '</td>
-                    <td>' . $tabla[$i][4] . '</td>';
+                    <td>' . $tabla[$i][6] . '</td>';
             echo '<td><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
                         <input type="hidden" name="mod" value="' . $i . '">
                         <button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
@@ -644,8 +644,8 @@ function verColumnas($nombreTabla){
     echo '<th>Editar</th>';
     echo '<th>Eliminar</th>';
 }
-function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
-    $tableKey = extraerTablas('SHOW KEYS FROM '.$nombreTabla.' WHERE Key_name = "PRIMARY";');
+function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
+    $tableKey = extraerTablas('SHOW KEYS FROM ' . $nombreTabla . ' WHERE Key_name = "PRIMARY";');
 
     if (isset($post['datos'])) {
         try {
@@ -662,26 +662,43 @@ function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
             if (isset($post['mod'])) {
                 return intval($post['mod']);
             } else {
-                if ($nombreTabla == 'coches') {
-                    if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
+                switch ($nombreTabla) {
+                    case 'coches':
+                        if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
+                            try {
+                                insertar($nombreTabla, $valorInsertar);
+                                mensajeCheck('Se ha insertado correctamente los valores');
+                            } catch (Exception $exc) {
+                                echo 'Ha ocurrido un error inesperado al insertar los datos';
+                            }
+                        }
+                    case 'empleados':
+                    case 'clientes':
+                        if (isset($post['contrasena'])) {
+                            $contrasena = validarContraseña($post['contrasena']);
+                        }
+                        if (checkForm($post) && validarDNI($post['dni']) && $contrasena == true) {
+                            try {
+                                insertar($nombreTabla, $valorInsertar);
+                                mensajeCheck('Se ha insertado correctamente los valores');
+                            } catch (Exception $exc) {
+                                echo 'Ha ocurrido un error inesperado al insertar los datos';
+                            }
+                        } else {
+                            echo mensajeError('No has introducido correctamente los datos del formulario.');
+                            $formError = true;
+                        }
+                        break;
+                    case 'ventas':
                         try {
-                            insertar($nombreTabla,$valorInsertar);
+                            insertar($nombreTabla, $valorInsertar);
                             mensajeCheck('Se ha insertado correctamente los valores');
                         } catch (Exception $exc) {
                             echo 'Ha ocurrido un error inesperado al insertar los datos';
                         }
-                    } else {
-                        echo mensajeError('No has introducido correctamente los datos del formulario.');
-                        $formError = true;
-                    }
-                } else {
-                    try {
-                        insertar($nombreTabla,$valorInsertar);
-                        mensajeCheck('Se ha insertado correctamente los valores');
-                        
-                    } catch (Exception $exc) {
-                        echo 'Ha ocurrido un error inesperado al insertar los datos';
-                    }
+
+                    default:
+                        break;
                 }
             }
         }
