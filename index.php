@@ -16,7 +16,7 @@
     <head>
         <meta charset="UTF-8">
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
-        <title></title>
+        <title>Login</title>
     </head>
     <body>
         <div class="container mt-4">
@@ -26,7 +26,7 @@
             //el formulario te llevaría a homepage
             ?>
             <h1 class="text-center">Inicio de sesión</h1>
-            <form method="POST" class="text-center mt-4 p-4 border d-flex align-items-center flex-column" style="width: 400px; margin: auto" action='<?php $_SERVER["PHP_SELF"] ?>'>
+            <form method="POST" class="text-center mt-4 p-4 border d-flex align-items-center flex-column" style="width: 400px; margin: auto" action='<?= $_SERVER["PHP_SELF"] ?>'>
                 <div class="form-group m-2" style="width: 300px">
                     <label for="usr">Usuario</label>
                     <input value="<?= (isset($_POST["usr"]) && $formError) ? $_POST["usr"] : "" ?>" type="text" class="form-control" id="usr" name="usr" placeholder="Usuario">

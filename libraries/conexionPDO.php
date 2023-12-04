@@ -222,19 +222,16 @@ function insertar($tabla, $valores) {
         }
 }
 
-function modificarTabla($tabla, $dato, $valor) {
+function modificarTabla($tabla, $dato, $post) {
     $BD = conexionPDO();
-
+    $arrayKeys= array_keys($post);
     try {
-        
         for ($i=0;$i<count($dato);$i++){
-            $sql ="UPDATE $tabla SET ". $dato[$i][0]." = '".$_POST[$dato[$i][0]]."' WHERE ".$dato[0][0]." = '".$_POST[$dato[0][0]]."'";
+            $result= explode(" ", $post[$arrayKeys[$i+1]]);
+            $sql ="UPDATE $tabla SET ". $dato[$i][0]." = '".end($result)."' WHERE ".$dato[0][0]." = '".$post[$arrayKeys[1]]."'";
             $stmt = $BD->prepare($sql);
             $stmt->execute();
         }
-
-        
-
     } catch (Exception $e) {
         throw new Exception('¡Algo salió mal!');
     }
@@ -260,7 +257,7 @@ function eliminarDatos($tabla,$dato,$valor){
         echo "<nav class='navbar bg-body-tertiary bg-danger rounded m-2'>
             <div class='container-fluid'>
                 <p>
-                    'No se puede eliminar este valor, porque es foranea de otra.'
+                    'No se puede eliminar este valor, primero debe borrar las instancias asociadas.'
                 </p>
             </div>
         </nav>'";

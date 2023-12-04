@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de empleados - Concesionario</title>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" >
     <?php
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
     ?>
@@ -33,31 +33,6 @@
         }
         else{
             $mod = formularioGestion($nombreTabla, $_POST);
-        }
-    }
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['datos'])) {
-            try {
-                $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
-                modificarTabla($nombreTabla,$tabla,$_POST);
-                modificacionMessage(); 
-            } catch (Exception $exc) {
-                echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
-            }
-        } else {
-            if (isset($_POST['clear'])) {
-                eliminarDatos('vendedores', 'DNI', $_POST['clear']);
-            } else {
-                if (isset($_POST['mod'])) {
-                    $mod = $_POST['mod'];
-                } else {
-                    if (checkForm($_POST)) {
-                        insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]));
-                    } else {
-                        $formError = true;
-                    }
-                }
-            }
         }
     }
     ?>    
@@ -125,7 +100,7 @@
                           </div>
                           <div class="form-group">
                               <label for="rol">E-mail</label>
-                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="text" class="form-control" id="mail" placeholder="E-mail" required>
+                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="email" class="form-control" id="mail" placeholder="E-mail" required>
                           </div>
                           <div class="form-group">
                               <label for="rol">Contraseña</label>
