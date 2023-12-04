@@ -89,11 +89,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
                             </div>
                             <div class="form-group">
                                 <label for="precio">Precio</label>
-                                <input value="<?= $formError ? $_POST["precio"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
+                                <input value="<?= $formError ? $_POST["precio"] : "" ?>" type="number" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
                             </div>
                             <div class="form-group">
                                 <label for="km">KM</label>
-                                <input value="<?= $formError ? $_POST["km"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
+                                <input value="<?= $formError ? $_POST["km"] : "" ?>" type="number" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
                             </div>
 
 

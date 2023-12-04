@@ -100,7 +100,7 @@
                           </div>
                           <div class="form-group">
                               <label for="rol">E-mail</label>
-                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="text" class="form-control" id="mail" placeholder="E-mail" required>
+                              <input value="<?= $formError ? $_POST["mail"] : "" ?>"  name="mail" type="email" class="form-control" id="mail" placeholder="E-mail" required>
                           </div>
                           <div class="form-group">
                               <label for="rol">Contraseña</label>
