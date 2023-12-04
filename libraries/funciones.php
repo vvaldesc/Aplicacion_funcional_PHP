@@ -140,6 +140,7 @@ function comprobarLogin($post) {
 
                     //variable manual (CUIDADO)
                     enviarMail();
+                    guardarLog($_SESSION);
 
                     header('Location: ./pages/homepage.php');
                 } else {
@@ -154,7 +155,9 @@ function comprobarLogin($post) {
     }
     return $valido;
 }
-
+function guardarLog($session){
+    insertar('Logs', 'El usuario '.$session['name'].' ha iniciado sesión en el sistema');
+}
 /**
  * 
  * @param array[] $sesion
@@ -669,12 +672,14 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
             $tabla = extraerTablas("SHOW COLUMNS FROM " . $nombreTabla . "");
             modificarTabla($nombreTabla, $tabla, $post);
             mensajeCheck('Se ha modificado correctamente la tabla');
+            insertar('Logs', 'El usuario '.$_SESSION['name'].' ha hecho una modificacion en la tabla '.$nombreTabla);
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }
     } else {
         if (isset($post['clear'])) {
             eliminarDatos($nombreTabla, $tableKey[0][4], $post['clear']);
+            insertar('Logs', 'El usuario '.$_SESSION['name'].' ha eliminado datos en la tabla '.$nombreTabla);
         } else {
             if (isset($post['mod'])) {
                 return intval($post['mod']);
@@ -684,6 +689,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
                         case 'coches':
                             if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
                                     insertar($nombreTabla, $valorInsertar);
+                                    insertar('Logs', 'El usuario '.$_SESSION['name'].' ha hecho una inserccion en la tabla '.$nombreTabla);
                                     mensajeCheck('Se ha insertado correctamente los valores');
                             }else{
                                 throw new Exception('El VIN o la Matricula no tiene los valores correctos');
@@ -697,6 +703,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
                             if (checkForm($post) && validarDNI($post['dni']) && $contrasena == true) {
                                     insertar($nombreTabla, $valorInsertar);
                                     mensajeCheck('Se ha insertado correctamente los valores');
+                                    insertar('Logs', 'El usuario '.$_SESSION['name'].' ha hecho una inserccion en la tabla '.$nombreTabla);
                             } else {
                                 throw new Exception('No has introducido correctamente los datos del formulario.');
                                 $formError = true;
@@ -704,6 +711,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
                             break;
                         case 'ventas':
                                 insertar($nombreTabla, $valorInsertar);
+                                insertar('Logs', 'El usuario '.$_SESSION['name'].' ha hecho una inserccion en la tabla '.$nombreTabla);
                                 mensajeCheck('Se ha insertado correctamente los valores');
 
                         default:

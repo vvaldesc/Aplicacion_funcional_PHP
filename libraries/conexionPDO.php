@@ -69,7 +69,7 @@ function crearBD() {
             //En insertar la letra ñ da error (puede ser la función bindValues)
             $BD->exec('CREATE DATABASE concesionario');
             
-
+            crearTabla('Logs', array('Actualizaciones'=> 'varchar(200)'));
             crearTabla("vendedores", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)", "Apellidos" => "varchar(20)", "FechaAlta" => "DATE", "FechaNac" => "DATE",
             "Rol" => "varchar(20)", "contrasena" => "varchar(100)", 'Email' => 'varchar(100)'), array("DNI"));
 
