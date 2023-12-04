@@ -444,7 +444,7 @@ function mostrarVentas(&$mod,&$cod_venta){
                     for($i=0;$i< count($tabla);$i++){
                         $cod_venta=$tabla[$i][0];
                         //No lo he comprobado
-                        if($mod==$i){
+                        if($mod===$i){
                             echo '<form class="mx-0" method="POST" action="'.$_SERVER["PHP_SELF"].'">';
                             echo '<input type="hidden" id="datos" name="datos" value="">';
                             echo '<input type="hidden" id="cod_venta" name="cod_venta" value="'.$tabla[$i][0].'">';
@@ -496,7 +496,7 @@ function mostrarEmpleados(&$mod) {
     $sentencia = 'SELECT * FROM vendedores';
     $tabla = extraerTablas($sentencia);
     for ($i = 0; $i < count($tabla); $i++) {
-        if ($mod == $i) {
+        if ($mod === $i) {
             echo '<form method="POST" class="border w-100" action="' . $_SERVER["PHP_SELF"] . '">';
             echo '<input type="hidden" id="datos" name="datos" value="">';
             echo '<input type="hidden" id="DNI" name="DNI" value="' . $tabla[$i][0] . '">';
@@ -654,7 +654,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
             echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
         }
     } else {
-        if (isset($_POST['clear'])) {
+        if (isset($post['clear'])) {
             eliminarDatos($nombreTabla, $tableKey[0][4], $post['clear']);
         } else {
             if (isset($post['mod'])) {

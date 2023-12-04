@@ -35,31 +35,6 @@
             $mod = formularioGestion($nombreTabla, $_POST);
         }
     }
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['datos'])) {
-            try {
-                $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
-                modificarTabla($nombreTabla,$tabla,$_POST);
-                modificacionMessage(); 
-            } catch (Exception $exc) {
-                echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
-            }
-        } else {
-            if (isset($_POST['clear'])) {
-                eliminarDatos('vendedores', 'DNI', $_POST['clear']);
-            } else {
-                if (isset($_POST['mod'])) {
-                    $mod = $_POST['mod'];
-                } else {
-                    if (checkForm($_POST)) {
-                        insertar("vendedores", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]));
-                    } else {
-                        $formError = true;
-                    }
-                }
-            }
-        }
-    }
     ?>    
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Empleados</h1>
