@@ -156,7 +156,8 @@ function comprobarLogin($post) {
     return $valido;
 }
 function guardarLog($session){
-    insertar('Logs', 'El usuario '.$session['name'].' ha iniciado sesión en el sistema');
+    $mensaje=Array('log'=>'El usuario '.$session['name'].' ha iniciado sesión en el sistema');
+    insertar('Logs',$mensaje );
 }
 /**
  * 
