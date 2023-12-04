@@ -21,9 +21,9 @@
             $claseActiva = ($nombreArchivo === $ruta) ? 'active' : '';
             echo '<li class="nav-item"><a href="' . $ruta . '" class="nav-link ' . $claseActiva . '">' . $texto . '</a></li>';
         }
-        echo '<a class="nav-link" href="homepage.php?logOut=true">
-                                <i class="fa-solid fa-car mx-2 bg-danger"></i>Cerrar sesión
-                            </a>';
+        echo '<li class="nav-item"><a class="nav-link" href="homepage.php?logOut=true">
+                                <p class="mx-2 text-danger">Cerrar sesión</p>
+                            </a></li>';
         ?>
     </ul>
 </header>

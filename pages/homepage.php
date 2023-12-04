@@ -80,7 +80,7 @@
                     <div class="bg-white rounded shadow-sm py-5 px-4">
                         <img src="../assets/img/jefe.jpg" alt="" width="100" class="img-fluid rounded-circle mb-3 mx-auto d-block  img-thumbnail shadow-sm">
                         <h2 class="mb-3 mx-auto col-lg-14 text-center">Bienvenido <span class="display-4"><?php echo isset($_COOKIE["nombreSesion"]) ? $_COOKIE["nombreSesion"] : "error no existe la cookie nombreSesion"; ?></span></h2>
-                        <p class="small text-uppercase text-muted text-center">Última conexión <span><?php echo isset($_COOKIE["ultCone"]) ? $_COOKIE["ultCone"] : "error no existe la cookie ultCone"; ?></p>
+                        <p class="small text-uppercase text-muted text-center">Última conexión <span><?php echo isset($_COOKIE["ultCone"]) ? $_COOKIE["ultCone"] : "error no existe la cookie ultCone"; ?></span></p>
                     </div>
                 </div>
             </main>

@@ -98,13 +98,13 @@
                   </div>
                   <div class="modal-body">
                       <!-- Agregar Nuevo Empleado-->
-                      <form method="POST" action=<?php $_SERVER["PHP_SELF"] ?>>
+                      <form method="POST" action="<?= $_SERVER["PHP_SELF"] ?>">
                           <div class="form-group">
-                              <label for="dni">DNI</label>
+                              <label for="DNI">DNI</label>
                               <input value="<?= $formError ? $_POST["dni"] : "" ?>"  name="dni" type="text" class="form-control" id="DNI" placeholder="dni" required>
                           </div>
                           <div class="form-group">
-                              <label for="modelo">Nombre</label>
+                              <label for="nombre">Nombre</label>
                               <input value="<?= $formError ? $_POST["nombre"] : "" ?>"  name="nombre" type="text" class="form-control" id="nombre" placeholder="Nombre" required>
                           </div>
                           <div class="form-group">
