@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Coches - Concesionario</title>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" >
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/conexionPDO.php';
 ?>
@@ -66,7 +66,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
                     </div>
                     <div class="modal-body">
                         <!-- Agregar Nuevo coche-->
-                        <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+                        <form method="POST" action="<?php echo $_SERVER["PHP_SELF"] ?>">
                             <div class="form-group">
                                 <label for="vin">VIN</label>
                                 <input  value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: JH4DC4400SS012345" required>
@@ -84,8 +84,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
                                 <input value="<?= $formError ? $_POST["modelo"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
                             </div>
                             <div class="form-group">
-                                <label for="año">Año</label>
-                                <input value="<?= $formError ? $_POST["año"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
+                                <label for="ano">Año</label>
+                                <input value="<?= $formError ? $_POST["año"] : "" ?>" type="number" name="ano"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
                             </div>
                             <div class="form-group">
                                 <label for="precio">Precio</label>
