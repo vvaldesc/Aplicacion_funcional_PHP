@@ -32,7 +32,7 @@
              formularioGestion($nombreTabla, $_POST, $valorInsert);       
         }
         else{
-            formularioGestion($nombreTabla, $_POST);
+            $mod = formularioGestion($nombreTabla, $_POST);
         }
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -556,7 +556,7 @@ function mostrarCoches(&$mod){
 
     $tabla = extraerTablas($sentencia);
     for ($i = 0; $i < count($tabla); $i++) {
-        if ($mod == $i) {
+        if ($mod === $i) {
             echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
             echo '<input type="hidden" id="datos" name="datos" value="">';
             echo '<input type="hidden" id="vin" name="VIN" value="' . $tabla[$i][0] . '">';
@@ -603,7 +603,7 @@ function mostrarClientes(&$mod){
     $sentencia='SELECT * FROM CLIENTES';
     $tabla=extraerTablas($sentencia);
     for($i=0;$i< count($tabla);$i++){
-        if($mod==$i){
+        if($mod===$i){
             echo '<form method="POST" class="border w-100" action="'.$_SERVER["PHP_SELF"].'">';
             echo '<input type="hidden" id="datos" name="datos" value="">';
             echo '<input type="hidden" id="vin" name="DNI" value="'.$tabla[$i][0].'">';
@@ -658,7 +658,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
             eliminarDatos($nombreTabla, $tableKey[0][4], $post['clear']);
         } else {
             if (isset($post['mod'])) {
-                $mod = $post['mod'];
+                return intval($post['mod']);
             } else {
                 if ($nombreTabla == 'coches') {
                     if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {

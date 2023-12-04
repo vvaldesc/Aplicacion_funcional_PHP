@@ -26,7 +26,7 @@
                 formularioGestion($nombreTabla, $_POST, $valorInsert);
             }
             else{
-                formularioGestion($nombreTabla, $_POST);
+                $mod = formularioGestion($nombreTabla, $_POST);
             }
         }
         

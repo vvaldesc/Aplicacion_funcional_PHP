@@ -28,7 +28,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
             formularioGestion($nombreTabla, $_POST, $valorInsert);
         }
         else{
-            formularioGestion($nombreTabla, $_POST);
+            $mod = formularioGestion($nombreTabla, $_POST);
         }
     }
 ?>

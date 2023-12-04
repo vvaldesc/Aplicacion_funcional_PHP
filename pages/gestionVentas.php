@@ -29,7 +29,7 @@
                                 "DNI_clientes" => ultimaPalabra($_POST['cliente']));
                 formularioGestion($nombreTabla, $_POST, $valorInsert);
             }else{
-                formularioGestion($nombreTabla, $_POST);
+                $mod = formularioGestion($nombreTabla, $_POST);
             }
             
         }
