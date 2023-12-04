@@ -21,12 +21,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
  * @return bool
  */
 function checkForm($datosForm, $noClave = null, $numInputEsperados = null) {//Recibe dos arrays, (asociativo,indexado) y un integer
+    
     /*
-    if ($numInputEsperados != null || !is_int($numInputEsperados || $numInputEsperados!=$datosForm)) {
+    if ($numInputEsperados != null || !is_int($numInputEsperados) || $numInputEsperados!=$datosForm) {
         throw new Exception(mensajeError("(checkForm) Error en parámetro inputs esperados"));
         return false;
-    }*/
-    
+    }
+    */
     $bandera = true; // I assume that all essential parameters are filled
     $claves = array_keys($datosForm); // Store the keys of the associative array from the form (from the POST superglobal array)
     $i = 0;
@@ -86,7 +87,15 @@ function mensajeError($message) {
                 </div>
             </nav>';
 }
-
+function mensajeCheck($message){
+    echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
+            <div class='container-fluid'>
+                <p>
+                    $message 
+                </p>
+            </div>
+        </nav>'";
+}
 /**
  * Genera el token en funcion de fecha y la hora.
  * 
@@ -203,6 +212,7 @@ function cerrarSesion(&$sesion) {
  * @param type $cookie
  */
 function comprobarCookie($session, $cookie) {
+    //getcwd()-> This function returns the path where the file is located.
     if (getcwd() != 'C:\xampp\htdocs\Aplicacion_funcional_PHP') {
         comprobarInicio($session);
     }
@@ -338,7 +348,7 @@ function validarMatricula($matricula) {
  * @param array[] $session
  * @return bool
  */
-function comprobarCookieInicio($post, $session) {
+function setCookieInicio($post, $session) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (comprobarLogin($post)) {
             $nombreParaCookie = $_SESSION["name"];
@@ -357,7 +367,6 @@ function comprobarCookieInicio($post, $session) {
             unset($fechaActualString);
             unset($fechaActualString);
         } else {
-
             //hay error
             return true;
         }
@@ -535,57 +544,55 @@ function mostrarEmpleados(&$mod) {
  * @param string $mod
  */
 function mostrarCoches(&$mod){
-                        //EMPLEADOS Y JEFE PUEDEN VER LOS COCHES
-                    //si la sesion corresponde a un admin, puede ver todos los coches y toda la info sobre cada uno
-                
-                    $sentencia='SELECT * FROM coches';
-                    
-                    //si la sesion corresponde a un cliente, este puede ver sus propios coches, y eliminaría el apartado de propietario
-                    //de cada coche, ya que todos van a ser su coche
-                    
-                    //$sentencia = 'SELECT * FROM COCHES WHERE DNI IS (SELECT DNI FROM USUARIOS WHERE USUARIO IS (USUARIO DE LA SESION))'
-                    
-                    
-                    $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($tabla);$i++){
-                        if($mod==$i){
-                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
-                            echo '<input type="hidden" id="datos" name="datos" value="">';
-                            echo '<input type="hidden" id="vin" name="VIN" value="'.$tabla[$i][0].'">';
-                            echo '<tr>
-                                     <td>'.$tabla[$i][0].'</td>
-                                     <td><input value="'.$tabla[$i][1].'" type="text" name="Matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required></td>
-                                     <td> <input value="'.$tabla[$i][2].'" type="text" name="Marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required></td>
-                                     <td><input value="'.$tabla[$i][3].'" type="text" name="Modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required></td>
-                                     <td><input value="'.$tabla[$i][4].'" type="number" name="Ano"  class="form-control" id="año" placeholder="Ejemplo: 2023" required></td>
-                                     <td><input value="'.$tabla[$i][5].'" type="number" name="Precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
-                                     <td><input value="'.$tabla[$i][6].'" type="number" name="Km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
+    //EMPLEADOS Y JEFE PUEDEN VER LOS COCHES
+    //si la sesion corresponde a un admin, puede ver todos los coches y toda la info sobre cada uno
+
+    $sentencia = 'SELECT * FROM coches';
+
+    //si la sesion corresponde a un cliente, este puede ver sus propios coches, y eliminaría el apartado de propietario
+    //de cada coche, ya que todos van a ser su coche
+    //$sentencia = 'SELECT * FROM COCHES WHERE DNI IS (SELECT DNI FROM USUARIOS WHERE USUARIO IS (USUARIO DE LA SESION))'
+
+
+    $tabla = extraerTablas($sentencia);
+    for ($i = 0; $i < count($tabla); $i++) {
+        if ($mod == $i) {
+            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+            echo '<input type="hidden" id="datos" name="datos" value="">';
+            echo '<input type="hidden" id="vin" name="VIN" value="' . $tabla[$i][0] . '">';
+            echo '<tr>
+                                     <td>' . $tabla[$i][0] . '</td>
+                                     <td><input value="' . $tabla[$i][1] . '" type="text" name="Matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required></td>
+                                     <td> <input value="' . $tabla[$i][2] . '" type="text" name="Marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required></td>
+                                     <td><input value="' . $tabla[$i][3] . '" type="text" name="Modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required></td>
+                                     <td><input value="' . $tabla[$i][4] . '" type="number" name="Ano"  class="form-control" id="año" placeholder="Ejemplo: 2023" required></td>
+                                     <td><input value="' . $tabla[$i][5] . '" type="number" name="Precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
+                                     <td><input value="' . $tabla[$i][6] . '" type="number" name="Km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
                                     </tr>';
-                            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
-                            echo '</form>';
-                        }else{
-                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
-                            echo '<input type="hidden" id="mod" name="mod" value="'.$i.'">';
-                            echo '<tr>
-                                <td>'.$tabla[$i][0].'</td>
-                                <td>'.$tabla[$i][1].'</td>
-                                <td>'.$tabla[$i][2].'</td>
-                                <td>'.$tabla[$i][3].'</td>
-                                <td>'.$tabla[$i][4].'</td>
-                                <td>'.$tabla[$i][5].'</td>
-                                <td>'.$tabla[$i][6].'</td>
+            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+            echo '</form>';
+        } else {
+            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+            echo '<input type="hidden" id="mod" name="mod" value="' . $i . '">';
+            echo '<tr>
+                                <td>' . $tabla[$i][0] . '</td>
+                                <td>' . $tabla[$i][1] . '</td>
+                                <td>' . $tabla[$i][2] . '</td>
+                                <td>' . $tabla[$i][3] . '</td>
+                                <td>' . $tabla[$i][4] . '</td>
+                                <td>' . $tabla[$i][5] . '</td>
+                                <td>' . $tabla[$i][6] . '</td>
                                 <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
                                 ';
-                            echo '</form>';
-                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">
-                                    <input type="hidden" id="clear" name="clear" value="'.$tabla[$i][0].'">
+            echo '</form>';
+            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+                                    <input type="hidden" id="clear" name="clear" value="' . $tabla[$i][0] . '">
                                     <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
                                 </form>';
-                            echo '</tr>';
-                    }
-                    }
+            echo '</tr>';
+        }
+    }
 }
-
 
 /**
  * This function return a table withd perssonal data for clients
@@ -633,5 +640,48 @@ function verColumnas($nombreTabla){
     $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
     for ($i=0;$i< count($tabla);$i++){
         echo '<th>'.$tabla[$i][0].'</th>';
+    }
+}
+function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
+    $tableKey = extraerTablas('SHOW KEYS FROM '.$nombreTabla.' WHERE Key_name = "PRIMARY";');
+
+    if (isset($post['datos'])) {
+        try {
+            $tabla = extraerTablas("SHOW COLUMNS FROM " . $nombreTabla . "");
+            modificarTabla($nombreTabla, $tabla, $post);
+            mensajeCheck('Se ha modificado correctamente la tabla');
+        } catch (Exception $exc) {
+            echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+        }
+    } else {
+        if (isset($_POST['clear'])) {
+            eliminarDatos($nombreTabla, $tableKey[0][4], $post['clear']);
+        } else {
+            if (isset($post['mod'])) {
+                $mod = $post['mod'];
+            } else {
+                if ($nombreTabla == 'coches') {
+                    if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
+                        try {
+                            insertar($nombreTabla,$valorInsertar);
+                            mensajeCheck('Se ha insertado correctamente los valores');
+                        } catch (Exception $exc) {
+                            echo 'Ha ocurrido un error inesperado al insertar los datos';
+                        }
+                    } else {
+                        echo mensajeError('No has introducido correctamente los datos del formulario.');
+                        $formError = true;
+                    }
+                } else {
+                    try {
+                        insertar($nombreTabla,$valorInsertar);
+                        mensajeCheck('Se ha insertado correctamente los valores');
+                        
+                    } catch (Exception $exc) {
+                        echo 'Ha ocurrido un error inesperado al insertar los datos';
+                    }
+                }
+            }
+        }
     }
 }
