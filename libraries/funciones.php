@@ -689,6 +689,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
                                 echo 'Ha ocurrido un error inesperado al insertar los datos';
                             }
                         }
+                    break;
                     case 'empleados':
                     case 'clientes':
                         if (isset($post['contrasena'])) {
