@@ -670,7 +670,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
             modificarTabla($nombreTabla, $tabla, $post);
             mensajeCheck('Se ha modificado correctamente la tabla');
         } catch (Exception $exc) {
-            echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+            echo $exc->getMessage();
         }
     } else {
         if (isset($post['clear'])) {
