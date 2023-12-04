@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Coches - Concesionario</title>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/styleLinks.php' ?>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" >
     <?php
         $mod = 'a';
         $formError = false;
@@ -26,7 +26,7 @@
                 formularioGestion($nombreTabla, $_POST, $valorInsert);
             }
             else{
-                formularioGestion($nombreTabla, $_POST);
+                $mod = formularioGestion($nombreTabla, $_POST);
             }
         }
         
@@ -79,13 +79,13 @@
                   </div>
                   <div class="modal-body">
                       <!-- Agregar Nuevo coche-->
-                      <form method="POST" action='<?php $_SERVER["PHP_SELF"] ?>'>
+                      <form method="POST" action='<?= $_SERVER["PHP_SELF"] ?>'>
                           <div class="form-group">
                               <label for="dni">DNI</label>
                               <input value="<?= $formError ? $_POST["dni"] : "" ?>"  name="dni" type="text" class="form-control" id="dni" placeholder="dni" required>
                           </div>
                           <div class="form-group">
-                              <label for="modelo">Nombre</label>
+                              <label for="nombre">Nombre</label>
                               <input value="<?= $formError ? $_POST["nombre"] : "" ?>"  name="nombre" type="text" class="form-control" id="nombre" placeholder="Nombre" required>
                           </div>
                           <div class="form-group">
@@ -98,7 +98,7 @@
                           </div>
                           <div class="form-group">
                               <label for="fechanac">Fecha de nacimiento</label>
-                              <input name="fechanac" type="date" class="form-control" id="domicilio" required>
+                              <input name="fechanac" type="date" class="form-control" id="fechanac" required>
                           </div>
                           <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

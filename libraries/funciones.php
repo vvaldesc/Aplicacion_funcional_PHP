@@ -441,51 +441,57 @@ function mostrarVentas(&$mod,&$cod_venta){
                  * */
                     $sentencia='SELECT * from ventas';
                     $tabla=extraerTablas($sentencia);
-                    for($i=0;$i< count($tabla);$i++){
-                        $cod_venta=$tabla[$i][0];
-                        //No lo he comprobado
-                        if($mod==$i){
-                            echo '<form class="mx-0" method="POST" action="'.$_SERVER["PHP_SELF"].'">';
-                            echo '<input type="hidden" id="datos" name="datos" value="">';
-                            echo '<input type="hidden" id="cod_venta" name="cod_venta" value="'.$tabla[$i][0].'">';
-                            echo '<tr>
-                                     <td>'.$tabla[$i][0].'</td>
-                                     <td><select class="col-xl-9" id="vendedor" name="vendedor">
-                                    ';
-                            imprimirSelects('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');    
-                            echo '       
-                                </select></td>
-                                     <td><select class="col-xl-9" id="coche" name="coche">
-                                    ';
-                            imprimirSelects('SELECT Marca , Modelo , vin FROM coches');
-                                    
-                            echo   '</select></td>
-                                     <td><select class="col-xl-9" id="cliente" name="cliente">
-                                    ';
-                            imprimirSelects('SELECT Nombre , Apellidos , dni FROM clientes');
-                                    
-                            echo    '</select></td>
-                                    </tr>';
-                            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
-                            echo '</form>';
-                        }else{
-                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
-                            echo '<input type="hidden" id="mod" name="mod" value="'.$i.'">';
-                            echo '<tr>
-                                     <td>'.$tabla[$i][0].'</td>
-                                     <td>'.$tabla[$i][1].'</td>
-                                     <td>'.$tabla[$i][2].'</td>
-                                     <td>'.$tabla[$i][3].'</td>
-                                     <td class="mx-0"><button class="btn btn-primary mx-0 border" type="submit"><i class="fa-solid fa-pencil"></i></button></td>
-                            ';
-                            echo '</form>';
-                            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">
-                                    <input type="hidden" id="clear" name="clear" value="'.$tabla[$i][0].'">
-                                    <td><button class="btn btn-danger mx-0 border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
-                                </form>';
-                            echo '</tr>';
-                        }
-                    }
+for ($i = 0; $i < count($tabla); $i++) {
+    $cod_venta = $tabla[$i][0];
+
+    if ($mod == $i) {
+        echo '<tr>';
+        echo '<td>' . $tabla[$i][0] . '</td>';
+        echo '<td>';
+        echo '<form class="mx-0" method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+        echo '<input type="hidden" id="datos" name="datos" value="">';
+        echo '<input type="hidden" id="cod_venta" name="cod_venta" value="' . $tabla[$i][0] . '">';
+        echo '<select class="col-xl-9" id="vendedor" name="vendedor">';
+        imprimirSelects('SELECT NOMBRE , APELLIDOS, DNI FROM VENDEDORES');
+        echo '</select>';
+        echo '</td>';
+        echo '<td>';
+        echo '<select class="col-xl-9" id="coche" name="coche">';
+        imprimirSelects('SELECT Marca , Modelo , vin FROM coches');
+        echo '</select>';
+        echo '</td>';
+        echo '<td>';
+        echo '<select class="col-xl-9" id="cliente" name="cliente">';
+        imprimirSelects('SELECT Nombre , Apellidos , dni FROM clientes');
+        echo '</select>';
+        echo '</td>';
+        echo '<td>';
+        echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+        echo '</form>';
+        echo '</td>';
+        echo '</tr>';
+    } else {
+        echo '<tr>';
+        echo '<td>' . $tabla[$i][0] . '</td>';
+        echo '<td>' . $tabla[$i][1] . '</td>';
+        echo '<td>' . $tabla[$i][2] . '</td>';
+        echo '<td>' . $tabla[$i][3] . '</td>';
+        echo '<td>';
+        echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+        echo '<input type="hidden" name="mod" value="' . $i . '">';
+        echo '<button class="btn btn-primary mx-0 border" type="submit"><i class="fa-solid fa-pencil"></i></button>';
+        echo '</form>';
+        echo '</td>';
+        echo '<td>';
+        echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+        echo '<input type="hidden" name="clear" value="' . $tabla[$i][0] . '">';
+        echo '<button class="btn btn-danger mx-0 border" type="submit"><i class="fa-solid fa-trash"></i></button>';
+        echo '</form>';
+        echo '</td>';
+        echo '</tr>';
+    }
+}
+
 }
 
 /**
@@ -495,48 +501,58 @@ function mostrarVentas(&$mod,&$cod_venta){
 function mostrarEmpleados(&$mod) {
     $sentencia = 'SELECT * FROM vendedores';
     $tabla = extraerTablas($sentencia);
+
     for ($i = 0; $i < count($tabla); $i++) {
+
         if ($mod == $i) {
-            echo '<form method="POST" class="border w-100" action="' . $_SERVER["PHP_SELF"] . '">';
-            echo '<input type="hidden" id="datos" name="datos" value="">';
-            echo '<input type="hidden" id="DNI" name="DNI" value="' . $tabla[$i][0] . '">';
-            echo '<tr>
-                                     <td>' . $tabla[$i][0] . '</td>
-                                     <td><input value="' . $tabla[$i][1] . '" type="text" name="Nombre"  class="form-control" id="nombre" placeholder="Ejemplo: Federico" required></td>
-                                     <td> <input value="' . $tabla[$i][2] . '" type="text" name="Apellidos"  class="form-control" id="apellido" placeholder="Ejemplo: Garcia Garcia" required></td>
-                                     <td><input value="' . $tabla[$i][3] . '" type="date" name="FechaAlta"  class="form-control" id="fechaAlta" required></td>
-                                     <td><input value="' . $tabla[$i][4] . '" type="date" name="FechaNac"  class="form-control" id="fechaNac"  required></td>
-                                     <td><select class="form-select form-select-sm w-100" id="rol" name="Rol">
-                                            <option value="junior">Junior</option>
-                                            <option value="admin">Admin</option>
-                                    </select></td>
-                                    <input type="hidden" id="contrasena" name="contrasena" value="' . $tabla[$i][6] . '">
-                                     <td><input value="' . $tabla[$i][7] . '" type="text" name="Email"  class="form-control" id="email" placeholder="Ejemplo: hola@hola.es" required></td>
-                                    </tr>';
-            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
-            echo '</form>';
-        } else {
-            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+            echo '<tr><form method="POST" class="border w-100" action="' . $_SERVER["PHP_SELF"] . '">';
             echo '<input type="hidden" id="mod" name="mod" value="' . $i . '">';
-            echo '<tr>
-                                <td>' . $tabla[$i][0] . '</td>
-                                <td>' . $tabla[$i][1] . '</td>
-                                <td>' . $tabla[$i][2] . '</td>
-                                <td>' . $tabla[$i][3] . '</td>
-                                <td>' . $tabla[$i][4] . '</td>
-                                <td>' . $tabla[$i][5] . '</td>
-                                <td>' . $tabla[$i][7] . '</td>
-                                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
-                                ';
+
+            echo '<td>' . $tabla[$i][0] . '</td>
+                  <td><label for="nombre">Nombre:</label><input value="' . $tabla[$i][1] . '" type="text" name="Nombre" class="form-control" id="nombre" placeholder="Ejemplo: Federico" required></td>
+                  <td><label for="apellido">Apellidos:</label><input value="' . $tabla[$i][2] . '" type="text" name="Apellidos" class="form-control" id="apellido" placeholder="Ejemplo: Garcia Garcia" required></td>
+                  <td><label for="fechaAlta">Fecha de Alta:</label><input value="' . $tabla[$i][3] . '" type="date" name="FechaAlta" class="form-control" id="fechaAlta" required></td>
+                  <td><label for="fechaNac">Fecha de Nacimiento:</label><input value="' . $tabla[$i][4] . '" type="date" name="FechaNac" class="form-control" id="fechaNac" required></td>
+                  <td><label for="rol">Rol:</label><select class="form-select form-select-sm w-100" id="rol" name="Rol">
+                        <option value="junior">Junior</option>
+                        <option value="admin">Admin</option>
+                      </select></td>
+                  <input type="hidden" id="contrasena" name="contrasena" value="' . $tabla[$i][6] . '">
+                  <td><label for="email">Email:</label><input value="' . $tabla[$i][7] . '" type="text" name="Email" class="form-control" id="email" placeholder="Ejemplo: hola@hola.es" required></td>
+                  <td><button class="btn btn-primary border" type="submit">Modificar Tabla</button></td>';
             echo '</form>';
-            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
-                                    <input type="hidden" id="clear" name="clear" value="' . $tabla[$i][0] . '">
-                                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
-                                </form>';
+
             echo '</tr>';
-        }
+        } else {
+    echo '<tr>';
+    echo '<td>' . $tabla[$i][0] . '</td>
+          <td>' . $tabla[$i][1] . '</td>
+          <td>' . $tabla[$i][2] . '</td>
+          <td>' . $tabla[$i][3] . '</td>
+          <td>' . $tabla[$i][4] . '</td>
+          <td>' . $tabla[$i][5] . '</td>
+          <td>' . $tabla[$i][7] . '</td>
+          <td>';
+    echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+    echo '<input type="hidden" name="mod" value="' . $i . '">';
+    echo '<button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>';
+    echo '</form>';
+    echo '</td>';
+    echo '<td>';
+    echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+    echo '<input type="hidden" name="clear" value="' . $tabla[$i][0] . '">';
+    echo '<button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button>';
+    echo '</form>';    
+            /*echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+                                    <input type="hidden" name="clear" value="' . $tabla[$i][0] . '">
+                                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
+                                </form>';*/
+    echo '</td>';
+    echo '</tr>';
+}
     }
 }
+
 
 
 /**
@@ -556,11 +572,11 @@ function mostrarCoches(&$mod){
 
     $tabla = extraerTablas($sentencia);
     for ($i = 0; $i < count($tabla); $i++) {
-        if ($mod == $i) {
-            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+        if ($mod === $i) {
+            echo '<tr><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
             echo '<input type="hidden" id="datos" name="datos" value="">';
             echo '<input type="hidden" id="vin" name="VIN" value="' . $tabla[$i][0] . '">';
-            echo '<tr>
+            echo '
                                      <td>' . $tabla[$i][0] . '</td>
                                      <td><input value="' . $tabla[$i][1] . '" type="text" name="Matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required></td>
                                      <td> <input value="' . $tabla[$i][2] . '" type="text" name="Marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required></td>
@@ -568,27 +584,26 @@ function mostrarCoches(&$mod){
                                      <td><input value="' . $tabla[$i][4] . '" type="number" name="Ano"  class="form-control" id="año" placeholder="Ejemplo: 2023" required></td>
                                      <td><input value="' . $tabla[$i][5] . '" type="number" name="Precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
                                      <td><input value="' . $tabla[$i][6] . '" type="number" name="Km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
-                                    </tr>';
+                                    ';
             echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
-            echo '</form>';
+            echo '</form></tr>';
         } else {
-            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
-            echo '<input type="hidden" id="mod" name="mod" value="' . $i . '">';
-            echo '<tr>
-                                <td>' . $tabla[$i][0] . '</td>
-                                <td>' . $tabla[$i][1] . '</td>
-                                <td>' . $tabla[$i][2] . '</td>
-                                <td>' . $tabla[$i][3] . '</td>
-                                <td>' . $tabla[$i][4] . '</td>
-                                <td>' . $tabla[$i][5] . '</td>
-                                <td>' . $tabla[$i][6] . '</td>
-                                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
-                                ';
-            echo '</form>';
-            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
-                                    <input type="hidden" id="clear" name="clear" value="' . $tabla[$i][0] . '">
-                                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
-                                </form>';
+             echo '<tr>
+                    <td>' . $tabla[$i][0] . '</td>
+                    <td>' . $tabla[$i][1] . '</td>
+                    <td>' . $tabla[$i][2] . '</td>
+                    <td>' . $tabla[$i][3] . '</td>
+                    <td>' . $tabla[$i][4] . '</td>
+                    <td>' . $tabla[$i][5] . '</td>
+                    <td>' . $tabla[$i][4] . '</td>';
+            echo '<td><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+                        <input type="hidden" name="mod" value="' . $i . '">
+                        <button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
+                    </form></td>';
+            echo '<td><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+                        <input type="hidden" name="clear" value="' . $tabla[$i][0] . '">
+                        <button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button>
+                    </form></td>';
             echo '</tr>';
         }
     }
@@ -602,45 +617,50 @@ function mostrarCoches(&$mod){
 function mostrarClientes(&$mod){
     $sentencia='SELECT * FROM CLIENTES';
     $tabla=extraerTablas($sentencia);
-    for($i=0;$i< count($tabla);$i++){
-        if($mod==$i){
-            echo '<form method="POST" class="border w-100" action="'.$_SERVER["PHP_SELF"].'">';
+    for ($i = 0; $i < count($tabla); $i++) {
+        if ($mod === $i) {
+            echo '<form method="POST" class="border w-100" action="' . $_SERVER["PHP_SELF"] . '">';
             echo '<input type="hidden" id="datos" name="datos" value="">';
-            echo '<input type="hidden" id="vin" name="DNI" value="'.$tabla[$i][0].'">';
+            echo '<input type="hidden" id="vin" name="DNI" value="' . $tabla[$i][0] . '">';
             echo '<tr>
-                     <td>'.$tabla[$i][0].'</td>
-                     <td><input value="'.$tabla[$i][1].'" type="text" name="Nombre"  class="form-control" id="Nombre" placeholder="Ejemplo: Federico" required></td>
-                     <td> <input value="'.$tabla[$i][2].'" type="text" name="Apellidos"  class="form-control" id="Apellido" placeholder="Ejemplo: Garcia Garcia" required></td>
-                     <td><input value="'.$tabla[$i][3].'" type="text" name="Domicilio"  class="form-control" id="Domicilio" required></td>
-                     <td><input value="'.$tabla[$i][4].'" type="date" name="FechaNac"  class="form-control" id="FechaNac"  required></td>';
-            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+                     <td>' . $tabla[$i][0] . '</td>
+                     <td><input value="' . $tabla[$i][1] . '" type="text" name="Nombre" class="form-control" id="Nombre" placeholder="Ejemplo: Federico" required></td>
+                     <td><input value="' . $tabla[$i][2] . '" type="text" name="Apellidos" class="form-control" id="Apellido" placeholder="Ejemplo: Garcia Garcia" required></td>
+                     <td><input value="' . $tabla[$i][3] . '" type="text" name="Domicilio" class="form-control" id="Domicilio" required></td>
+                     <td><input value="' . $tabla[$i][4] . '" type="date" name="FechaNac" class="form-control" id="FechaNac" required></td>
+                     <td><button class="btn btn-primary border" type="submit">Modificar Tabla</button></td>
+                  </tr>';
             echo '</form>';
-        }else{
-            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
-            echo '<input type="hidden" id="mod" name="mod" value="'.$i.'">';
+        } else {
             echo '<tr>
-                <td>'.$tabla[$i][0].'</td>
-                <td>'.$tabla[$i][1].'</td>
-                <td>'.$tabla[$i][2].'</td>
-                <td>'.$tabla[$i][3].'</td>
-                <td>'.$tabla[$i][4].'</td>
-                <td><button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
-                ';
-            echo '</form>';
-            echo '<form method="POST" action="'.$_SERVER["PHP_SELF"].'">
-                    <input type="hidden" id="clear" name="clear" value="'.$tabla[$i][0].'">
-                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
-                </form>';
+                    <td>' . $tabla[$i][0] . '</td>
+                    <td>' . $tabla[$i][1] . '</td>
+                    <td>' . $tabla[$i][2] . '</td>
+                    <td>' . $tabla[$i][3] . '</td>
+                    <td>' . $tabla[$i][4] . '</td>';
+            echo '<td><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+                        <input type="hidden" name="mod" value="' . $i . '">
+                        <button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
+                    </form></td>';
+            echo '<td><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+                        <input type="hidden" name="clear" value="' . $tabla[$i][0] . '">
+                        <button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button>
+                    </form></td>';
             echo '</tr>';
+        }
     }
-    }
+    
 }
 
 function verColumnas($nombreTabla){
     $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
     for ($i=0;$i< count($tabla);$i++){
-        echo '<th>'.$tabla[$i][0].'</th>';
+        if ($tabla[$i][0]!='contrasena') {
+            echo '<th>'.$tabla[$i][0].'</th>';
+        }
     }
+    echo '<th>Editar</th>';
+    echo '<th>Eliminar</th>';
 }
 function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
     $tableKey = extraerTablas('SHOW KEYS FROM '.$nombreTabla.' WHERE Key_name = "PRIMARY";');
@@ -654,11 +674,11 @@ function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
             echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
         }
     } else {
-        if (isset($_POST['clear'])) {
+        if (isset($post['clear'])) {
             eliminarDatos($nombreTabla, $tableKey[0][4], $post['clear']);
         } else {
             if (isset($post['mod'])) {
-                $mod = $post['mod'];
+                return intval($post['mod']);
             } else {
                 if ($nombreTabla == 'coches') {
                     if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
