@@ -584,7 +584,7 @@ function mostrarCoches(&$mod){
                                      <td><input value="' . $tabla[$i][5] . '" type="number" name="Precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
                                      <td><input value="' . $tabla[$i][6] . '" type="number" name="Km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
                                     ';
-            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+            echo '<td><button class="btn btn-primary border" type="submit">Modificar Tabla</button></td>';
             echo '</form></tr>';
         } else {
              echo '<tr>
