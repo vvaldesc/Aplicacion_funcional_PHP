@@ -679,44 +679,39 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
             if (isset($post['mod'])) {
                 return intval($post['mod']);
             } else {
-                switch ($nombreTabla) {
-                    case 'coches':
-                        if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
-                            try {
-                                insertar($nombreTabla, $valorInsertar);
-                                mensajeCheck('Se ha insertado correctamente los valores');
-                            } catch (Exception $exc) {
-                                echo 'Ha ocurrido un error inesperado al insertar los datos';
+                try {
+                    switch ($nombreTabla) {
+                        case 'coches':
+                            if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
+                                    insertar($nombreTabla, $valorInsertar);
+                                    mensajeCheck('Se ha insertado correctamente los valores');
+                            }else{
+                                throw new Exception('El VIN o la Matricula no tiene los valores correctos');
                             }
-                        }
-                    break;
-                    case 'empleados':
-                    case 'clientes':
-                        if (isset($post['contrasena'])) {
-                            $contrasena = validarContraseña($post['contrasena']);
-                        }
-                        if (checkForm($post) && validarDNI($post['dni']) && $contrasena == true) {
-                            try {
-                                insertar($nombreTabla, $valorInsertar);
-                                mensajeCheck('Se ha insertado correctamente los valores');
-                            } catch (Exception $exc) {
-                                echo 'Ha ocurrido un error inesperado al insertar los datos';
-                            }
-                        } else {
-                            echo mensajeError('No has introducido correctamente los datos del formulario.');
-                            $formError = true;
-                        }
                         break;
-                    case 'ventas':
-                        try {
-                            insertar($nombreTabla, $valorInsertar);
-                            mensajeCheck('Se ha insertado correctamente los valores');
-                        } catch (Exception $exc) {
-                            echo 'Ha ocurrido un error inesperado al insertar los datos';
-                        }
+                        case 'empleados':
+                        case 'clientes':
+                            if (isset($post['contrasena'])) {
+                                $contrasena = validarContraseña($post['contrasena']);
+                            }
+                            if (checkForm($post) && validarDNI($post['dni']) && $contrasena == true) {
+                                    insertar($nombreTabla, $valorInsertar);
+                                    mensajeCheck('Se ha insertado correctamente los valores');
+                            } else {
+                                throw new Exception('No has introducido correctamente los datos del formulario.');
+                                $formError = true;
+                            }
+                            break;
+                        case 'ventas':
+                                insertar($nombreTabla, $valorInsertar);
+                                mensajeCheck('Se ha insertado correctamente los valores');
 
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
+                }catch (Exception $exc) {
+                    echo mensajeError($exc->getMessage());
+                    echo mensajeError('Ha ocurrido un error inesperado al insertar los datos');
                 }
             }
         }
