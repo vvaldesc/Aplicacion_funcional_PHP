@@ -224,16 +224,37 @@ function insertar($tabla, $valores) {
 
 function modificarTabla($tabla, $dato, $post) {
     $BD = conexionPDO();
-    $arrayKeys= array_keys($post);
-    try {
-        for ($i=0;$i<count($dato);$i++){
-            $result= explode(" ", $post[$arrayKeys[$i+1]]);
-            $sql ="UPDATE $tabla SET ". $dato[$i][0]." = '".end($result)."' WHERE ".$dato[0][0]." = '".$post[$arrayKeys[1]]."'";
-            $stmt = $BD->prepare($sql);
-            $stmt->execute();
+
+    $arrayKeys = array_keys($post);
+
+    if (isset($post["Matricula"])) {
+        if (validarMatricula($post["Matricula"])) {
+
+            try {
+                for ($i = 0; $i < count($dato); $i++) {
+                    $result = explode(" ", $post[$arrayKeys[$i + 1]]);
+                    $sql = "UPDATE $tabla SET " . $dato[$i][0] . " = '" . end($result) . "' WHERE " . $dato[0][0] . " = '" . $post[$arrayKeys[1]] . "'";
+                    $stmt = $BD->prepare($sql);
+                    $stmt->execute();
+                }
+            } catch (Exception $e) {
+                throw new (mensajeError("Algo salió mal"));
+            }
+        }else{
+                throw new Exception(mensajeError("Error matrícula errónea"));
         }
-    } catch (Exception $e) {
-        throw new Exception('¡Algo salió mal!');
+    } else {
+
+        try {
+            for ($i = 0; $i < count($dato); $i++) {
+                $result = explode(" ", $post[$arrayKeys[$i + 1]]);
+                $sql = "UPDATE $tabla SET " . $dato[$i][0] . " = '" . end($result) . "' WHERE " . $dato[0][0] . " = '" . $post[$arrayKeys[1]] . "'";
+                $stmt = $BD->prepare($sql);
+                $stmt->execute();
+            }
+        } catch (Exception $e) {
+            throw new Exception('¡Algo salió mal!');
+        }
     }
 }
 

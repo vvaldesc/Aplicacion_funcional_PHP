@@ -444,7 +444,7 @@ function mostrarVentas(&$mod,&$cod_venta){
 for ($i = 0; $i < count($tabla); $i++) {
     $cod_venta = $tabla[$i][0];
 
-    if ($mod == $i) {
+    if ($mod === $i) {
         echo '<tr>';
         echo '<td>' . $tabla[$i][0] . '</td>';
         echo '<td>';
@@ -504,9 +504,10 @@ function mostrarEmpleados(&$mod) {
 
     for ($i = 0; $i < count($tabla); $i++) {
 
-        if ($mod == $i) {
+        if ($mod === $i) {
             echo '<tr><form method="POST" class="border w-100" action="' . $_SERVER["PHP_SELF"] . '">';
-            echo '<input type="hidden" id="mod" name="mod" value="' . $i . '">';
+            echo '<input type="hidden" id="datos" name="datos" value="' . $i . '">';
+            echo '<input type="hidden" id="dni_mod" name="dni_mod" value="' . $tabla[$i][0]. '">';
 
             echo '<td>' . $tabla[$i][0] . '</td>
                   <td><label for="nombre">Nombre:</label><input value="' . $tabla[$i][1] . '" type="text" name="Nombre" class="form-control" id="nombre" placeholder="Ejemplo: Federico" required></td>
@@ -524,8 +525,8 @@ function mostrarEmpleados(&$mod) {
 
             echo '</tr>';
         } else {
-    echo '<tr>';
-    echo '<td>' . $tabla[$i][0] . '</td>
+            echo '<tr>';
+            echo '<td>' . $tabla[$i][0] . '</td>
           <td>' . $tabla[$i][1] . '</td>
           <td>' . $tabla[$i][2] . '</td>
           <td>' . $tabla[$i][3] . '</td>
@@ -533,27 +534,25 @@ function mostrarEmpleados(&$mod) {
           <td>' . $tabla[$i][5] . '</td>
           <td>' . $tabla[$i][7] . '</td>
           <td>';
-    echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
-    echo '<input type="hidden" name="mod" value="' . $i . '">';
-    echo '<button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>';
-    echo '</form>';
-    echo '</td>';
-    echo '<td>';
-    echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
-    echo '<input type="hidden" name="clear" value="' . $tabla[$i][0] . '">';
-    echo '<button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button>';
-    echo '</form>';    
-            /*echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
-                                    <input type="hidden" name="clear" value="' . $tabla[$i][0] . '">
-                                    <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
-                                </form>';*/
-    echo '</td>';
-    echo '</tr>';
-}
+            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+            echo '<input type="hidden" name="mod" value="' . $i . '">';
+            echo '<button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>';
+            echo '</form>';
+            echo '</td>';
+            echo '<td>';
+            echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
+            echo '<input type="hidden" name="clear" value="' . $tabla[$i][0] . '">';
+            echo '<button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button>';
+            echo '</form>';
+            /* echo '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
+              <input type="hidden" name="clear" value="' . $tabla[$i][0] . '">
+              <td><button class="btn btn-danger border" type="submit"><i class="fa-solid fa-trash"></i></button></td>
+              </form>'; */
+            echo '</td>';
+            echo '</tr>';
+        }
     }
 }
-
-
 
 /**
  * This function print a form in a table to view cars
@@ -585,7 +584,7 @@ function mostrarCoches(&$mod){
                                      <td><input value="' . $tabla[$i][5] . '" type="number" name="Precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required></td>
                                      <td><input value="' . $tabla[$i][6] . '" type="number" name="Km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required></td>
                                     ';
-            echo '<button class="btn btn-primary border" type="submit">Modificar Tabla</button>';
+            echo '<td><button class="btn btn-primary border" type="submit">Modificar Tabla</button></td>';
             echo '</form></tr>';
         } else {
              echo '<tr>
@@ -595,7 +594,7 @@ function mostrarCoches(&$mod){
                     <td>' . $tabla[$i][3] . '</td>
                     <td>' . $tabla[$i][4] . '</td>
                     <td>' . $tabla[$i][5] . '</td>
-                    <td>' . $tabla[$i][4] . '</td>';
+                    <td>' . $tabla[$i][6] . '</td>';
             echo '<td><form method="POST" action="' . $_SERVER["PHP_SELF"] . '">
                         <input type="hidden" name="mod" value="' . $i . '">
                         <button class="btn btn-primary border" type="submit"><i class="fa-solid fa-pencil"></i></button>
@@ -662,8 +661,8 @@ function verColumnas($nombreTabla){
     echo '<th>Editar</th>';
     echo '<th>Eliminar</th>';
 }
-function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
-    $tableKey = extraerTablas('SHOW KEYS FROM '.$nombreTabla.' WHERE Key_name = "PRIMARY";');
+function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
+    $tableKey = extraerTablas('SHOW KEYS FROM ' . $nombreTabla . ' WHERE Key_name = "PRIMARY";');
 
     if (isset($post['datos'])) {
         try {
@@ -671,7 +670,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
             modificarTabla($nombreTabla, $tabla, $post);
             mensajeCheck('Se ha modificado correctamente la tabla');
         } catch (Exception $exc) {
-            echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
+            echo $exc->getMessage();
         }
     } else {
         if (isset($post['clear'])) {
@@ -680,26 +679,39 @@ function formularioGestion($nombreTabla, $post, $valorInsertar=null) {
             if (isset($post['mod'])) {
                 return intval($post['mod']);
             } else {
-                if ($nombreTabla == 'coches') {
-                    if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
-                        try {
-                            insertar($nombreTabla,$valorInsertar);
-                            mensajeCheck('Se ha insertado correctamente los valores');
-                        } catch (Exception $exc) {
-                            echo 'Ha ocurrido un error inesperado al insertar los datos';
-                        }
-                    } else {
-                        echo mensajeError('No has introducido correctamente los datos del formulario.');
-                        $formError = true;
+                try {
+                    switch ($nombreTabla) {
+                        case 'coches':
+                            if (checkForm($post) && validarVIN($post["vin"]) && validarMatricula($post["matricula"])) {
+                                    insertar($nombreTabla, $valorInsertar);
+                                    mensajeCheck('Se ha insertado correctamente los valores');
+                            }else{
+                                throw new Exception('El VIN o la Matricula no tiene los valores correctos');
+                            }
+                        break;
+                        case 'empleados':
+                        case 'clientes':
+                            if (isset($post['contrasena'])) {
+                                $contrasena = validarContraseña($post['contrasena']);
+                            }
+                            if (checkForm($post) && validarDNI($post['dni']) && $contrasena == true) {
+                                    insertar($nombreTabla, $valorInsertar);
+                                    mensajeCheck('Se ha insertado correctamente los valores');
+                            } else {
+                                throw new Exception('No has introducido correctamente los datos del formulario.');
+                                $formError = true;
+                            }
+                            break;
+                        case 'ventas':
+                                insertar($nombreTabla, $valorInsertar);
+                                mensajeCheck('Se ha insertado correctamente los valores');
+
+                        default:
+                            break;
                     }
-                } else {
-                    try {
-                        insertar($nombreTabla,$valorInsertar);
-                        mensajeCheck('Se ha insertado correctamente los valores');
-                        
-                    } catch (Exception $exc) {
-                        echo 'Ha ocurrido un error inesperado al insertar los datos';
-                    }
+                }catch (Exception $exc) {
+                    echo mensajeError($exc->getMessage());
+                    echo mensajeError('Ha ocurrido un error inesperado al insertar los datos');
                 }
             }
         }
