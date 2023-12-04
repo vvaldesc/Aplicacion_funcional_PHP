@@ -75,22 +75,25 @@ function crearBD() {
 
             insertar("vendedores", array("DNI" => "06293360P", "Nombre" => "Javier", "Apellidos" => "Diaz", "FechaAlta" => "2023-11-13", "FechaNac" => "2004-10-01", "Rol" => "junior", "contrasena" => 'javier1234', 'Email' => 'javierdiazmolina@yopmail.com'));
             insertar("vendedores", array("DNI" => "06293362X", "Nombre" => "Victor", "Apellidos" => "Valdes", "FechaAlta" => "2023-11-11", "FechaNac" => "2001-03-13", "Rol" => "admin", "contrasena" => 'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
-            insertar("vendedores", array("DNI" => "75143313J", "Nombre" => "VictorNoAdmin", "Apellidos" => "Valdes", "FechaAlta" => "2023-11-11", "FechaNac" => "2001-03-13", "Rol" => "", "contrasena" => 'victor1234', 'Email' => 'victorvaldescobos@yopmail.com'));
 
             crearTabla("coches", array("VIN" => "varchar(20)", "Matricula" => "varchar(20)", "Marca" => "varchar(20)", "Modelo" => "varchar(20)", "Ano" => "varchar(20)", "Precio" => "integer", "Km" => 'integer'), array("VIN"));
             insertar("coches", array("VIN" => "JH4DC4400SS012345", "Matricula" => "3467-LKF", "Marca" => "Ford", "Modelo" => "Fiesta", "Ano" => 2007, "Precio" => 2500, "Km" => 100000));
             insertar("coches", array("VIN" => "KLATF08Y1VB363633", "Matricula" => "0493-HGS", "Marca" => "Ferrari", "Modelo" => "Roma", "Ano" => 2017, "Precio" => 200500, "Km" => 80000));
 
             crearTabla("clientes", array("DNI" => "varchar(20)", "Nombre" => "varchar(20)", "Apellidos" => "varchar(20)", "Domicilio" => "varchar(20)", "FechaNac" => "DATE"), array("DNI"));
+
             insertar("clientes", array("DNI" => "07328669H", "Nombre" => "Rodrigo", "Apellidos" => "Pérez", "Domicilio" => "Calle Fernandez De los Rios, 9", "FechaNac" => "2000-04-11"));
             insertar("clientes", array("DNI" => "03069726P", "Nombre" => "Alejandro", "Apellidos" => "Sánchez", "Domicilio" => "Calle Sol, 8", "FechaNac" => "2002-08-19"));
+
 
             crearTabla('ventas', array('COD_VENTAS' => 'varchar(20)'), array('COD_VENTAS'));
             anadirForanea('ventas', 'DNI', 'vendedores');
             anadirForanea('ventas', 'VIN', 'coches');
             anadirForanea('ventas', 'DNI', 'clientes');
+
             insertar('ventas', array('COD_VENTAS' => '1', "DNI_vendedores" => "06293360P", "VIN_coches" => "KLATF08Y1VB363633", "DNI_clientes" => "07328669H"));
             insertar('ventas', array('COD_VENTAS' => '2', "DNI_vendedores" => "06293362X", "VIN_coches" => "JH4DC4400SS012345", "DNI_clientes" => "03069726P"));
+
 
         } catch (Exception $exc) {
             echo $exc->getMessage();
@@ -166,32 +169,32 @@ function insertar($tabla, $valores) {
 
     if (count($result) == 1) {
 
- 
+
         if (isset($valores['DNI'])) {
             if (!validarDNI($valores['DNI'])) {
                 throw new Exception(mensajeError("(insertar): DNI no válido."));
             }
             if (isset($valores['contrasena'])) {
                 if (validarContraseña($valores['contrasena'])) {
-                    $valores['contrasena']=hash('sha256', $valores['contrasena']);
-                }else{
+                    $valores['contrasena'] = hash('sha256', $valores['contrasena']);
+                } else {
                     throw new Exception(mensajeError("(insertar): Error la contraseña no es válida."));
                 }
-            }            
-        }else{
+            }
+        } else {
             if (isset($valores['VIN'])) {
                 if (!validarVIN($valores['VIN'])) {
                     throw new Exception(mensajeError("(insertar): VIN no válido."));
                 }
                 if (isset($valores['Matricula'])) {
                     if (!validarMatricula($valores['Matricula'])) {
-                    throw new Exception(mensajeError("(insertar): Matrícula no válida."));
+                        throw new Exception(mensajeError("(insertar): Matrícula no válida."));
                     }
                 }
-            }            
+            }
         }
-            //Parámetros en caso de que no haya
-    try {
+        //Parámetros en caso de que no haya
+        try {
             $BD = conexionPDO();
 
             //para mostrar errores
@@ -210,10 +213,7 @@ function insertar($tabla, $valores) {
                 // Esto sustituye las claves por sus respectivas columnas
                 $stmt->bindValue(":" . $clave, $valor, is_int($valor) ? PDO::PARAM_INT : PDO::PARAM_STR);
             }
-
-            if (!$stmt->execute()) {
-                throw new Exception(mensajeError("(insertar): Error en la inserción del registro."));
-            } 
+            $stmt->execute();
         } catch (Exception $exc) {
             echo mensajeError('No se puede insertar el registro, porque la clave principal está repetida.');
         }

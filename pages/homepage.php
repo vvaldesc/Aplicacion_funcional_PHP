@@ -1,6 +1,9 @@
 <?php
+    //Functions Implements
     include_once $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
+    //Open Session
     session_start();
+    //Check cookies
     comprobarCookie($_SESSION, $_COOKIE)
     
 ?>
@@ -14,11 +17,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
 </head>
+<!--INICIO DEL BODY -->
 <body>
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' ?>
+    <?php
+        //Implements header
+        include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/header.php' 
+    ?>
+    <!--INICIO DE LA CABECERA -->
     <header>
         <h1>Concesionarios García</h1>
     </header>
+    <!--FIN DE LA CABECERA -->
+    <!--INICIO DEL CONTENEDOR -->
     <div class="container-fluid">
         <div class="row">
             <nav id="sidebar" class="col-sm-3 d-md-block bg-light sidebar">
@@ -76,12 +86,12 @@
             </main>
         </div>
     </div>
-    
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
-    <!-- Agrega el enlace a Bootstrap JavaScript (asegúrate de que la URL sea correcta) -->
+    <!--FIN DEL CONTENEDOR -->
+    <!-- SCRIPTS BOOSTRAP -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+<!--FIN DEL BODY -->
 </html>
 
