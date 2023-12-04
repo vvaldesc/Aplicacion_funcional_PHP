@@ -227,8 +227,13 @@ function modificarTabla($tabla, $dato, $post) {
     $arrayKeys= array_keys($post);
     try {
         for ($i=0;$i<count($dato);$i++){
-            $result= explode(" ", $post[$arrayKeys[$i+1]]);
-            $sql ="UPDATE $tabla SET ". $dato[$i][0]." = '".end($result)."' WHERE ".$dato[0][0]." = '".$post[$arrayKeys[1]]."'";
+            if(isset($post['cod_venta'])){
+                $result= explode(" ", $post[$arrayKeys[$i+1]]);
+                $result=end($result);
+            }else{
+                $result= $post[$arrayKeys[$i+1]];
+            }
+            $sql ="UPDATE $tabla SET ". $dato[$i][0]." = '".($result)."' WHERE ".$dato[0][0]." = '".$post[$arrayKeys[1]]."'";
             $stmt = $BD->prepare($sql);
             $stmt->execute();
         }
