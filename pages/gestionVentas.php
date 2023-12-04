@@ -64,11 +64,11 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+ <div class="modal-body">
                         <!-- Agregar Nuevo coche-->
-                        <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+                        <form method="POST" action="<?= $_SERVER["PHP_SELF"] ?>">
                             <div class="form-group">
-                                <label for="marca">Seleccione un Vendedor</label>
+                                <label for="vendedor">Seleccione un Vendedor</label>
 
                                 <input type="hidden" id="cod_ventas" name="cod_ventas" value="<?php echo $cod_venta + 1; ?>">
                                 <select class="col-xl-9" id="vendedor" name="vendedor">
@@ -78,7 +78,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="modelo">Seleccione un Coche</label>
+                                <label for="coche">Seleccione un Coche</label>
                                 <select class="col-xl-9" id="coche" name="coche">
                                     <?php
                                         imprimirSelects('SELECT Marca , Modelo , VIN FROM coches');
@@ -86,7 +86,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="año">Seleccione un Cliente</label>
+                                <label for="cliente">Seleccione un Cliente</label>
                                 <select class="col-xl-9" id="cliente" name="cliente">
                                     <?php
                                         imprimirSelects('SELECT Nombre , Apellidos , dni FROM clientes');
