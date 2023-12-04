@@ -19,31 +19,17 @@
         $mod = 'a';
         $formError = false;
         $nombreTabla='clientes';
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (isset($_POST['datos'])) {
-                try {
-                    $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
-                    modificarTabla($nombreTabla,$tabla,$_POST);
-                    modificacionCheck(); 
-                } catch (Exception $exc) {
-                    echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
-                }
-                        } else {
-                if (isset($_POST['clear'])) {
-                    eliminarDatos('clientes', 'DNI', $_POST['clear']);
-                } else {
-                    if (isset($_POST['mod'])) {
-                        $mod = $_POST['mod'];
-                    } else {
-                        if (checkForm($_POST)) {
-                             insertar("clientes", array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"],"Apellidos" => $_POST["domicilio"],"Domicilio" => "Calle Fernandez De los Rios, 9","FechaNac"=>$_POST["fechanac"]));
-                        } else {
-                            $formError = true;
-                        }
-                    }
-                }
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            if(isset($_POST['dni'])){
+                $valorInsert=  array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"],"Apellidos" => $_POST["domicilio"],"Domicilio"
+                                     => "Calle Fernandez De los Rios, 9","FechaNac"=>$_POST["fechanac"]);
+                formularioGestion($nombreTabla, $_POST, $valorInsert);
+            }
+            else{
+                formularioGestion($nombreTabla, $_POST);
             }
         }
+        
 ?>
 </head>
 <body>

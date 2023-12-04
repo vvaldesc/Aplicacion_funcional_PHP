@@ -26,12 +26,21 @@
     $mod = 'a';
     $formError = false;
     $nombreTabla='vendedores';
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        if(isset($_POST['cod_ventas'])){
+            $valorInsert= array("DNI" => $_POST["dni"], "Nombre" => $_POST["nombre"], "Apellidos" => $_POST["apellidos"], "FechaAlta" => $_POST["fechaAlta"], "FechaNac" => $_POST["fechanac"], "Rol" => $_POST["rol"], "contrasena" => hash('sha256', $_POST["contrasena"]), 'Email' => $_POST["mail"]);
+             formularioGestion($nombreTabla, $_POST, $valorInsert);       
+        }
+        else{
+            formularioGestion($nombreTabla, $_POST);
+        }
+    }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['datos'])) {
             try {
                 $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
                 modificarTabla($nombreTabla,$tabla,$_POST);
-                modificacionCheck(); 
+                modificacionMessage(); 
             } catch (Exception $exc) {
                 echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
             }

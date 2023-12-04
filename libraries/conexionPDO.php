@@ -239,15 +239,6 @@ function modificarTabla($tabla, $dato, $valor) {
         throw new Exception('¡Algo salió mal!');
     }
 }
-function modificacionCheck(){
-    echo "<nav class='navbar bg-body-tertiary bg-success rounded m-2'>
-            <div class='container-fluid'>
-                <p>
-                    'Se ha modificado la tabla correctamente '
-                </p>
-            </div>
-        </nav>'";
-}
 
 function eliminarDatos($tabla,$dato,$valor){
     $BD = conexionPDO();

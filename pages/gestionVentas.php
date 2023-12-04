@@ -21,33 +21,19 @@
         $mod = 'a';
         $nombreTabla='ventas';
         include $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/templates/header.php';
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (isset($_POST['datos'])) {
-                try {
-                    $tabla= extraerTablas("SHOW COLUMNS FROM ".$nombreTabla."");
-                    modificarTabla($nombreTabla,$tabla,$_POST);
-                    modificacionCheck(); 
-                } catch (Exception $exc) {
-                    echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
-                }
-            } else {
-                if (isset($_POST['clear'])) {
-                    eliminarDatos('ventas', 'cod_ventas', $_POST['clear']);
-                } else {
-                    if (isset($_POST['mod'])) {
-                        $mod = $_POST['mod'];
-                    } else {
-                        try {
-                            insertar('ventas', array('COD_VENTAS' => $_POST['cod_ventas'], "DNI_vendedores"
+        
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            if(isset($_POST['cod_ventas'])){
+                $valorInsert= array('COD_VENTAS' => $_POST['cod_ventas'], "DNI_vendedores"
                                 . "" => ultimaPalabra($_POST['vendedor']), "VIN_coches" => ultimaPalabra($_POST['coche']),
-                                "DNI_clientes" => ultimaPalabra($_POST['cliente'])));
-                        } catch (Exception $ex) {
-
-                        }
-                    }
-                }
+                                "DNI_clientes" => ultimaPalabra($_POST['cliente']));
+                formularioGestion($nombreTabla, $_POST, $valorInsert);
+            }else{
+                formularioGestion($nombreTabla, $_POST);
             }
+            
         }
+        
     ?>
     <div class="container mt-4">
         <h1 class="text-center mb-5">Gestión de Ventas</h1>
@@ -67,7 +53,7 @@
                 ?>
             </tbody>
         </table>
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarVenta">Agregar Coche</button>
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarVenta">Agregar Venta</button>
 
         <div class="modal fade" id="agregarVenta" >
             <div class="modal-dialog">

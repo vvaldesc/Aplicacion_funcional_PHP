@@ -22,33 +22,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
     $mod = 'a';
     $formError = false;
     $nombreTabla = 'coches';
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST['datos'])) {
-            try {
-                $tabla = extraerTablas("SHOW COLUMNS FROM " . $nombreTabla . "");
-                modificarTabla($nombreTabla, $tabla, $_POST);
-                modificacionCheck();
-            } catch (Exception $exc) {
-                echo 'SE HA PRODUCIDO UN ERROR EN LA MODIFICACIÓN';
-            }
-        } else {
-            if (isset($_POST['clear'])) {
-                eliminarDatos('coches', 'VIN', $_POST['clear']);
-            } else {
-                if (isset($_POST['mod'])) {
-                    $mod = $_POST['mod'];
-                } else {
-                    if (checkForm($_POST) && validarVIN($_POST["vin"]) && validarMatricula($_POST["matricula"])) {
-                        try {
-                            insertar("coches", array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]));
-                        } catch (Exception $exc) {
-                            echo $exc->getTraceAsString();
-                        }
-                    } else {
-                        $formError = true;
-                    }
-                }
-            }
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        if(isset($_POST["vin"])){
+            $valorInsert=array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]);
+            formularioGestion($nombreTabla, $_POST, $valorInsert);
+        }
+        else{
+            formularioGestion($nombreTabla, $_POST);
         }
     }
 ?>
@@ -60,102 +40,73 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
             <thead>
                 <tr>
                     <?php
-                    verColumnas($nombreTabla);
+                        //This function print name colums are in table
+                        verColumnas($nombreTabla);
                     ?>
                 </tr>
             </thead>
             <tbody>
                 <?php
-mostrarCoches($mod)
-                
+                    //This function print data for table cars
+                    mostrarCoches($mod)
                 ?>
-                
+
             </tbody>
         </table>
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#agregarCoche">Agregar Coche</button>
-
+        <!-- INICIO MODAL -->
         <div class="modal fade" id="agregarCoche" >
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title">Agregar Coche</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <!-- Agregar Nuevo coche-->
-                      <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
-                          <div class="form-group">
-                              <label for="vin">VIN</label>
-                              <input  value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: Bastidor" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="matricula">Matricula</label>
-                              <input value="<?= $formError ? $_POST["matricula"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 0625FFF" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="marca">Marca</label>
-                              <input value="<?= $formError ? $_POST["marca"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="modelo">Modelo</label>
-                              <input value="<?= $formError ? $_POST["modelo"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="año">Año</label>
-                              <input value="<?= $formError ? $_POST["año"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="precio">Precio</label>
-                              <input value="<?= $formError ? $_POST["precio"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="km">KM</label>
-                              <input value="<?= $formError ? $_POST["km"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
-                          </div>
-                          <div class="form-group d-flex flex-column">
-                              <label for="vendedor">Vendedor</label>
-                              <div class="form-group">
-                                  <select class="col-xl-9" id="vendedor" name="vendedor">
-                                  <?php
-                                    imprimirSelects('SELECT Nombre,Apellidos,DNI FROM vendedores;');
-                                  ?>
-                              </select>
-                              <?php
-                                //Boton añadir vendedor
-                                if($_SESSION['rol']=='admin'){
-                                    echo '<a href="./gestionEmpleados.php"><i class="fa-solid fa-circle-plus"></i></a>';
-                                }
-                              ?>
-                              </div>                    
-                          </div>
-                          <div class="form-group d-flex flex-column">
-                              <label for="cliente">Cliente</label>
-                              <div class="form-group">
-                                  <select class="col-xl-9" id="cliente" name="Cliente">
-                                    <?php
-                                        $tabla= extraerTablas('SELECT Nombre,Apellidos,DNI FROM clientes;');
-                                        foreach ($tabla as $key => $value) {
-                                            echo '<option value="' . $value[0].' '.$value[1] . ' '.$value[2] . '">' . $value[0].' '.$value[1] . ' ' .$value[2] .' </option>';
-                                        }
-                                    ?> 
-                                  </select>
-                                  <a href="./gestionClientes.php"><i class="fa-solid fa-circle-plus"></i></a>
-                                  
-                              </div>
-                                
-                          </div>
-                      
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                      <input type="submit" class="btn btn-primary" value="Guardar">
-                  </div>
-                    </form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Coche</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Agregar Nuevo coche-->
+                        <form method="POST" action="<?php $_SERVER["PHP_SELF"] ?>">
+                            <div class="form-group">
+                                <label for="vin">VIN</label>
+                                <input  value="<?= $formError ? $_POST["vin"] : "" ?>" type="text" name="vin" class="form-control" id="vin" placeholder="Ejemplo: JH4DC4400SS012345" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="matricula">Matricula</label>
+                                <input value="<?= $formError ? $_POST["matricula"] : "" ?>" type="text" name="matricula"  class="form-control" id="matricula" placeholder="Ejemplo: 4321-DCB" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca">Marca</label>
+                                <input value="<?= $formError ? $_POST["marca"] : "" ?>" type="text" name="marca"  class="form-control" id="marca" placeholder="Ejemplo: Toyota" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="modelo">Modelo</label>
+                                <input value="<?= $formError ? $_POST["modelo"] : "" ?>" type="text" name="modelo"  class="form-control" id="modelo" placeholder="Ejemplo: Camry" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="año">Año</label>
+                                <input value="<?= $formError ? $_POST["año"] : "" ?>" type="number" name="año"  class="form-control" id="ano" placeholder="Ejemplo: 2023" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="precio">Precio</label>
+                                <input value="<?= $formError ? $_POST["precio"] : "" ?>" type="text" name="precio"  class="form-control" id="precio" placeholder="Ejemplo: 25000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="km">KM</label>
+                                <input value="<?= $formError ? $_POST["km"] : "" ?>" type="text" name="km"  class="form-control" id="km" placeholder="Ejemplo: 150000" required>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <input type="submit" class="btn btn-primary" value="Guardar">
+                            </div>
+                        </form>
+                    </div>
                 </div>
-              </div>
-          </div>
-      </div>
+            </div>
+        </div>
+        <!-- INICIO MODAL -->
     </div>
 
     <?php include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/templates/footer.php' ?>
