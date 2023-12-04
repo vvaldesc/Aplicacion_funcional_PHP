@@ -24,7 +24,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/Aplicacion_funcional_PHP/libraries/co
     $nombreTabla = 'coches';
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         if(isset($_POST["vin"])){
-            $valorInsert=array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["año"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]);
+            $valorInsert=array("VIN" => $_POST["vin"], "Matricula" => $_POST["matricula"], "Marca" => $_POST["marca"], "Modelo" => $_POST["modelo"], "Ano" => $_POST["ano"], "Precio" => $_POST["precio"], "Km" => $_POST["km"]);
             formularioGestion($nombreTabla, $_POST, $valorInsert);
         }
         else{

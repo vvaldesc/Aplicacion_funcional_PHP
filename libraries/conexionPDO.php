@@ -224,6 +224,7 @@ function insertar($tabla, $valores) {
 
 function modificarTabla($tabla, $dato, $post) {
     $BD = conexionPDO();
+
     $arrayKeys = array_keys($post);
 
     if (isset($post["Matricula"])) {
