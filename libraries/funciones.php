@@ -203,6 +203,7 @@ function cerrarSesion(&$sesion) {
  * @param type $cookie
  */
 function comprobarCookie($session, $cookie) {
+    //getcwd()-> This function returns the path where the file is located.
     if (getcwd() != 'C:\xampp\htdocs\Aplicacion_funcional_PHP') {
         comprobarInicio($session);
     }
@@ -338,7 +339,7 @@ function validarMatricula($matricula) {
  * @param array[] $session
  * @return bool
  */
-function comprobarCookieInicio($post, $session) {
+function setCookieInicio($post, $session) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (comprobarLogin($post)) {
             $nombreParaCookie = $_SESSION["name"];
@@ -357,7 +358,6 @@ function comprobarCookieInicio($post, $session) {
             unset($fechaActualString);
             unset($fechaActualString);
         } else {
-
             //hay error
             return true;
         }

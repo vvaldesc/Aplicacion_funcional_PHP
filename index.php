@@ -1,7 +1,11 @@
 <?php 
     include $_SERVER['DOCUMENT_ROOT'].'/Aplicacion_funcional_PHP/libraries/funciones.php';
     session_start();
-    $formError=comprobarCookieInicio($_POST,$_SESSION);
+    if(isset($_SESSION['rol'])) {
+        header("Location: ./pages/homepage.php");
+
+    }
+    $formError=setCookieInicio($_POST,$_SESSION);
     if (isset($_POST['guardar'])) {
         //Aquí entra si hemos accedido a crear la BD
         crearBD();
