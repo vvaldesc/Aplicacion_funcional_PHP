@@ -128,8 +128,17 @@ function comprobarLogin($post) {
                 // ESTO NO LO HE COMPROBADO TODAVÍA
                 $contrasena = hash('sha256', $_POST['pass']);
                 $tabla = extraerTablas($sql);
-                if (count($tabla) == 1 && $tabla[0][6] == $contrasena) {
 
+                
+                echo "<p>".$tabla[0][6]."</p>";
+                echo "<p>".$contrasena."</p>";
+                
+                if ($tabla[0][6] == $contrasena) {
+                    echo "si";
+                    
+                }
+                
+                if (count($tabla) == 1 && $tabla[0][6] == $contrasena) {
 
                     $valido = true;
 
@@ -689,7 +698,7 @@ function formularioGestion($nombreTabla, $post, $valorInsertar = null) {
                                 throw new Exception('El VIN o la Matricula no tiene los valores correctos');
                             }
                         break;
-                        case 'empleados':
+                        case 'vendedores':
                         case 'clientes':
                             if (isset($post['contrasena'])) {
                                 $contrasena = validarContraseña($post['contrasena']);
